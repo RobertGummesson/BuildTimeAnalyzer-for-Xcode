@@ -38,12 +38,6 @@ extension CMXcodeWorkspaceProtocol {
         }
         validatePath(lastLogPath, creationDate: lastLogCreationDate, attemptIndex: attemptIndex, completionHandler: completionHandler)
     }
-
-    static func openFile(atPath path: String, andLineNumber lineNumber: Int) {
-        // TODO: Work out how to jump to the line number. 
-        // Need to be notified when it has opened
-        NSApp.delegate?.application?(NSApp, openFile: path)
-    }
     
     func productWorkspace() -> AnyObject? {
         guard let windowController = NSClassFromString("IDEWorkspaceWindowController") else { return nil }
@@ -60,6 +54,25 @@ extension CMXcodeWorkspaceProtocol {
     
     func buildFolderPath(productName: String) -> String? {
         return buildFolderFromWorkspace(productWorkspace())?.path
+    }
+    
+    // MARK: Static methods
+    
+    static func openFile(atPath path: String, andLineNumber lineNumber: Int) {
+        // TODO: Work out how to jump to the line number.
+        // Need to be notified when it has opened
+        NSApp.delegate?.application?(NSApp, openFile: path)
+    }
+    
+    static func buildOperation(fromData data: AnyObject?) -> CMBuildOperation? {
+        guard let actionName = data?.valueForKeyPath("_buildOperationDescription._actionName") as? String,
+            let productName = data?.valueForKeyPath("_buildOperationDescription._objectToBuildName") as? String,
+            let duration = data?.valueForKey("duration") as? Double,
+            let result = data?.valueForKey("_result") as? Int,
+            let startTime = data?.valueForKey("_startTime") as? NSDate else {
+                return nil
+        }
+        return CMBuildOperation(actionName: actionName, productName: productName, duration: duration, result: result, startTime: startTime)
     }
     
     // MARK: Private methods

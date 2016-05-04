@@ -128,7 +128,7 @@ class CMResultWindowController: NSWindowController {
         })
         
         buildOperationDidGenerateOutputFilesObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationDidGenerateOutputFilesNotification, usingBlock: { [weak self] (note) in
-            guard let buildOperation = CMBuildOperation(data: note.object) else { return  }
+            guard let buildOperation = CMXcodeWorkSpace.buildOperation(fromData: note.object) else { return  }
             
             if buildOperation.result == 1 && buildOperation.actionName == "Build" {
                 self?.buildDurationTextField.stringValue = String(format: "%.0fs", round(buildOperation.duration))

@@ -21,7 +21,6 @@ func ==(lhs: CMRawMeasure, rhs: CMRawMeasure) -> Bool {
     return lhs.time == rhs.time && lhs.text == rhs.text
 }
 
-
 // MARK: Hashable
 
 extension CMRawMeasure: Hashable {
