@@ -17,8 +17,6 @@ IntelliPaste is available through [Alcatraz - The package manager for Xcode](htt
 
 If you rather compile it yourself, simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. To uninstall, just remove the plugin from there (and restart Xcode).
 
-The plug-in is developed and tested using Xcode 5.1.1 and Xcode 6.0 (beta). 
-
 ## License
 
     Copyright (c) 2016, Robert Gummesson
