@@ -38,7 +38,7 @@ class CMPlugin: NSObject {
     func createMenuItem() {
         guard let submenu = NSApp.mainMenu?.itemWithTitle("View")?.submenu else { return }
         
-        let title = NSLocalizedString("Build Time", comment: "")
+        let title = NSLocalizedString("Build Time Analyzer", comment: "")
         let menuItem = NSMenuItem(title: title, action: #selector(showWindow), keyEquivalent: "")
         menuItem.target = self
         menuItem.keyEquivalent = "b"
