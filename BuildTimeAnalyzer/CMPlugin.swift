@@ -47,7 +47,10 @@ class CMPlugin: NSObject {
     }
     
     func showWindow() {
-        guard windowController == nil else { return }
+        guard windowController == nil else {
+            windowController?.resultWindow.close()
+            return
+        }
         
         windowController = CMResultWindowController(windowNibName: "CMResultWindow")
         windowController?.show()
