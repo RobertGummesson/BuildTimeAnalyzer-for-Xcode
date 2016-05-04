@@ -6,7 +6,6 @@
 //  Copyright © 2016 Robert Gummesson. All rights reserved.
 //
 
-//typealias CMRawMeasure    = (time: Double, text: String)
 typealias CMUpdateClosure = (result: [CMCompileMeasure], didComplete: Bool) -> ()
 
 protocol CMLogProcessorProtocol: class {
