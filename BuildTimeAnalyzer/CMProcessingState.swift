@@ -6,7 +6,7 @@
 //  Copyright © 2016 Robert Gummesson. All rights reserved.
 //
 
-enum CMProcessingState: Equatable {
+enum CMProcessingState {
     case processing
     case waiting(shouldIndicate: Bool)
     case completed(stateName: String)
@@ -18,6 +18,8 @@ enum CMProcessingState: Equatable {
     static let waitingForBuildString = "Waiting..."
     static let buildString           = "Building..."
 }
+
+extension CMProcessingState : Equatable {}
 
 func ==(lhs: CMProcessingState, rhs: CMProcessingState) -> Bool {
     switch (lhs, rhs) {

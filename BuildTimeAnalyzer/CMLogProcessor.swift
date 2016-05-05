@@ -19,7 +19,6 @@ protocol CMLogProcessorProtocol: class {
 }
 
 extension CMLogProcessorProtocol {
-
     func process(productName: String, buildCompletionDate: NSDate?, updateHandler: ((result: [CMCompileMeasure], didComplete: Bool) -> ())?) {
         workspace = CMXcodeWorkSpace(productName: productName, buildCompletionDate: buildCompletionDate)
         workspace?.logTextForProduct() { [weak self] (text) in
@@ -98,7 +97,7 @@ extension CMLogProcessorProtocol {
         
         var result: [CMCompileMeasure] = []
         for entry in unprocessedResult {
-            let code = entry.text.characters.split{$0 == "\t"}.map(String.init)
+            let code = entry.text.characters.split("\t").map(String.init)
             if code.count >= 2, let measure = CMCompileMeasure(time: entry.time, rawPath: code[0], code: trimPrefixes(code[1])) {
                 result.append(measure)
             }
