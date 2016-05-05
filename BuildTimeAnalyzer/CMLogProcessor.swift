@@ -37,15 +37,13 @@ extension CMLogProcessorProtocol {
     // MARK: Private methods
     
     private func process(text text: String) {
-        let timePattern = "^\\d*\\.?\\d"
         let locationPattern = "^\\d*\\.?\\dms\\t/"
         let matchingOption = NSMatchingOptions(rawValue: 0)
         let compareOptions = NSStringCompareOptions(rawValue: 0)
         let regexOptions = NSRegularExpressionOptions(rawValue: 0)
         let characterSet = NSCharacterSet(charactersInString:"\r")
         
-        let regexLocation = try! NSRegularExpression(pattern: locationPattern, options: regexOptions)
-        let regexTime = try! NSRegularExpression(pattern: timePattern, options: regexOptions)
+        let regex = try! NSRegularExpression(pattern: locationPattern, options: regexOptions)
         
         var remainingRange = text.startIndex..<text.endIndex
         
@@ -59,10 +57,9 @@ extension CMLogProcessorProtocol {
             defer { remainingRange = nextRange.endIndex..<remainingRange.endIndex }
             
             let range = NSMakeRange(0, text.characters.count)
-            guard let match = regexLocation.firstMatchInString(text, options: matchingOption, range: range) else { continue }
-            guard let timeMatch = regexTime.firstMatchInString(text, options: matchingOption, range: range) else { continue }
+            guard let match = regex.firstMatchInString(text, options: matchingOption, range: range) else { continue }
             
-            let timeString = text.substringToIndex(text.startIndex.advancedBy(timeMatch.range.length))
+            let timeString = text.substringToIndex(text.startIndex.advancedBy(match.range.length - 4))
             if let time = Double(timeString) {
                 let value = text.substringFromIndex(text.startIndex.advancedBy(match.range.length - 1))
                 unprocessedResult.append(CMRawMeasure(time: time, text: value))
