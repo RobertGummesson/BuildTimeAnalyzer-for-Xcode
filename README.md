@@ -13,6 +13,8 @@ Open the analyzer window by tapping `Shift+Ctrl+B` or `View` > `Build Time Analy
 
 ## Installation
 
+NOTE: The new Xcode (7.3.1) will be supported in the next couple of hours. Bare with me. :)
+
 Build Time Analyzer is available through [Alcatraz - The package manager for Xcode](http://alcatraz.io/).
 
 If you rather compile it yourself, simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. To uninstall, just remove the plugin from there (and restart Xcode).
