@@ -105,7 +105,7 @@ extension CMXcodeWorkspaceProtocol {
                     let files = filesAtURL(logFolderURL),
                     let filename = files.filter({ $0.hasSuffix(".db") }).first,
                     let path = logFolderURL.URLByAppendingPathComponent(filename).path,
-                    let schemeName = lastSchemeName(fromPath: path) where schemeName == productNatome {
+                    let schemeName = lastSchemeName(fromPath: path) where schemeName == productName {
                     return workspace
                 }
             }
