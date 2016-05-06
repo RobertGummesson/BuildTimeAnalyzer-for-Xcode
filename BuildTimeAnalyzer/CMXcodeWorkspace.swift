@@ -59,9 +59,27 @@ extension CMXcodeWorkspaceProtocol {
     // MARK: Static methods
     
     static func openFile(atPath path: String, andLineNumber lineNumber: Int) {
-        // TODO: Work out how to jump to the line number.
-        // Need to be notified when it has opened
+        
         NSApp.delegate?.application?(NSApp, openFile: path)
+        
+        // NOTE: the following is a bit of a hacky approach
+        // using applescript to try and go to the line number
+        // We start with a sleep delay of x seconds and hope that 
+        // the application has opened the file within that window
+        // instead of waiting for a notification
+        var gotoLineNumber = ""
+        gotoLineNumber = gotoLineNumber + "do shell script \"sleep 0.3\" #catchup"
+        gotoLineNumber = gotoLineNumber + "\ntell application \"XCode\""
+        gotoLineNumber = gotoLineNumber + "\n   activate"
+        gotoLineNumber = gotoLineNumber + "\n   tell application \"System Events\" to key code 37 using command down #send command L"
+        gotoLineNumber = gotoLineNumber + "\n   tell application \"System Events\" to keystroke \(lineNumber)"
+        gotoLineNumber = gotoLineNumber + "\n   tell application \"System Events\" to keystroke return"
+        gotoLineNumber = gotoLineNumber + "\nend tell"
+        if let script = NSAppleScript(source: gotoLineNumber) {
+            var error:NSDictionary? = nil
+            script.executeAndReturnError(&error)
+            // FIXME: silently ignore errors?
+        }
     }
     
     static func buildOperation(fromData data: AnyObject?) -> CMBuildOperation? {
@@ -87,7 +105,7 @@ extension CMXcodeWorkspaceProtocol {
                     let files = filesAtURL(logFolderURL),
                     let filename = files.filter({ $0.hasSuffix(".db") }).first,
                     let path = logFolderURL.URLByAppendingPathComponent(filename).path,
-                    let schemeName = lastSchemeName(fromPath: path) where schemeName == productName {
+                    let schemeName = lastSchemeName(fromPath: path) where schemeName == productNatome {
                     return workspace
                 }
             }
