@@ -13,7 +13,7 @@ Open the analyzer window by tapping `Shift+Ctrl+B` or `View` > `Build Time Analy
 
 ## Installation
 
-NOTE: The new Xcode (7.3.1) will be supported in the next couple of hours. Bare with me. :)
+NOTE: [Some people appear to have issues installing](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/issues/1) from Alcatraz at the moment. You can work around this by building it yourself. Will debug when I have a moment.
 
 Build Time Analyzer is available through [Alcatraz - The package manager for Xcode](http://alcatraz.io/).
 
