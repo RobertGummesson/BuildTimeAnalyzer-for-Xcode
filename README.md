@@ -9,7 +9,7 @@ Build Time Analyzer is an Xcode plugin that shows you a break down of Swift buil
 
 Open the analyzer window by tapping `Shift+Ctrl+B` or `View` > `Build Time Analyzer`. From there just follow the instructions.
 
-![screenshot.png](https://raw.githubusercontent.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/master/Screenshots/screenshot.png)
+![screenshot.png](https://raw.githubusercontent.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/master/Screenshots/screenshot2.png)
 
 ## Installation
 
