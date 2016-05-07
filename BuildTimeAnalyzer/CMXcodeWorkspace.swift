@@ -58,12 +58,6 @@ extension CMXcodeWorkspaceProtocol {
     
     // MARK: Static methods
     
-    static func openFile(atPath path: String, andLineNumber lineNumber: Int) {
-        // TODO: Work out how to jump to the line number.
-        // Need to be notified when it has opened
-        NSApp.delegate?.application?(NSApp, openFile: path)
-    }
-    
     static func buildOperation(fromData data: AnyObject?) -> CMBuildOperation? {
         guard let actionName = data?.valueForKeyPath("_buildOperationDescription._actionName") as? String,
             let productName = data?.valueForKeyPath("_buildOperationDescription._objectToBuildName") as? String,
