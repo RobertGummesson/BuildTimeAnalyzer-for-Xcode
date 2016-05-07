@@ -165,7 +165,7 @@ extension CMResultWindowController: NSTableViewDelegate {
     
     func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         let item = dataSource[row]
-        CMXcodeWorkSpace.openFile(atPath: item.path, andLineNumber: item.location)
+        processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location)
         
         return true
     }
