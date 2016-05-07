@@ -14,7 +14,7 @@ extension NSNotificationCenter {
         }
     }
     
-    static func addObserverForName(name: String, usingBlock block: (NSNotification) -> Void) -> NSObjectProtocol {
+    static func addObserverForName(name: String?, usingBlock block: (NSNotification) -> Void) -> NSObjectProtocol {
         return NSNotificationCenter.defaultCenter().addObserverForName(name, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: block)
     }
 }

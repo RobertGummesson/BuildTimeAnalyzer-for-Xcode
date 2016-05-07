@@ -15,6 +15,7 @@ protocol CMXcodeWorkspaceProtocol {
     
     init(productName: String, buildCompletionDate: NSDate?)
     func logTextForProduct(attemptIndex: Int, completionHandler: ((text: String?) -> ()))
+    func willOpenDocument(atLineNumber lineNumber: Int)
 }
 
 extension CMXcodeWorkspaceProtocol {
@@ -56,13 +57,13 @@ extension CMXcodeWorkspaceProtocol {
         return buildFolderFromWorkspace(productWorkspace())?.path
     }
     
-    // MARK: Static methods
-    
-    static func openFile(atPath path: String, andLineNumber lineNumber: Int) {
-        // TODO: Work out how to jump to the line number.
-        // Need to be notified when it has opened
+    func openFile(atPath path: String, andLineNumber lineNumber: Int) {
+        // TODO: This only works if a new file is opened
+        willOpenDocument(atLineNumber: lineNumber)
         NSApp.delegate?.application?(NSApp, openFile: path)
     }
+    
+    // MARK: Static methods
     
     static func buildOperation(fromData data: AnyObject?) -> CMBuildOperation? {
         guard let actionName = data?.valueForKeyPath("_buildOperationDescription._actionName") as? String,
@@ -186,14 +187,52 @@ extension CMXcodeWorkspaceProtocol {
     }
 }
 
-struct CMXcodeWorkSpace: CMXcodeWorkspaceProtocol {
+class CMXcodeWorkSpace: NSObject, CMXcodeWorkspaceProtocol {
+    
+    let notificationName = "IDESourceCodeEditorDidFinishSetup"
     
     var retryAttempts = 10
     var productName: String
     var buildCompletionDate: NSDate?
+    var lineNumber = 0
     
-    init(productName: String, buildCompletionDate: NSDate?) {
+    required init(productName: String, buildCompletionDate: NSDate?) {
         self.productName = productName
         self.buildCompletionDate = buildCompletionDate
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: notificationName, object: nil)
+    }
+    
+    func willOpenDocument(atLineNumber lineNumber: Int) {
+        self.lineNumber = lineNumber
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(sourceCodeEditorDidFinishSetup(_:)), name: notificationName, object: nil)
+    }
+    
+    func sourceCodeEditorDidFinishSetup(notification: NSNotification) {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: notificationName, object: nil)
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.adjustSelection(forTextView: notification.object?.valueForKeyPath("_textView") as? NSTextView)
+        }
+    }
+    
+    func adjustSelection(forTextView textView: NSTextView?) {
+        guard let textView = textView, text = textView.textStorage?.string else { return }
+        
+        let subSequences = text.characters.split("\n", allowEmptySlices: true)
+        let lineCount = subSequences.count > lineNumber ? lineNumber : subSequences.count
+        
+        var characterCount = 0
+        subSequences.dropLast(subSequences.count - lineCount).forEach({ (subSequence) in
+            characterCount += String(subSequence).characters.count
+        })
+        
+        let range = NSMakeRange(characterCount + lineNumber - 1, 0)
+        if range.location < text.characters.count {
+            textView.selectedRange = range
+            textView.scrollRangeToVisible(range)
+        }
     }
 }
