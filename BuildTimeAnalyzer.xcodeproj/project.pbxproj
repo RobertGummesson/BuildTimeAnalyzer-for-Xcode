@@ -29,6 +29,8 @@
 		2CB35FA41CDDCB1900805DD3 /* DVTFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB35FA31CDDCB1900805DD3 /* DVTFoundation.framework */; };
 		2CB35FA71CDDCB5100805DD3 /* IDEFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB35FA51CDDCB5100805DD3 /* IDEFoundation.framework */; };
 		2CB35FA81CDDCB5100805DD3 /* IDEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB35FA61CDDCB5100805DD3 /* IDEKit.framework */; };
+		2CC3403C1CDEBDC200757C6C /* CMBuildAnalyzerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC3403B1CDEBDC200757C6C /* CMBuildAnalyzerWindowController.swift */; };
+		2CC3403E1CDEBE1600757C6C /* CMBuildAnalyzerWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CC3403D1CDEBE1600757C6C /* CMBuildAnalyzerWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +76,8 @@
 		2CB35FA31CDDCB1900805DD3 /* DVTFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DVTFoundation.framework; path = ../../../Applications/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework; sourceTree = "<group>"; };
 		2CB35FA51CDDCB5100805DD3 /* IDEFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IDEFoundation.framework; path = ../../../Applications/Xcode.app/Contents/Frameworks/IDEFoundation.framework; sourceTree = "<group>"; };
 		2CB35FA61CDDCB5100805DD3 /* IDEKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IDEKit.framework; path = ../../../Applications/Xcode.app/Contents/Frameworks/IDEKit.framework; sourceTree = "<group>"; };
+		2CC3403B1CDEBDC200757C6C /* CMBuildAnalyzerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMBuildAnalyzerWindowController.swift; sourceTree = "<group>"; };
+		2CC3403D1CDEBE1600757C6C /* CMBuildAnalyzerWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMBuildAnalyzerWindow.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +137,8 @@
 				2AE38C561CDA8222008B65AE /* CMRawMeasure.swift */,
 				2A74ACC41CD5733B0057B819 /* CMResultWindow.xib */,
 				2A74ACCB1CD573CD0057B819 /* CMResultWindowController.swift */,
+				2CC3403D1CDEBE1600757C6C /* CMBuildAnalyzerWindow.xib */,
+				2CC3403B1CDEBDC200757C6C /* CMBuildAnalyzerWindowController.swift */,
 				2A69BFFD1CD5179200A554A3 /* CMXcodeWorkspace.swift */,
 				2C9B7D781CDDD5E6001C1B3C /* CMXcodeNavigator.swift */,
 				2A9BDFEA1CD95196000E5862 /* Icons.xcassets */,
@@ -292,6 +298,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CC3403E1CDEBE1600757C6C /* CMBuildAnalyzerWindow.xib in Resources */,
 				2A9BDFEB1CD95196000E5862 /* Icons.xcassets in Resources */,
 				2A74ACC51CD5733B0057B819 /* CMResultWindow.xib in Resources */,
 			);
@@ -317,6 +324,7 @@
 				2ABB72041CDA4680001FDC32 /* CMLogProcessor.swift in Sources */,
 				2A71846E1CDA483E00E8B7D3 /* NSNotificationCenter+Extensions.swift in Sources */,
 				2ABB72051CDA4680001FDC32 /* CMProcessingState.swift in Sources */,
+				2CC3403C1CDEBDC200757C6C /* CMBuildAnalyzerWindowController.swift in Sources */,
 				2C9B7D791CDDD5E6001C1B3C /* CMXcodeNavigator.swift in Sources */,
 				2ABB72061CDA4680001FDC32 /* CMResultWindowController.swift in Sources */,
 				2A14D30B1CDA4F380079BFF0 /* NSData+GZIP.m in Sources */,

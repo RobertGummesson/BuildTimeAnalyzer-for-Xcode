@@ -18,6 +18,27 @@ protocol CMXcodeWorkspaceProtocol {
 }
 
 extension CMXcodeWorkspaceProtocol {
+    static func currentProductName() -> String? {
+        guard let workSpaceControllers = NSClassFromString("IDEWorkspaceWindowController")?.valueForKey("workspaceWindowControllers") as? [AnyObject] else {
+                return nil
+        }
+        
+        for controller in workSpaceControllers {
+            guard
+                let window = controller.valueForKey("window") as? NSWindow
+                where window.keyWindow,
+                let workspace = controller.valueForKey("_workspace"),
+                projectName = workspace.valueForKey("name") as? String
+                else {
+                    continue
+            }
+            
+            return projectName
+        }
+        
+        return nil
+    }
+    
     func logTextForProduct(attemptIndex: Int = 0, completionHandler: ((text: String?) -> ())) {
         guard let buildFolderPath = buildFolderPath(productName),
             let buildFolderURL = NSURL(string: buildFolderPath),

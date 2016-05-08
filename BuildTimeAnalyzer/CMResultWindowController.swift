@@ -47,13 +47,17 @@ class CMResultWindowController: NSWindowController {
         showWindow(self)
         addObservers()
         
+        if let currentProduct = CMXcodeWorkSpace.currentProductName() {
+            processLog(currentProduct)
+        }
+        
         if let window = resultWindow {
             window.makeMainWindow()
             window.level = Int(CGWindowLevelKey.OverlayWindowLevelKey.rawValue)
         }
     }
     
-    func processLog(productName: String, buildCompletionDate: NSDate?) {
+    func processLog(productName: String, buildCompletionDate: NSDate? = nil) {
         guard processingState != .processing else { return }
         processingState = .processing
         
