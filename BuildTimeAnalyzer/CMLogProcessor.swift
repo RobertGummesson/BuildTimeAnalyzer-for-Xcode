@@ -19,7 +19,7 @@ protocol CMLogProcessorProtocol: class {
 }
 
 extension CMLogProcessorProtocol {
-    func process(productName: String, buildCompletionDate: NSDate?, updateHandler: ((result: [CMCompileMeasure], didComplete: Bool) -> ())?) {
+    func process(productName: String, buildCompletionDate: NSDate?, updateHandler: CMUpdateClosure?) {
         workspace = CMXcodeWorkSpace(productName: productName, buildCompletionDate: buildCompletionDate)
         workspace?.logTextForProduct() { [weak self] (text) in
             guard let text = text else {
