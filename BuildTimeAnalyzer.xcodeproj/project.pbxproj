@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2A14D30B1CDA4F380079BFF0 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A69BFFB1CD513D700A554A3 /* NSData+GZIP.m */; };
 		2A1682C31CD4039300014B7F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1682C21CD4039300014B7F /* Cocoa.framework */; };
-		2A1682C51CD403FB00014B7F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1682C41CD403FB00014B7F /* AppKit.framework */; };
 		2A1682C71CD4040900014B7F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1682C61CD4040900014B7F /* Foundation.framework */; };
 		2A1682CA1CD4042800014B7F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1682C91CD4042800014B7F /* CoreData.framework */; };
 		2A71846E1CDA483E00E8B7D3 /* NSNotificationCenter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A71846D1CDA483E00E8B7D3 /* NSNotificationCenter+Extensions.swift */; };
@@ -25,6 +24,11 @@
 		2ABB72061CDA4680001FDC32 /* CMResultWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A74ACCB1CD573CD0057B819 /* CMResultWindowController.swift */; };
 		2ABB72071CDA4680001FDC32 /* CMXcodeWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A69BFFD1CD5179200A554A3 /* CMXcodeWorkspace.swift */; };
 		2AE38C571CDA8222008B65AE /* CMRawMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE38C561CDA8222008B65AE /* CMRawMeasure.swift */; };
+		2C9B7D791CDDD5E6001C1B3C /* CMXcodeNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9B7D781CDDD5E6001C1B3C /* CMXcodeNavigator.swift */; };
+		2CB35FA21CDDCAFE00805DD3 /* DVTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB35FA11CDDCAFE00805DD3 /* DVTKit.framework */; };
+		2CB35FA41CDDCB1900805DD3 /* DVTFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB35FA31CDDCB1900805DD3 /* DVTFoundation.framework */; };
+		2CB35FA71CDDCB5100805DD3 /* IDEFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB35FA51CDDCB5100805DD3 /* IDEFoundation.framework */; };
+		2CB35FA81CDDCB5100805DD3 /* IDEKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB35FA61CDDCB5100805DD3 /* IDEKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +47,6 @@
 		2A1682BD1CD3FB5D00014B7F /* BuildTimeAnalyzer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BuildTimeAnalyzer-Bridging-Header.h"; sourceTree = "<group>"; };
 		2A1682C01CD3FBCC00014B7F /* CMPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPlugin.swift; sourceTree = "<group>"; };
 		2A1682C21CD4039300014B7F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		2A1682C41CD403FB00014B7F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		2A1682C61CD4040900014B7F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2A1682C91CD4042800014B7F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		2A1854A31CD8BB74005498BF /* CMBuildOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMBuildOperation.swift; sourceTree = "<group>"; };
@@ -61,6 +64,16 @@
 		2A7DBBF61CD8E5D1009E9B49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = BuildTimeAnalyzerTests/Info.plist; sourceTree = "<group>"; };
 		2A9BDFEA1CD95196000E5862 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		2AE38C561CDA8222008B65AE /* CMRawMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMRawMeasure.swift; sourceTree = "<group>"; };
+		2C9B7D781CDDD5E6001C1B3C /* CMXcodeNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMXcodeNavigator.swift; sourceTree = "<group>"; };
+		2CB35F9C1CDDC6EB00805DD3 /* DVTFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVTFoundation.h; sourceTree = "<group>"; };
+		2CB35F9D1CDDC6EB00805DD3 /* DVTKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVTKit.h; sourceTree = "<group>"; };
+		2CB35F9E1CDDC6EB00805DD3 /* IDEFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDEFoundation.h; sourceTree = "<group>"; };
+		2CB35F9F1CDDC6EB00805DD3 /* IDEKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDEKit.h; sourceTree = "<group>"; };
+		2CB35FA01CDDC6EB00805DD3 /* IDESourceEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDESourceEditor.h; sourceTree = "<group>"; };
+		2CB35FA11CDDCAFE00805DD3 /* DVTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DVTKit.framework; path = ../../../Applications/Xcode.app/Contents/SharedFrameworks/DVTKit.framework; sourceTree = "<group>"; };
+		2CB35FA31CDDCB1900805DD3 /* DVTFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DVTFoundation.framework; path = ../../../Applications/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework; sourceTree = "<group>"; };
+		2CB35FA51CDDCB5100805DD3 /* IDEFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IDEFoundation.framework; path = ../../../Applications/Xcode.app/Contents/Frameworks/IDEFoundation.framework; sourceTree = "<group>"; };
+		2CB35FA61CDDCB5100805DD3 /* IDEKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IDEKit.framework; path = ../../../Applications/Xcode.app/Contents/Frameworks/IDEKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,9 +81,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CB35FA71CDDCB5100805DD3 /* IDEFoundation.framework in Frameworks */,
+				2CB35FA81CDDCB5100805DD3 /* IDEKit.framework in Frameworks */,
+				2CB35FA41CDDCB1900805DD3 /* DVTFoundation.framework in Frameworks */,
+				2CB35FA21CDDCAFE00805DD3 /* DVTKit.framework in Frameworks */,
 				2A1682CA1CD4042800014B7F /* CoreData.framework in Frameworks */,
 				2A1682C71CD4040900014B7F /* Foundation.framework in Frameworks */,
-				2A1682C51CD403FB00014B7F /* AppKit.framework in Frameworks */,
 				2A1682C31CD4039300014B7F /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -108,6 +124,7 @@
 		2A1682B51CD3F73900014B7F /* BuildTimeAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
+				2CB35F9B1CDDC6EB00805DD3 /* Dumped Headers */,
 				2A1854A31CD8BB74005498BF /* CMBuildOperation.swift */,
 				2A1B1E7F1CD768C300ADD414 /* CMCompileMeasure.swift */,
 				2A74ACC11CD571470057B819 /* CMLogProcessor.swift */,
@@ -117,6 +134,7 @@
 				2A74ACC41CD5733B0057B819 /* CMResultWindow.xib */,
 				2A74ACCB1CD573CD0057B819 /* CMResultWindowController.swift */,
 				2A69BFFD1CD5179200A554A3 /* CMXcodeWorkspace.swift */,
+				2C9B7D781CDDD5E6001C1B3C /* CMXcodeNavigator.swift */,
 				2A9BDFEA1CD95196000E5862 /* Icons.xcassets */,
 				2A1682BC1CD3FAA800014B7F /* Supporting Files */,
 				2AC835061CD664B200314A5A /* System Extensions */,
@@ -136,7 +154,10 @@
 		2A1682C81CD4041200014B7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2A1682C41CD403FB00014B7F /* AppKit.framework */,
+				2CB35FA51CDDCB5100805DD3 /* IDEFoundation.framework */,
+				2CB35FA61CDDCB5100805DD3 /* IDEKit.framework */,
+				2CB35FA31CDDCB1900805DD3 /* DVTFoundation.framework */,
+				2CB35FA11CDDCAFE00805DD3 /* DVTKit.framework */,
 				2A1682C91CD4042800014B7F /* CoreData.framework */,
 				2A1682C61CD4040900014B7F /* Foundation.framework */,
 				2A1682C21CD4039300014B7F /* Cocoa.framework */,
@@ -178,6 +199,18 @@
 				2A71846D1CDA483E00E8B7D3 /* NSNotificationCenter+Extensions.swift */,
 			);
 			name = "System Extensions";
+			sourceTree = "<group>";
+		};
+		2CB35F9B1CDDC6EB00805DD3 /* Dumped Headers */ = {
+			isa = PBXGroup;
+			children = (
+				2CB35F9C1CDDC6EB00805DD3 /* DVTFoundation.h */,
+				2CB35F9D1CDDC6EB00805DD3 /* DVTKit.h */,
+				2CB35F9E1CDDC6EB00805DD3 /* IDEFoundation.h */,
+				2CB35F9F1CDDC6EB00805DD3 /* IDEKit.h */,
+				2CB35FA01CDDC6EB00805DD3 /* IDESourceEditor.h */,
+			);
+			path = "Dumped Headers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,6 +317,7 @@
 				2ABB72041CDA4680001FDC32 /* CMLogProcessor.swift in Sources */,
 				2A71846E1CDA483E00E8B7D3 /* NSNotificationCenter+Extensions.swift in Sources */,
 				2ABB72051CDA4680001FDC32 /* CMProcessingState.swift in Sources */,
+				2C9B7D791CDDD5E6001C1B3C /* CMXcodeNavigator.swift in Sources */,
 				2ABB72061CDA4680001FDC32 /* CMResultWindowController.swift in Sources */,
 				2A14D30B1CDA4F380079BFF0 /* NSData+GZIP.m in Sources */,
 				2ABB72071CDA4680001FDC32 /* CMXcodeWorkspace.swift in Sources */,
@@ -406,15 +440,20 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DSTROOT = "$(HOME)";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Frameworks",
+					"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/SharedFrameworks",
+				);
 				INFOPLIST_FILE = BuildTimeAnalyzer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Application Support/Developer/Shared/Xcode/Plug-ins";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(DT_TOOLCHAIN_DIR)/usr/lib/swift/macosx $(inherited)";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = BuildTimeAnalyzer;
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzer/BuildTimeAnalyzer-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				WRAPPER_EXTENSION = xcplugin;
 			};
 			name = Debug;
@@ -428,9 +467,14 @@
 				COPY_PHASE_STRIP = YES;
 				DSTROOT = "$(HOME)";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Frameworks",
+					"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/SharedFrameworks",
+				);
 				INFOPLIST_FILE = BuildTimeAnalyzer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Application Support/Developer/Shared/Xcode/Plug-ins";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(DT_TOOLCHAIN_DIR)/usr/lib/swift/macosx $(inherited)";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = BuildTimeAnalyzer;
