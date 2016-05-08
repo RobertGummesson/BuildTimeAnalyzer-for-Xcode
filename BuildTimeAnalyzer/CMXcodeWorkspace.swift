@@ -15,7 +15,7 @@ protocol CMXcodeWorkspaceProtocol {
     
     init(productName: String, buildCompletionDate: NSDate?)
     func logTextForProduct(attemptIndex: Int, completionHandler: ((text: String?) -> ()))
-    func willOpenDocument(atLineNumber lineNumber: Int)
+    func willOpenDocument(atLineNumber lineNumber: Int, usingTextView textView: NSTextView?)
 }
 
 extension CMXcodeWorkspaceProtocol {
@@ -58,12 +58,15 @@ extension CMXcodeWorkspaceProtocol {
     }
     
     func openFile(atPath path: String, andLineNumber lineNumber: Int) {
-        // TODO: This only works if a new file is opened
-        willOpenDocument(atLineNumber: lineNumber)
-        NSApp.delegate?.application?(NSApp, openFile: path)
+        if let textView = Self.editorForFilepath(path) {
+            willOpenDocument(atLineNumber: lineNumber, usingTextView: textView)
+        } else {
+            willOpenDocument(atLineNumber: lineNumber, usingTextView: nil)
+            NSApp.delegate?.application?(NSApp, openFile: path)
+        }
     }
     
-    // MARK: Static methods
+    // MARK: Public static methods
     
     static func buildOperation(fromData data: AnyObject?) -> CMBuildOperation? {
         guard let actionName = data?.valueForKeyPath("_buildOperationDescription._actionName") as? String,
@@ -91,7 +94,27 @@ extension CMXcodeWorkspaceProtocol {
         return nil
     }
     
-    static func workspaceWindowControllers() -> [AnyObject]? {
+    // MARK: Private static methods
+    
+    private static func editorForFilepath(filepath: String) -> NSTextView? {
+        guard let workSpaceControllers = workspaceWindowControllers() else { return nil }
+        
+        for controller in workSpaceControllers {
+            guard
+                let editor = controller.valueForKeyPath("editorArea.lastActiveEditorContext.editor"),
+                let IDESourceCodeEditor = NSClassFromString("IDESourceCodeEditor") where editor.isKindOfClass(IDESourceCodeEditor),
+                let url = editor.valueForKeyPath("sourceCodeDocument.fileURL") as? NSURL,
+                let path = url.path where path == filepath,
+                let textView = editor.valueForKey("_textView")
+                else {
+                    continue
+            }
+            return textView as? NSTextView
+        }
+        return nil
+    }
+    
+    private static  func workspaceWindowControllers() -> [AnyObject]? {
         guard let windowController = NSClassFromString("IDEWorkspaceWindowController") else { return nil }
         return windowController.valueForKey("workspaceWindowControllers") as? [AnyObject]
     }
@@ -225,9 +248,13 @@ class CMXcodeWorkSpace: NSObject, CMXcodeWorkspaceProtocol {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: notificationName, object: nil)
     }
     
-    func willOpenDocument(atLineNumber lineNumber: Int) {
+    func willOpenDocument(atLineNumber lineNumber: Int, usingTextView textView: NSTextView?) {
         self.lineNumber = lineNumber
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(sourceCodeEditorDidFinishSetup(_:)), name: notificationName, object: nil)
+        if let textView = textView {
+            adjustSelection(forTextView: textView)
+        } else {
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(sourceCodeEditorDidFinishSetup(_:)), name: notificationName, object: nil)
+        }
     }
     
     func sourceCodeEditorDidFinishSetup(notification: NSNotification) {
