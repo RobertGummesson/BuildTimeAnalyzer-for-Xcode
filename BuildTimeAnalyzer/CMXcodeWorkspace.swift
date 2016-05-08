@@ -66,7 +66,7 @@ extension CMXcodeWorkspaceProtocol {
         }
     }
     
-    // MARK: Static public methods
+    // MARK: Public static methods
     
     static func buildOperation(fromData data: AnyObject?) -> CMBuildOperation? {
         guard let actionName = data?.valueForKeyPath("_buildOperationDescription._actionName") as? String,
