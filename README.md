@@ -13,8 +13,6 @@ Open the analyzer window by tapping `Shift+Ctrl+B` or `View` > `Build Time Analy
 
 ## Installation
 
-_NOTE: [There is an issue installing](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/issues/1) from Alcatraz at the moment. You can work around this by building it yourself. I'm working on fixing this._
-
 Build Time Analyzer is available through [Alcatraz - The package manager for Xcode](http://alcatraz.io/).
 
 If you rather compile it yourself, simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. To uninstall, just remove the plugin from there (and restart Xcode).
