@@ -12,9 +12,9 @@ protocol CMXcodeWorkspaceProtocol {
     var retryAttempts: Int { get }
     var productName: String { get set }
     var buildCompletionDate: NSDate? { get set }
+    var focusLostHandler: (() -> ())? { get set }
     
     init(productName: String, buildCompletionDate: NSDate?)
-    func logTextForProduct(attemptIndex: Int, completionHandler: ((text: String?) -> ()))
     func willOpenDocument(atLineNumber lineNumber: Int, usingTextView textView: NSTextView?)
 }
 
@@ -57,10 +57,11 @@ extension CMXcodeWorkspaceProtocol {
         return buildFolderFromWorkspace(productWorkspace())?.path
     }
     
-    func openFile(atPath path: String, andLineNumber lineNumber: Int) {
+    mutating func openFile(atPath path: String, andLineNumber lineNumber: Int, focusLostHandler: () -> ()) {
         if let textView = Self.editorForFilepath(path) {
             willOpenDocument(atLineNumber: lineNumber, usingTextView: textView)
         } else {
+            self.focusLostHandler = focusLostHandler
             willOpenDocument(atLineNumber: lineNumber, usingTextView: nil)
             NSApp.delegate?.application?(NSApp, openFile: path)
         }
@@ -238,6 +239,7 @@ class CMXcodeWorkSpace: NSObject, CMXcodeWorkspaceProtocol {
     var productName: String
     var buildCompletionDate: NSDate?
     var lineNumber = 0
+    var focusLostHandler: (() -> ())?
     
     required init(productName: String, buildCompletionDate: NSDate?) {
         self.productName = productName
@@ -262,6 +264,8 @@ class CMXcodeWorkSpace: NSObject, CMXcodeWorkspaceProtocol {
         
         dispatch_async(dispatch_get_main_queue()) {
             self.adjustSelection(forTextView: notification.object?.valueForKeyPath("_textView") as? NSTextView)
+            self.focusLostHandler?()
+            self.focusLostHandler = nil
         }
     }
     

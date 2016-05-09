@@ -36,7 +36,7 @@ struct CMCompileMeasure {
         guard let filename = untrimmedFilename?.characters.split(":").map(String.init).first else { return nil }
         
         let locationString = String(rawPath.substringFromIndex(filepath.endIndex).characters.dropFirst())
-        let locations = locationString.characters.split(":").map(String.init).flatMap{ Int($0) }
+        let locations = locationString.characters.split(":").flatMap{ Int(String.init($0)) }
         guard locations.count == 2 else { return nil }
         
         self.time = time

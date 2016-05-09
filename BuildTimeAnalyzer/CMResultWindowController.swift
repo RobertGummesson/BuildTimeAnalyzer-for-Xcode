@@ -47,7 +47,7 @@ class CMResultWindowController: NSWindowController {
         showWindow(self)
         addObservers()
         
-        // Get currentProduct needs to be run before set resultWindow.makeMainWindow()
+        // Get currentProduct needs to be run before resultWindow.makeMainWindow()
         if let currentProduct = CMXcodeWorkSpace.currentProductName() {
             processLog(currentProduct)
         }
@@ -170,8 +170,9 @@ extension CMResultWindowController: NSTableViewDelegate {
     
     func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         let item = dataSource[row]
-        processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location)
-        
+        processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location, focusLostHandler: { [weak self] in
+            self?.resultWindow.makeKeyWindow()
+        })
         return true
     }
 }
