@@ -55,6 +55,7 @@ class CMResultWindowController: NSWindowController {
         if let window = resultWindow {
             window.makeMainWindow()
             window.level = Int(CGWindowLevelKey.OverlayWindowLevelKey.rawValue)
+            updateViewForState()
         }
     }
     
