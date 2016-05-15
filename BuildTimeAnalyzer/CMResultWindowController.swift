@@ -135,14 +135,17 @@ class CMResultWindowController: NSWindowController {
         
         buildOperationDidGenerateOutputFilesObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationDidGenerateOutputFilesNotification, usingBlock: { [weak self] (note) in
             guard let buildOperation = CMXcodeWorkSpace.buildOperation(fromData: note.object) else { return  }
+            let result = buildOperation.result
             
-            if buildOperation.result == 1 && buildOperation.actionName == "Build" {
-                self?.buildDurationTextField.stringValue = String(format: "%.0fs", round(buildOperation.duration))
-                self?.processLog(buildOperation.productName, buildCompletionDate: buildOperation.endTime)
-            } else {
+            guard buildOperation.actionName == "Build" && (result == .Success || result == .Failed || result == .Cancelled) else {
                 self?.processingState = .waiting(shouldIndicate: false)
+                return
             }
+            
+            self?.buildDurationTextField.stringValue = String(format: "%.0fs", round(buildOperation.duration))
+            self?.processLog(buildOperation.productName, buildCompletionDate: buildOperation.endTime)
         })
+        
     }
     
     func removeObservers() {
