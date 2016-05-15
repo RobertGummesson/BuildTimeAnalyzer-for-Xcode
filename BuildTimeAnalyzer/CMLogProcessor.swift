@@ -128,11 +128,10 @@ class CMLogProcessor: NSObject, CMLogProcessorProtocol {
     }
     
     func processingDidFinish() {
-        timer?.invalidate()
-        timer = nil
-        
-        shouldCancel = false
         dispatch_async(dispatch_get_main_queue()) {
+            self.timer?.invalidate()
+            self.timer = nil
+            self.shouldCancel = false
             self.updateResults(true)
         }
     }

@@ -8,12 +8,18 @@
 
 import Foundation
 
+enum CMBuildResult : Int {
+    case Success = 1
+    case Failed = 2
+    case Cancelled = 3
+}
+
 struct CMBuildOperation {
     
     var actionName: String
     var productName: String
     var duration: Double
-    var result: Int
+    var result: CMBuildResult
     var startTime: NSDate
     
     var endTime: NSDate {

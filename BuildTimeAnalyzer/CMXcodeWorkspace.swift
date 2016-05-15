@@ -73,11 +73,12 @@ extension CMXcodeWorkspaceProtocol {
         guard let actionName = data?.valueForKeyPath("_buildOperationDescription._actionName") as? String,
             let productName = data?.valueForKeyPath("_buildOperationDescription._objectToBuildName") as? String,
             let duration = data?.valueForKey("duration") as? Double,
-            let result = data?.valueForKey("_result") as? Int,
+            let intResult = data?.valueForKey("_result") as? Int,
+            let cmResult = CMBuildResult(rawValue: intResult),
             let startTime = data?.valueForKey("_startTime") as? NSDate else {
                 return nil
         }
-        return CMBuildOperation(actionName: actionName, productName: productName, duration: duration, result: result, startTime: startTime)
+        return CMBuildOperation(actionName: actionName, productName: productName, duration: duration, result: cmResult, startTime: startTime)
     }
     
     static func currentProductName() -> String? {
