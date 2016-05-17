@@ -41,7 +41,7 @@ extension CMLogProcessorProtocol {
         let matchingOption = NSMatchingOptions(rawValue: 0)
         let compareOptions = NSStringCompareOptions(rawValue: 0)
         let regexOptions = NSRegularExpressionOptions(rawValue: 0)
-        let characterSet = NSCharacterSet(charactersInString:"\r")
+        let characterSet = NSCharacterSet(charactersInString:"\r\"")
         
         let regex = try! NSRegularExpression(pattern: locationPattern, options: regexOptions)
         
@@ -80,7 +80,7 @@ extension CMLogProcessorProtocol {
     
     private func capEntries(entries: [CMRawMeasure]) -> [CMRawMeasure] {
         let limit = 20
-
+        
         let distinct = Array(Set(entries))
         var sorted = distinct.sort{ $0.time > $1.time }
         if sorted.count > limit {
