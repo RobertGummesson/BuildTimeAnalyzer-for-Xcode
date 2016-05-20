@@ -117,7 +117,7 @@ extension CMXcodeWorkspaceProtocol {
     }
     
     private static  func workspaceWindowControllers() -> [AnyObject]? {
-        guard let windowController = NSClassFromString("IDEWorkspaceWindowController") else { return nil }
+        guard let windowController = NSClassFromString("IDEWorkspaceWindowController") as? NSObject.Type else { return nil }
         return windowController.valueForKey("workspaceWindowControllers") as? [AnyObject]
     }
     
@@ -256,7 +256,7 @@ class CMXcodeWorkSpace: NSObject, CMXcodeWorkspaceProtocol {
         if let textView = textView {
             adjustSelection(forTextView: textView)
         } else {
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(sourceCodeEditorDidFinishSetup(_:)), name: notificationName, object: nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "sourceCodeEditorDidFinishSetup:", name: notificationName, object: nil)
         }
     }
     

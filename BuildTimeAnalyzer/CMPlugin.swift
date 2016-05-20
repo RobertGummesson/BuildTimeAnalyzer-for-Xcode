@@ -39,7 +39,7 @@ class CMPlugin: NSObject {
         guard let submenu = NSApp.mainMenu?.itemWithTitle("View")?.submenu else { return }
         
         let title = NSLocalizedString("Build Time Analyzer", comment: "")
-        let menuItem = NSMenuItem(title: title, action: #selector(showWindow), keyEquivalent: "")
+        let menuItem = NSMenuItem(title: title, action: "showWindow", keyEquivalent: "")
         menuItem.target = self
         menuItem.keyEquivalent = "b"
         menuItem.keyEquivalentModifierMask = Int(NSEventModifierFlags.ShiftKeyMask.rawValue | NSEventModifierFlags.ControlKeyMask.rawValue)
@@ -56,7 +56,7 @@ class CMPlugin: NSObject {
         windowController?.show()
         
         if let window = self.windowController?.resultWindow {
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(windowWillClose(_:)), name: NSWindowWillCloseNotification, object: window)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "windowWillClose:", name: NSWindowWillCloseNotification, object: window)
         }
     }
     
