@@ -17,6 +17,8 @@ Build Time Analyzer is available through [Alcatraz - The package manager for Xco
 
 If you rather compile it yourself, simply build the Xcode project and restart Xcode. The plugin will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. To uninstall, just remove the plugin from there (and restart Xcode).
 
+Currently, the plugin supports Xcode 7.2.1 and above. See https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/issues/20 to add support for other Xcode versions.
+
 ## Contributions
 
 If you encounter any issues or have ideas for improvement, I am open to code contributions.
