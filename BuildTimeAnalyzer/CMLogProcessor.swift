@@ -123,7 +123,7 @@ class CMLogProcessor: NSObject, CMLogProcessorProtocol {
     
     func processingDidStart() {
         dispatch_async(dispatch_get_main_queue()) {
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.timerCallback(_:)), userInfo: nil, repeats: true)
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerCallback:", userInfo: nil, repeats: true)
         }
     }
     
