@@ -41,7 +41,8 @@ extension CMLogProcessorProtocol {
     private func process(text text: String) {
         let characterSet = NSCharacterSet(charactersInString:"\r\"")
         var remainingRange = text.startIndex..<text.endIndex
-        
+        var rawMeasures: [String:Double] = [:]
+
         unprocessedResult.removeAll()
         processingDidStart()
         
@@ -49,7 +50,9 @@ extension CMLogProcessorProtocol {
             let currentRange = remainingRange.startIndex..<nextRange.endIndex
             let text = text.substringWithRange(currentRange)
             
-            defer { remainingRange = nextRange.endIndex..<remainingRange.endIndex }
+            defer {
+                remainingRange = nextRange.endIndex..<remainingRange.endIndex
+            }
             
             let range = NSMakeRange(0, text.characters.count)
             guard let match = processRx.firstMatchInString(text, options: [], range: range) else { continue }
@@ -57,12 +60,19 @@ extension CMLogProcessorProtocol {
             let timeString = text.substringToIndex(text.startIndex.advancedBy(match.range.length - 4))
             if let time = Double(timeString) {
                 let value = text.substringFromIndex(text.startIndex.advancedBy(match.range.length - 1))
-                unprocessedResult.append(CMRawMeasure(time: time, text: value))
+
+                let cumulativeTime = rawMeasures[value] ?? 0
+                rawMeasures[value] = cumulativeTime + time
             }
             if shouldCancel {
                 break
             }
         }
+
+        for (k, v) in rawMeasures {
+            unprocessedResult.append(CMRawMeasure(time: v, text: k))
+        }
+
         processingDidFinish()
     }
     
