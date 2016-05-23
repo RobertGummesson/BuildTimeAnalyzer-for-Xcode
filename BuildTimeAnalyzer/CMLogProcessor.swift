@@ -76,13 +76,15 @@ extension CMLogProcessorProtocol {
             }
         }
 
-        unprocessedResult.sortInPlace{ $0.time > $1.time }
-
         processingDidFinish()
     }
     
     private func updateResults(didComplete: Bool) {
-        updateHandler?(result: processResult(unprocessedResult), didComplete: didComplete)
+        var results = processResult(unprocessedResult)
+        results = groupResultsBySourceLine(results)
+        results.sortInPlace{ $0.time > $1.time }
+
+        updateHandler?(result: results, didComplete: didComplete)
         if didComplete {
             unprocessedResult.removeAll()
         }
@@ -97,6 +99,20 @@ extension CMLogProcessorProtocol {
             }
         }
         return result
+    }
+
+    private func groupResultsBySourceLine(results: [CMCompileMeasure]) -> [CMCompileMeasure] {
+        var grouped: [String:CMCompileMeasure] = [:]
+        for result in results {
+            let key = result.fileAndLine
+            if var measure = grouped[key] {
+                measure.time += result.time
+                grouped[key] = measure
+            } else {
+                grouped[key] = result
+            }
+        }
+        return Array(grouped.values)
     }
     
     private func trimPrefixes(code: String) -> String {
