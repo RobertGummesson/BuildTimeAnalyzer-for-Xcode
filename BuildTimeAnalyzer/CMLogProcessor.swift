@@ -9,7 +9,7 @@
 typealias CMUpdateClosure = (result: [CMCompileMeasure], didComplete: Bool) -> ()
 
 protocol CMLogProcessorProtocol: class {
-    var unprocessedResult: [CMRawMeasure] { get set }
+    var rawMeasures: [String: CMRawMeasure] { get set }
     var updateHandler: CMUpdateClosure? { get set }
     var workspace: CMXcodeWorkSpace? { get set }
     var shouldCancel: Bool { get set }
@@ -17,6 +17,8 @@ protocol CMLogProcessorProtocol: class {
     func processingDidStart()
     func processingDidFinish()
 }
+
+private let processRx = try! NSRegularExpression(pattern:  "^\\d*\\.?\\dms\\t/", options: [])
 
 extension CMLogProcessorProtocol {
     func process(productName: String, buildCompletionDate: NSDate?, updateHandler: CMUpdateClosure?) {
@@ -37,61 +39,54 @@ extension CMLogProcessorProtocol {
     // MARK: Private methods
     
     private func process(text text: String) {
-        let locationPattern = "^\\d*\\.?\\dms\\t/"
-        let matchingOption = NSMatchingOptions(rawValue: 0)
-        let compareOptions = NSStringCompareOptions(rawValue: 0)
-        let regexOptions = NSRegularExpressionOptions(rawValue: 0)
         let characterSet = NSCharacterSet(charactersInString:"\r\"")
-        
-        let regex = try! NSRegularExpression(pattern: locationPattern, options: regexOptions)
-        
         var remainingRange = text.startIndex..<text.endIndex
+        rawMeasures.removeAll()
         
-        unprocessedResult.removeAll()
         processingDidStart()
         
-        while let nextRange = text.rangeOfCharacterFromSet(characterSet, options: compareOptions, range: remainingRange) {
-            let currentRange = remainingRange.startIndex..<nextRange.endIndex
-            let text = text.substringWithRange(currentRange)
+        while let nextRange = text.rangeOfCharacterFromSet(characterSet, options: [], range: remainingRange) {
+            let text = text.substringWithRange(remainingRange.startIndex..<nextRange.endIndex)
             
-            defer { remainingRange = nextRange.endIndex..<remainingRange.endIndex }
+            defer {
+                remainingRange = nextRange.endIndex..<remainingRange.endIndex
+            }
             
             let range = NSMakeRange(0, text.characters.count)
-            guard let match = regex.firstMatchInString(text, options: matchingOption, range: range) else { continue }
+            guard let match = processRx.firstMatchInString(text, options: [], range: range) else { continue }
             
             let timeString = text.substringToIndex(text.startIndex.advancedBy(match.range.length - 4))
             if let time = Double(timeString) {
                 let value = text.substringFromIndex(text.startIndex.advancedBy(match.range.length - 1))
-                unprocessedResult.append(CMRawMeasure(time: time, text: value))
+                if var rawMeasure = rawMeasures[value] {
+                    rawMeasure.time += time
+                    rawMeasures[value] = rawMeasure
+                } else {
+                    rawMeasures[value] = CMRawMeasure(time: time, text: value)
+                }
             }
-            guard !shouldCancel else { break }
+            if shouldCancel {
+                break
+            }
         }
         processingDidFinish()
     }
     
     private func updateResults(didComplete: Bool) {
-        let cappedResult = capEntries(unprocessedResult)
-        updateHandler?(result: processResult(cappedResult), didComplete: didComplete)
+        var filteredResults = rawMeasures.values.filter({ $0.time > 10 })
+        if filteredResults.count < 20 {
+            filteredResults = rawMeasures.values.filter({ $0.time > 0.1 })
+        }
+        
+        let sortedResults = filteredResults.sort({ $0.time > $1.time })
+        updateHandler?(result: processResult(sortedResults), didComplete: didComplete)
         
         if didComplete {
-            unprocessedResult.removeAll()
+            rawMeasures.removeAll()
         }
-    }
-    
-    private func capEntries(entries: [CMRawMeasure]) -> [CMRawMeasure] {
-        let limit = 20
-        
-        let distinct = Array(Set(entries))
-        var sorted = distinct.sort{ $0.time > $1.time }
-        if sorted.count > limit {
-            sorted = Array(sorted[0..<limit])
-        }
-        return sorted
     }
     
     private func processResult(unprocessedResult: [CMRawMeasure]) -> [CMCompileMeasure] {
-        let unprocessedResult = capEntries(unprocessedResult)
-        
         var result: [CMCompileMeasure] = []
         for entry in unprocessedResult {
             let code = entry.text.characters.split("\t").map(String.init)
@@ -115,7 +110,7 @@ extension CMLogProcessorProtocol {
 
 class CMLogProcessor: NSObject, CMLogProcessorProtocol {
     
-    var unprocessedResult: [CMRawMeasure] = []
+    var rawMeasures: [String: CMRawMeasure] = [:]
     var updateHandler: CMUpdateClosure?
     var workspace: CMXcodeWorkSpace?
     var shouldCancel = false
@@ -123,7 +118,7 @@ class CMLogProcessor: NSObject, CMLogProcessorProtocol {
     
     func processingDidStart() {
         dispatch_async(dispatch_get_main_queue()) {
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(self.timerCallback(_:)), userInfo: nil, repeats: true)
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(1.5, target: self, selector: #selector(self.timerCallback(_:)), userInfo: nil, repeats: true)
         }
     }
     

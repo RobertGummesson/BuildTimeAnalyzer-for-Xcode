@@ -14,11 +14,15 @@ struct CMCompileMeasure {
     var path: String
     var code: String
     var filename: String
-    
+
     private var locationArray: [Int]
-    
+
+    var fileAndLine: String {
+        return "\(filename):\(locationArray[0])"
+    }
+
     var fileInfo: String {
-        return "\(filename):\(locationArray[0]):\(locationArray[1])"
+        return "\(fileAndLine):\(locationArray[1])"
     }
     
     var location: Int {
