@@ -39,23 +39,20 @@ extension CMLogProcessorProtocol {
     // MARK: Private methods
     
     private func process(text text: String) {
-        let matchingOption = NSMatchingOptions(rawValue: 0)
-        let compareOptions = NSStringCompareOptions(rawValue: 0)
         let characterSet = NSCharacterSet(charactersInString:"\r\"")
-
         var remainingRange = text.startIndex..<text.endIndex
         
         unprocessedResult.removeAll()
         processingDidStart()
         
-        while let nextRange = text.rangeOfCharacterFromSet(characterSet, options: compareOptions, range: remainingRange) {
+        while let nextRange = text.rangeOfCharacterFromSet(characterSet, options: [], range: remainingRange) {
             let currentRange = remainingRange.startIndex..<nextRange.endIndex
             let text = text.substringWithRange(currentRange)
             
             defer { remainingRange = nextRange.endIndex..<remainingRange.endIndex }
             
             let range = NSMakeRange(0, text.characters.count)
-            guard let match = processRx.firstMatchInString(text, options: matchingOption, range: range) else { continue }
+            guard let match = processRx.firstMatchInString(text, options: [], range: range) else { continue }
             
             let timeString = text.substringToIndex(text.startIndex.advancedBy(match.range.length - 4))
             if let time = Double(timeString) {
