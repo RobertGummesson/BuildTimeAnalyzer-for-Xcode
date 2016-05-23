@@ -18,6 +18,8 @@ protocol CMLogProcessorProtocol: class {
     func processingDidFinish()
 }
 
+private let processRx = try! NSRegularExpression(pattern:  "^\\d*\\.?\\dms\\t/", options: [])
+
 extension CMLogProcessorProtocol {
     func process(productName: String, buildCompletionDate: NSDate?, updateHandler: CMUpdateClosure?) {
         workspace = CMXcodeWorkSpace(productName: productName, buildCompletionDate: buildCompletionDate)
@@ -37,14 +39,10 @@ extension CMLogProcessorProtocol {
     // MARK: Private methods
     
     private func process(text text: String) {
-        let locationPattern = "^\\d*\\.?\\dms\\t/"
         let matchingOption = NSMatchingOptions(rawValue: 0)
         let compareOptions = NSStringCompareOptions(rawValue: 0)
-        let regexOptions = NSRegularExpressionOptions(rawValue: 0)
         let characterSet = NSCharacterSet(charactersInString:"\r\"")
-        
-        let regex = try! NSRegularExpression(pattern: locationPattern, options: regexOptions)
-        
+
         var remainingRange = text.startIndex..<text.endIndex
         
         unprocessedResult.removeAll()
@@ -57,7 +55,7 @@ extension CMLogProcessorProtocol {
             defer { remainingRange = nextRange.endIndex..<remainingRange.endIndex }
             
             let range = NSMakeRange(0, text.characters.count)
-            guard let match = regex.firstMatchInString(text, options: matchingOption, range: range) else { continue }
+            guard let match = processRx.firstMatchInString(text, options: matchingOption, range: range) else { continue }
             
             let timeString = text.substringToIndex(text.startIndex.advancedBy(match.range.length - 4))
             if let time = Double(timeString) {
