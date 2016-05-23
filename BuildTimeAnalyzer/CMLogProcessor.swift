@@ -73,8 +73,14 @@ extension CMLogProcessorProtocol {
     }
     
     private func updateResults(didComplete: Bool) {
-        let unprocessedResult = rawMeasures.values.filter({ $0.time > 10 }).sort({ $0.time > $1.time })
-        updateHandler?(result: processResult(unprocessedResult), didComplete: didComplete)
+        var filteredResults = rawMeasures.values.filter({ $0.time > 10 })
+        if filteredResults.count < 20 {
+            filteredResults = rawMeasures.values.filter({ $0.time > 0.1 })
+        }
+        
+        let sortedResults = filteredResults.sort({ $0.time > $1.time })
+        updateHandler?(result: processResult(sortedResults), didComplete: didComplete)
+        
         if didComplete {
             rawMeasures.removeAll()
         }
