@@ -18,6 +18,8 @@ protocol CMLogProcessorProtocol: class {
     func processingDidFinish()
 }
 
+private let processRx = try! NSRegularExpression(pattern:  "^\\d*\\.?\\dms\\t/", options: [])
+
 extension CMLogProcessorProtocol {
     func process(productName: String, buildCompletionDate: NSDate?, updateHandler: CMUpdateClosure?) {
         workspace = CMXcodeWorkSpace(productName: productName, buildCompletionDate: buildCompletionDate)
@@ -37,61 +39,58 @@ extension CMLogProcessorProtocol {
     // MARK: Private methods
     
     private func process(text text: String) {
-        let locationPattern = "^\\d*\\.?\\dms\\t/"
-        let matchingOption = NSMatchingOptions(rawValue: 0)
-        let compareOptions = NSStringCompareOptions(rawValue: 0)
-        let regexOptions = NSRegularExpressionOptions(rawValue: 0)
         let characterSet = NSCharacterSet(charactersInString:"\r\"")
-        
-        let regex = try! NSRegularExpression(pattern: locationPattern, options: regexOptions)
-        
         var remainingRange = text.startIndex..<text.endIndex
-        
+        var rawMeasures: [String:Double] = [:]
+
         unprocessedResult.removeAll()
         processingDidStart()
         
-        while let nextRange = text.rangeOfCharacterFromSet(characterSet, options: compareOptions, range: remainingRange) {
+        while let nextRange = text.rangeOfCharacterFromSet(characterSet, options: [], range: remainingRange) {
             let currentRange = remainingRange.startIndex..<nextRange.endIndex
             let text = text.substringWithRange(currentRange)
             
-            defer { remainingRange = nextRange.endIndex..<remainingRange.endIndex }
+            defer {
+                remainingRange = nextRange.endIndex..<remainingRange.endIndex
+            }
             
             let range = NSMakeRange(0, text.characters.count)
-            guard let match = regex.firstMatchInString(text, options: matchingOption, range: range) else { continue }
+            guard let match = processRx.firstMatchInString(text, options: [], range: range) else { continue }
             
             let timeString = text.substringToIndex(text.startIndex.advancedBy(match.range.length - 4))
             if let time = Double(timeString) {
                 let value = text.substringFromIndex(text.startIndex.advancedBy(match.range.length - 1))
-                unprocessedResult.append(CMRawMeasure(time: time, text: value))
+
+                let cumulativeTime = rawMeasures[value] ?? 0
+                rawMeasures[value] = cumulativeTime + time
             }
-            guard !shouldCancel else { break }
+            if shouldCancel {
+                break
+            }
         }
+
+        for (k, v) in rawMeasures {
+            // Only show files whose compile time is above 10ms
+            if v > 10 {
+                unprocessedResult.append(CMRawMeasure(time: v, text: k))
+            }
+        }
+
         processingDidFinish()
     }
     
     private func updateResults(didComplete: Bool) {
-        let cappedResult = capEntries(unprocessedResult)
-        updateHandler?(result: processResult(cappedResult), didComplete: didComplete)
-        
+        var results = processResult(unprocessedResult)
+        results = groupResultsBySourceLine(results)
+        results.sortInPlace{ $0.time > $1.time }
+
+        updateHandler?(result: results, didComplete: didComplete)
         if didComplete {
             unprocessedResult.removeAll()
         }
     }
-    
-    private func capEntries(entries: [CMRawMeasure]) -> [CMRawMeasure] {
-        let limit = 20
-        
-        let distinct = Array(Set(entries))
-        var sorted = distinct.sort{ $0.time > $1.time }
-        if sorted.count > limit {
-            sorted = Array(sorted[0..<limit])
-        }
-        return sorted
-    }
-    
+
     private func processResult(unprocessedResult: [CMRawMeasure]) -> [CMCompileMeasure] {
-        let unprocessedResult = capEntries(unprocessedResult)
-        
         var result: [CMCompileMeasure] = []
         for entry in unprocessedResult {
             let code = entry.text.characters.split("\t").map(String.init)
@@ -100,6 +99,20 @@ extension CMLogProcessorProtocol {
             }
         }
         return result
+    }
+
+    private func groupResultsBySourceLine(results: [CMCompileMeasure]) -> [CMCompileMeasure] {
+        var grouped: [String:CMCompileMeasure] = [:]
+        for result in results {
+            let key = result.fileAndLine
+            if var measure = grouped[key] {
+                measure.time += result.time
+                grouped[key] = measure
+            } else {
+                grouped[key] = result
+            }
+        }
+        return Array(grouped.values)
     }
     
     private func trimPrefixes(code: String) -> String {
