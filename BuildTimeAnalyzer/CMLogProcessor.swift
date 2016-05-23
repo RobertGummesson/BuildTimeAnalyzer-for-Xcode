@@ -70,35 +70,25 @@ extension CMLogProcessorProtocol {
         }
 
         for (k, v) in rawMeasures {
-            unprocessedResult.append(CMRawMeasure(time: v, text: k))
+            // Only show files whose compile time is above 10ms
+            if v > 10 {
+                unprocessedResult.append(CMRawMeasure(time: v, text: k))
+            }
         }
+
+        unprocessedResult.sortInPlace{ $0.time > $1.time }
 
         processingDidFinish()
     }
     
     private func updateResults(didComplete: Bool) {
-        let cappedResult = capEntries(unprocessedResult)
-        updateHandler?(result: processResult(cappedResult), didComplete: didComplete)
-        
+        updateHandler?(result: processResult(unprocessedResult), didComplete: didComplete)
         if didComplete {
             unprocessedResult.removeAll()
         }
     }
-    
-    private func capEntries(entries: [CMRawMeasure]) -> [CMRawMeasure] {
-        let limit = 20
-        
-        let distinct = Array(Set(entries))
-        var sorted = distinct.sort{ $0.time > $1.time }
-        if sorted.count > limit {
-            sorted = Array(sorted[0..<limit])
-        }
-        return sorted
-    }
-    
+
     private func processResult(unprocessedResult: [CMRawMeasure]) -> [CMCompileMeasure] {
-        let unprocessedResult = capEntries(unprocessedResult)
-        
         var result: [CMCompileMeasure] = []
         for entry in unprocessedResult {
             let code = entry.text.characters.split("\t").map(String.init)
