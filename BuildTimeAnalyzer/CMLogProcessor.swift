@@ -9,7 +9,7 @@
 typealias CMUpdateClosure = (result: [CMCompileMeasure], didComplete: Bool) -> ()
 
 protocol CMLogProcessorProtocol: class {
-    var unprocessedResult: [CMRawMeasure] { get set }
+    var rawMeasures: [String: CMRawMeasure] { get set }
     var updateHandler: CMUpdateClosure? { get set }
     var workspace: CMXcodeWorkSpace? { get set }
     var shouldCancel: Bool { get set }
@@ -41,14 +41,12 @@ extension CMLogProcessorProtocol {
     private func process(text text: String) {
         let characterSet = NSCharacterSet(charactersInString:"\r\"")
         var remainingRange = text.startIndex..<text.endIndex
-        var rawMeasures: [String:Double] = [:]
-
-        unprocessedResult.removeAll()
+        rawMeasures.removeAll()
+        
         processingDidStart()
         
         while let nextRange = text.rangeOfCharacterFromSet(characterSet, options: [], range: remainingRange) {
-            let currentRange = remainingRange.startIndex..<nextRange.endIndex
-            let text = text.substringWithRange(currentRange)
+            let text = text.substringWithRange(remainingRange.startIndex..<nextRange.endIndex)
             
             defer {
                 remainingRange = nextRange.endIndex..<remainingRange.endIndex
@@ -60,36 +58,28 @@ extension CMLogProcessorProtocol {
             let timeString = text.substringToIndex(text.startIndex.advancedBy(match.range.length - 4))
             if let time = Double(timeString) {
                 let value = text.substringFromIndex(text.startIndex.advancedBy(match.range.length - 1))
-
-                let cumulativeTime = rawMeasures[value] ?? 0
-                rawMeasures[value] = cumulativeTime + time
+                if var rawMeasure = rawMeasures[value] {
+                    rawMeasure.time += time
+                    rawMeasures[value] = rawMeasure
+                } else {
+                    rawMeasures[value] = CMRawMeasure(time: time, text: value)
+                }
             }
             if shouldCancel {
                 break
             }
         }
-
-        for (k, v) in rawMeasures {
-            // Only show files whose compile time is above 10ms
-            if v > 10 {
-                unprocessedResult.append(CMRawMeasure(time: v, text: k))
-            }
-        }
-
         processingDidFinish()
     }
     
     private func updateResults(didComplete: Bool) {
-        var results = processResult(unprocessedResult)
-        results = groupResultsBySourceLine(results)
-        results.sortInPlace{ $0.time > $1.time }
-
-        updateHandler?(result: results, didComplete: didComplete)
+        let unprocessedResult = rawMeasures.values.filter({ $0.time > 10 }).sort({ $0.time > $1.time })
+        updateHandler?(result: processResult(unprocessedResult), didComplete: didComplete)
         if didComplete {
-            unprocessedResult.removeAll()
+            rawMeasures.removeAll()
         }
     }
-
+    
     private func processResult(unprocessedResult: [CMRawMeasure]) -> [CMCompileMeasure] {
         var result: [CMCompileMeasure] = []
         for entry in unprocessedResult {
@@ -99,20 +89,6 @@ extension CMLogProcessorProtocol {
             }
         }
         return result
-    }
-
-    private func groupResultsBySourceLine(results: [CMCompileMeasure]) -> [CMCompileMeasure] {
-        var grouped: [String:CMCompileMeasure] = [:]
-        for result in results {
-            let key = result.fileAndLine
-            if var measure = grouped[key] {
-                measure.time += result.time
-                grouped[key] = measure
-            } else {
-                grouped[key] = result
-            }
-        }
-        return Array(grouped.values)
     }
     
     private func trimPrefixes(code: String) -> String {
@@ -128,7 +104,7 @@ extension CMLogProcessorProtocol {
 
 class CMLogProcessor: NSObject, CMLogProcessorProtocol {
     
-    var unprocessedResult: [CMRawMeasure] = []
+    var rawMeasures: [String: CMRawMeasure] = [:]
     var updateHandler: CMUpdateClosure?
     var workspace: CMXcodeWorkSpace?
     var shouldCancel = false
