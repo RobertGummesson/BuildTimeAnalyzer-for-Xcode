@@ -62,7 +62,9 @@ extension CMLogProcessorProtocol {
                 let value = text.substringFromIndex(text.startIndex.advancedBy(match.range.length - 1))
                 unprocessedResult.append(CMRawMeasure(time: time, text: value))
             }
-            guard !shouldCancel else { break }
+            if shouldCancel {
+                break
+            }
         }
         processingDidFinish()
     }
