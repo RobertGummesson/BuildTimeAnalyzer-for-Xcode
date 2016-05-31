@@ -21,7 +21,7 @@ protocol CMXcodeWorkspaceProtocol {
 extension CMXcodeWorkspaceProtocol {
     
     func logTextForProduct(attemptIndex: Int = 0, completionHandler: ((text: String?) -> ())) {
-        guard let buildFolderPath = buildFolderPath(productName),
+        guard let buildFolderPath = buildFolderPath(),
             let buildFolderURL = NSURL(string: buildFolderPath),
             let filenames = filesAtURL(buildFolderURL) else {
                 completionHandler(text: nil)
@@ -53,7 +53,7 @@ extension CMXcodeWorkspaceProtocol {
         return (workspace?.valueForKeyPath("_workspaceArena.logFolderPath.fileURL") as? NSURL)?.URLByAppendingPathComponent("Build")
     }
     
-    func buildFolderPath(productName: String) -> String? {
+    func buildFolderPath() -> String? {
         return buildFolderFromWorkspace(productWorkspace())?.path
     }
     
