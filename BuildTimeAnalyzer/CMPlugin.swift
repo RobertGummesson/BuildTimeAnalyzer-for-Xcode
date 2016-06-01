@@ -55,13 +55,13 @@ class CMPlugin: NSObject {
         windowController = CMResultWindowController(windowNibName: "CMResultWindow")
         windowController?.show()
         
-        if let window = self.windowController?.resultWindow {
+        if let window = windowController?.resultWindow {
             NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(windowWillClose(_:)), name: NSWindowWillCloseNotification, object: window)
         }
     }
     
     func windowWillClose(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NSWindowWillCloseNotification, object: notification.object as? NSWindow)
-        self.windowController = nil
+        windowController = nil
     }
 }
