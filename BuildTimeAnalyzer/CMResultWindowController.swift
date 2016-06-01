@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class CMResultWindowController: NSWindowController, NSSearchFieldDelegate {
+class CMResultWindowController: NSWindowController {
     
     let IDEBuildOperationWillStartNotification              = "IDEBuildOperationWillStartNotification"
     let IDEBuildOperationDidGenerateOutputFilesNotification = "IDEBuildOperationDidGenerateOutputFilesNotification"
@@ -154,20 +154,17 @@ class CMResultWindowController: NSWindowController, NSSearchFieldDelegate {
         NSNotificationCenter.removeObserver(buildOperationWillStartObserver, name: IDEBuildOperationWillStartNotification)
         NSNotificationCenter.removeObserver(buildOperationDidGenerateOutputFilesObserver, name: IDEBuildOperationWillStartNotification)
     }
-
+    
     override func controlTextDidChange(obj: NSNotification) {
-		guard let field = obj.object as? NSSearchField where field == self.searchField else { return }
-		let text = field.stringValue
-		if text.isEmpty {
-			filteredData = nil
-		}
-		else {
-			filteredData = dataSource.filter({ ($0.code.lowercaseString.containsString(searchField.stringValue.lowercaseString) ||
-															$0.filename.lowercaseString.containsString(searchField.stringValue.lowercaseString))
-			})
-		}
+		guard let field = obj.object as? NSSearchField where field == searchField else { return }
+        
+        filteredData = field.stringValue.isEmpty ? nil : dataSource.filter{ textContains($0.code) || textContains($0.filename) }
 		tableView.reloadData()
 	}
+    
+    func textContains(text: String) -> Bool {
+        return text.lowercaseString.containsString(searchField.stringValue.lowercaseString)
+    }
 }
 
 extension CMResultWindowController: NSTableViewDataSource {
@@ -175,9 +172,7 @@ extension CMResultWindowController: NSTableViewDataSource {
 		if let filteredData = filteredData {
 			return filteredData.count
 		}
-		else {
-			return dataSource.count
-		}
+        return dataSource.count
 	}
 }
 
@@ -189,8 +184,7 @@ extension CMResultWindowController: NSTableViewDelegate {
         let result = tableView.makeViewWithIdentifier("Cell\(columnIndex)", owner: self) as? NSTableCellView
         if let filteredData = filteredData {
             result?.textField?.stringValue = filteredData[row][columnIndex]
-        }
-        else {
+        } else {
             result?.textField?.stringValue = dataSource[row][columnIndex]
         }
 
@@ -199,15 +193,14 @@ extension CMResultWindowController: NSTableViewDelegate {
     
 	func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
 		var item: CMCompileMeasure
-		if filteredData != nil {
-			item = filteredData![row]
-		}
-		else {
+		if let filteredData = filteredData {
+			item = filteredData[row]
+		} else {
 			item = dataSource[row]
 		}
 		processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location, focusLostHandler: { [weak self] in
 			self?.resultWindow.makeKeyWindow()
-			})
+        })
 		return true
 	}
 }
