@@ -169,10 +169,7 @@ class CMResultWindowController: NSWindowController {
 
 extension CMResultWindowController: NSTableViewDataSource {
 	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
-		if let filteredData = filteredData {
-			return filteredData.count
-		}
-        return dataSource.count
+        return filteredData?.count ?? dataSource.count
 	}
 }
 
@@ -182,22 +179,13 @@ extension CMResultWindowController: NSTableViewDelegate {
         guard let tableColumn = tableColumn, columnIndex = tableView.tableColumns.indexOf(tableColumn) else { return nil }
         
         let result = tableView.makeViewWithIdentifier("Cell\(columnIndex)", owner: self) as? NSTableCellView
-        if let filteredData = filteredData {
-            result?.textField?.stringValue = filteredData[row][columnIndex]
-        } else {
-            result?.textField?.stringValue = dataSource[row][columnIndex]
-        }
-
+        result?.textField?.stringValue = filteredData?[row][columnIndex] ?? dataSource[row][columnIndex]
+        
         return result
     }
     
 	func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-		var item: CMCompileMeasure
-		if let filteredData = filteredData {
-			item = filteredData[row]
-		} else {
-			item = dataSource[row]
-		}
+        let item = filteredData?[row] ?? dataSource[row]
 		processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location, focusLostHandler: { [weak self] in
 			self?.resultWindow.makeKeyWindow()
         })
