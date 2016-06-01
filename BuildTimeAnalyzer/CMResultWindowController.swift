@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class CMResultWindowController: NSWindowController {
+class CMResultWindowController: NSWindowController, NSSearchFieldDelegate {
     
     let IDEBuildOperationWillStartNotification              = "IDEBuildOperationWillStartNotification"
     let IDEBuildOperationDidGenerateOutputFilesNotification = "IDEBuildOperationDidGenerateOutputFilesNotification"
@@ -21,8 +21,10 @@ class CMResultWindowController: NSWindowController {
     @IBOutlet weak var tableViewContainerView: NSScrollView!
     @IBOutlet weak var buildDurationTextField: NSTextField!
     @IBOutlet weak var cancelButton: NSButton!
-    
+    @IBOutlet weak var searchField: NSSearchField!
+
     var dataSource: [CMCompileMeasure] = []
+    var filteredData: [CMCompileMeasure]? = nil
     var processor: CMLogProcessor = CMLogProcessor()
     
     var buildOperationWillStartObserver: AnyObject?
@@ -64,6 +66,7 @@ class CMResultWindowController: NSWindowController {
         processingState = .processing
         
         dataSource.removeAll()
+        searchField.stringValue = ""
         tableView.reloadData()
         
         processor.process(productName, buildCompletionDate: buildCompletionDate, updateHandler: { [weak self] (result, didComplete) in
@@ -145,20 +148,39 @@ class CMResultWindowController: NSWindowController {
             self?.buildDurationTextField.stringValue = String(format: "%.0fs", round(buildOperation.duration))
             self?.processLog(buildOperation.productName, buildCompletionDate: buildOperation.endTime)
         })
-        
     }
     
     func removeObservers() {
         NSNotificationCenter.removeObserver(buildOperationWillStartObserver, name: IDEBuildOperationWillStartNotification)
         NSNotificationCenter.removeObserver(buildOperationDidGenerateOutputFilesObserver, name: IDEBuildOperationWillStartNotification)
     }
+
+    override func controlTextDidChange(obj: NSNotification) {
+		NSLog("searchField: controlTextDidChange: obj = \(obj)")
+		guard let field = obj.object as? NSSearchField where field == self.searchField else { return }
+		let text = field.stringValue
+		NSLog("searchField: controlTextDidChange: text = \(text)")
+		if text.isEmpty {
+			filteredData = nil
+		}
+		else {
+			filteredData = dataSource.filter({ ($0.code.lowercaseString.containsString(searchField.stringValue.lowercaseString) ||
+															$0.filename.lowercaseString.containsString(searchField.stringValue.lowercaseString))
+			})
+		}
+		tableView.reloadData()
+	}
 }
 
 extension CMResultWindowController: NSTableViewDataSource {
-    
-    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
-        return dataSource.count
-    }
+	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+		if let filteredData = filteredData {
+			return filteredData.count
+		}
+		else {
+			return dataSource.count
+		}
+	}
 }
 
 extension CMResultWindowController: NSTableViewDelegate {
@@ -167,18 +189,29 @@ extension CMResultWindowController: NSTableViewDelegate {
         guard let tableColumn = tableColumn, columnIndex = tableView.tableColumns.indexOf(tableColumn) else { return nil }
         
         let result = tableView.makeViewWithIdentifier("Cell\(columnIndex)", owner: self) as? NSTableCellView
-        result?.textField?.stringValue = dataSource[row][columnIndex]
-        
+        if let filteredData = filteredData {
+            result?.textField?.stringValue = filteredData[row][columnIndex]
+        }
+        else {
+            result?.textField?.stringValue = dataSource[row][columnIndex]
+        }
+
         return result
     }
     
-    func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        let item = dataSource[row]
-        processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location, focusLostHandler: { [weak self] in
-            self?.resultWindow.makeKeyWindow()
-        })
-        return true
-    }
+	func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+		var item: CMCompileMeasure
+		if filteredData != nil {
+			item = filteredData![row]
+		}
+		else {
+			item = dataSource[row]
+		}
+		processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location, focusLostHandler: { [weak self] in
+			self?.resultWindow.makeKeyWindow()
+			})
+		return true
+	}
 }
 
 extension CMResultWindowController: NSWindowDelegate {
