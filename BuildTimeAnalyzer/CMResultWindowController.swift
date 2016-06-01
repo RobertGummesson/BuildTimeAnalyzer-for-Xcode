@@ -156,10 +156,8 @@ class CMResultWindowController: NSWindowController, NSSearchFieldDelegate {
     }
 
     override func controlTextDidChange(obj: NSNotification) {
-		NSLog("searchField: controlTextDidChange: obj = \(obj)")
 		guard let field = obj.object as? NSSearchField where field == self.searchField else { return }
 		let text = field.stringValue
-		NSLog("searchField: controlTextDidChange: text = \(text)")
 		if text.isEmpty {
 			filteredData = nil
 		}
