@@ -9,9 +9,9 @@
 import Foundation
 
 enum CMBuildResult : Int {
-    case Success = 1
-    case Failed = 2
-    case Cancelled = 3
+    case success = 1
+    case failed = 2
+    case cancelled = 3
 }
 
 struct CMBuildOperation {

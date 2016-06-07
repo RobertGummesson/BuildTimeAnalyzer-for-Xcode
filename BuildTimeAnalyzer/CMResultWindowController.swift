@@ -141,7 +141,7 @@ class CMResultWindowController: NSWindowController {
             let result = buildOperation.result
             let action = buildOperation.actionName
             
-            guard (action == "Build" || action == "Compile") && (result == .Success || result == .Failed || result == .Cancelled) else {
+            guard (action == "Build" || action == "Compile") && (result == .success || result == .failed || result == .cancelled) else {
                 self?.processingState = .waiting(shouldIndicate: false)
                 return
             }
