@@ -71,13 +71,18 @@ extension CMXcodeWorkspaceProtocol {
     
     static func buildOperation(fromData data: AnyObject?) -> CMBuildOperation? {
         guard let actionName = data?.valueForKeyPath("_buildOperationDescription._actionName") as? String,
-            let productName = data?.valueForKeyPath("_buildOperationDescription._objectToBuildName") as? String,
+            var productName = data?.valueForKeyPath("_buildOperationDescription._objectToBuildName") as? String,
             let duration = data?.valueForKey("duration") as? Double,
             let intResult = data?.valueForKey("_result") as? Int,
             let cmResult = CMBuildResult(rawValue: intResult),
             let startTime = data?.valueForKey("_startTime") as? NSDate else {
                 return nil
         }
+        
+        if actionName == "Compile", let product = currentProductName() {
+            productName = product
+        }
+        
         return CMBuildOperation(actionName: actionName, productName: productName, duration: duration, result: cmResult, startTime: startTime)
     }
     
@@ -187,7 +192,7 @@ extension CMXcodeWorkspaceProtocol {
     
     private func lastBuildKey(fromPath path: String) -> String? {
         return lastDatabaseEntry(fromPath: path, usingFunction: { (key, value) -> String? in
-            if let title = value["title"] as? String where title.hasPrefix("Build ") {
+            if let title = value["title"] as? String where title.hasPrefix("Build ") ||  title.hasPrefix("Compile "){
                 return key
             }
             return nil

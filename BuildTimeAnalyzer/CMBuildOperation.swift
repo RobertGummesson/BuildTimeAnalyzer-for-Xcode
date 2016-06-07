@@ -25,6 +25,6 @@ struct CMBuildOperation {
     var endTime: NSDate {
         // We will be looking for log files created after this date
         // Let's subtract a second to be on the safe side
-        return startTime.dateByAddingTimeInterval(duration - 1000)
+        return startTime.dateByAddingTimeInterval(duration - 1)
     }
 }

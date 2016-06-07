@@ -139,8 +139,9 @@ class CMResultWindowController: NSWindowController {
         buildOperationDidGenerateOutputFilesObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationDidGenerateOutputFilesNotification, usingBlock: { [weak self] (note) in
             guard let buildOperation = CMXcodeWorkSpace.buildOperation(fromData: note.object) else { return  }
             let result = buildOperation.result
+            let action = buildOperation.actionName
             
-            guard buildOperation.actionName == "Build" && (result == .Success || result == .Failed || result == .Cancelled) else {
+            guard (action == "Build" || action == "Compile") && (result == .Success || result == .Failed || result == .Cancelled) else {
                 self?.processingState = .waiting(shouldIndicate: false)
                 return
             }
