@@ -18,8 +18,6 @@ protocol CMLogProcessorProtocol: class {
     func processingDidFinish()
 }
 
-private let processRx = try! NSRegularExpression(pattern:  "^\\d*\\.?\\dms\\t/", options: [])
-
 extension CMLogProcessorProtocol {
     func process(productName: String, buildCompletionDate: NSDate?, updateHandler: CMUpdateClosure?) {
         workspace = CMXcodeWorkSpace(productName: productName, buildCompletionDate: buildCompletionDate)
@@ -41,6 +39,8 @@ extension CMLogProcessorProtocol {
     private func process(text text: String) {
         let characterSet = NSCharacterSet(charactersInString:"\r\"")
         var remainingRange = text.startIndex..<text.endIndex
+        let regex = try! NSRegularExpression(pattern:  "^\\d*\\.?\\dms\\t/", options: [])
+        
         rawMeasures.removeAll()
         
         processingDidStart()
@@ -53,7 +53,7 @@ extension CMLogProcessorProtocol {
             }
             
             let range = NSMakeRange(0, text.characters.count)
-            guard let match = processRx.firstMatchInString(text, options: [], range: range) else { continue }
+            guard let match = regex.firstMatchInString(text, options: [], range: range) else { continue }
             
             let timeString = text.substringToIndex(text.startIndex.advancedBy(match.range.length - 4))
             if let time = Double(timeString) {
@@ -65,9 +65,7 @@ extension CMLogProcessorProtocol {
                     rawMeasures[value] = CMRawMeasure(time: time, text: value)
                 }
             }
-            if shouldCancel {
-                break
-            }
+            guard !shouldCancel else { break }
         }
         processingDidFinish()
     }
