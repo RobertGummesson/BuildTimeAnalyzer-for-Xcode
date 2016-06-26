@@ -14,6 +14,7 @@ struct CMCompileMeasure {
     var path: String
     var code: String
     var filename: String
+    var references: Int
 
     private var locationArray: [Int]
 
@@ -33,7 +34,7 @@ struct CMCompileMeasure {
         return "\(time)ms"
     }
     
-    init?(time: Double, rawPath: String, code: String) {
+    init?(time: Double, rawPath: String, code: String, references: Int) {
         let untrimmedFilename = rawPath.characters.split("/").map(String.init).last
         
         guard let filepath = rawPath.characters.split(":").map(String.init).first else { return nil }
@@ -48,6 +49,7 @@ struct CMCompileMeasure {
         self.path = filepath
         self.filename = filename
         self.locationArray = locations
+        self.references = references
     }
     
     subscript(column: Int) -> String {
@@ -57,6 +59,8 @@ struct CMCompileMeasure {
                 return timeString
             case 1:
                 return fileInfo
+            case 2:
+                return "\(references)"
             default:
                 return code
             }
