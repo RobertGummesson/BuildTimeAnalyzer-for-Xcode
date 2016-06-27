@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class CMResultWindowController: NSWindowController {
+class CMResultWindow: NSWindow {
     
     let IDEBuildOperationWillStartNotification              = "IDEBuildOperationWillStartNotification"
     let IDEBuildOperationDidGenerateOutputFilesNotification = "IDEBuildOperationDidGenerateOutputFilesNotification"
@@ -17,7 +17,6 @@ class CMResultWindowController: NSWindowController {
     @IBOutlet weak var instructionsView: NSView!
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
-    @IBOutlet weak var resultWindow: NSWindow!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
     @IBOutlet weak var buildDurationTextField: NSTextField!
     @IBOutlet weak var cancelButton: NSButton!
@@ -27,8 +26,8 @@ class CMResultWindowController: NSWindowController {
     var filteredData: [CMCompileMeasure]? = nil
     var processor: CMLogProcessor = CMLogProcessor()
     
-    var buildOperationWillStartObserver: AnyObject?
-    var buildOperationDidGenerateOutputFilesObserver: AnyObject?
+//    var buildOperationWillStartObserver: AnyObject?
+//    var buildOperationDidGenerateOutputFilesObserver: AnyObject?
     
     var processingState: CMProcessingState = .completed(stateName: CMProcessingState.completedString) {
         didSet {
@@ -36,30 +35,30 @@ class CMResultWindowController: NSWindowController {
         }
     }
     
-    override func windowDidLoad() {
-        super.windowDidLoad()
+    override func awakeFromNib() {
+        super.awakeFromNib()
         statusTextField.stringValue = CMProcessingState.waitingForBuildString
     }
-    
-    deinit {
-        removeObservers()
-    }
-    
-    func show() {
-        showWindow(self)
-        addObservers()
-        
-        // Get currentProduct needs to be run before resultWindow.makeMainWindow()
-        if let currentProduct = CMXcodeWorkSpace.currentProductName() {
-            processLog(currentProduct)
-        }
-        
-        if let window = resultWindow {
-            window.makeMainWindow()
-            window.level = Int(CGWindowLevelKey.OverlayWindowLevelKey.rawValue)
-            updateViewForState()
-        }
-    }
+//
+//    deinit {
+//        removeObservers()
+//    }
+//    
+//    func show() {
+//        showWindow(self)
+//        addObservers()
+//        
+//        // Get currentProduct needs to be run before resultWindow.makeMainWindow()
+//        if let currentProduct = CMXcodeWorkSpace.currentProductName() {
+//            processLog(currentProduct)
+//        }
+//        
+//        if let window = resultWindow {
+//            window.makeMainWindow()
+//            window.level = Int(CGWindowLevelKey.OverlayWindowLevelKey.rawValue)
+//            updateViewForState()
+//        }
+//    }
     
     func processLog(productName: String, buildCompletionDate: NSDate? = nil) {
         guard processingState != .processing else { return }
@@ -118,7 +117,7 @@ class CMResultWindowController: NSWindowController {
         progressIndicator.hidden = show
         tableViewContainerView.hidden = show
     }
-    
+
     // MARK: Actions
     
     @IBAction func clipboardButtonClicked(sender: AnyObject) {
@@ -127,36 +126,36 @@ class CMResultWindowController: NSWindowController {
     }
     
     @IBAction func cancelButtonClicked(sender: AnyObject) {
-        processor.shouldCancel = true
+//        processor.shouldCancel = true
     }
-    // MARK: Observers
-    
-    func addObservers() {
-        buildOperationWillStartObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationWillStartNotification, usingBlock: { [weak self] (note) in
-            if let stateDescription = note.object?.valueForKeyPath("_buildStatus._stateDescription") as? String {
-                self?.processingState = .waiting(shouldIndicate: stateDescription == "Build")
-            }
-        })
-        
-        buildOperationDidGenerateOutputFilesObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationDidGenerateOutputFilesNotification, usingBlock: { [weak self] (note) in
-            guard let buildOperation = CMXcodeWorkSpace.buildOperation(fromData: note.object) else { return  }
-            let result = buildOperation.result
-            let action = buildOperation.actionName
-            
-            guard (action == "Build" || action == "Compile") && (result == .success || result == .failed || result == .cancelled) else {
-                self?.processingState = .waiting(shouldIndicate: false)
-                return
-            }
-            
-            self?.buildDurationTextField.stringValue = String(format: "%.0fs", round(buildOperation.duration))
-            self?.processLog(buildOperation.productName, buildCompletionDate: buildOperation.endTime)
-        })
-    }
-    
-    func removeObservers() {
-        NSNotificationCenter.removeObserver(buildOperationWillStartObserver, name: IDEBuildOperationWillStartNotification)
-        NSNotificationCenter.removeObserver(buildOperationDidGenerateOutputFilesObserver, name: IDEBuildOperationWillStartNotification)
-    }
+//    // MARK: Observers
+//    
+//    func addObservers() {
+//        buildOperationWillStartObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationWillStartNotification, usingBlock: { [weak self] (note) in
+//            if let stateDescription = note.object?.valueForKeyPath("_buildStatus._stateDescription") as? String {
+//                self?.processingState = .waiting(shouldIndicate: stateDescription == "Build")
+//            }
+//        })
+//        
+//        buildOperationDidGenerateOutputFilesObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationDidGenerateOutputFilesNotification, usingBlock: { [weak self] (note) in
+//            guard let buildOperation = CMXcodeWorkSpace.buildOperation(fromData: note.object) else { return  }
+//            let result = buildOperation.result
+//            let action = buildOperation.actionName
+//            
+//            guard (action == "Build" || action == "Compile") && (result == .success || result == .failed || result == .cancelled) else {
+//                self?.processingState = .waiting(shouldIndicate: false)
+//                return
+//            }
+//            
+//            self?.buildDurationTextField.stringValue = String(format: "%.0fs", round(buildOperation.duration))
+//            self?.processLog(buildOperation.productName, buildCompletionDate: buildOperation.endTime)
+//        })
+//    }
+//    
+//    func removeObservers() {
+//        NSNotificationCenter.removeObserver(buildOperationWillStartObserver, name: IDEBuildOperationWillStartNotification)
+//        NSNotificationCenter.removeObserver(buildOperationDidGenerateOutputFilesObserver, name: IDEBuildOperationWillStartNotification)
+//    }
     
     override func controlTextDidChange(obj: NSNotification) {
 		guard let field = obj.object as? NSSearchField where field == searchField else { return }
@@ -164,19 +163,19 @@ class CMResultWindowController: NSWindowController {
         filteredData = field.stringValue.isEmpty ? nil : dataSource.filter{ textContains($0.code) || textContains($0.filename) }
 		tableView.reloadData()
 	}
-    
+
     func textContains(text: String) -> Bool {
         return text.lowercaseString.containsString(searchField.stringValue.lowercaseString)
     }
 }
 
-extension CMResultWindowController: NSTableViewDataSource {
+extension CMResultWindow: NSTableViewDataSource {
 	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
         return filteredData?.count ?? dataSource.count
 	}
 }
 
-extension CMResultWindowController: NSTableViewDelegate {
+extension CMResultWindow: NSTableViewDelegate {
 
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard let tableColumn = tableColumn, columnIndex = tableView.tableColumns.indexOf(tableColumn) else { return nil }
@@ -188,19 +187,19 @@ extension CMResultWindowController: NSTableViewDelegate {
     }
     
 	func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        let item = filteredData?[row] ?? dataSource[row]
-		processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location, focusLostHandler: { [weak self] in
-			self?.resultWindow.makeKeyWindow()
-        })
+//        let item = filteredData?[row] ?? dataSource[row]
+//		processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location, focusLostHandler: { [weak self] in
+//			self?.resultWindow.makeKeyWindow()
+//        })
 		return true
 	}
 }
 
-extension CMResultWindowController: NSWindowDelegate {
+extension CMResultWindow: NSWindowDelegate {
     
     func windowWillClose(notification: NSNotification) {
-        processor.shouldCancel = true
-        processingState = .completed(stateName: CMProcessingState.cancelledString)
-        removeObservers()
+//        processor.shouldCancel = true
+//        processingState = .completed(stateName: CMProcessingState.cancelledString)
+//        removeObservers()
     }
 }

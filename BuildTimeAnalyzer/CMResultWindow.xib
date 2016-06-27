@@ -5,22 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="CMResultWindowController">
-            <connections>
-                <outlet property="buildDurationTextField" destination="HPi-Ar-CM0" id="xF9-yY-U0f"/>
-                <outlet property="cancelButton" destination="hRu-er-26V" id="h1k-2z-Nkd"/>
-                <outlet property="instructionsView" destination="spL-CI-Cvm" id="RHH-Ly-0AE"/>
-                <outlet property="progressIndicator" destination="Df5-K9-u4q" id="6aU-Na-jO3"/>
-                <outlet property="resultWindow" destination="QvC-M9-y7g" id="cZp-v6-d1e"/>
-                <outlet property="searchField" destination="bG3-gx-tf3" id="c2U-qK-5UT"/>
-                <outlet property="statusTextField" destination="eSZ-xq-1Qq" id="O0O-S1-bUt"/>
-                <outlet property="tableView" destination="z0w-Vo-Edp" id="Owf-g0-RAx"/>
-                <outlet property="tableViewContainerView" destination="qiX-rM-BSu" id="lUc-nA-BOg"/>
-            </connections>
-        </customObject>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Build Time Analyzer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+        <window title="Build Time Analyzer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="CMResultWindow" customModule="BuildTimeAnalyzer" customModuleProvider="target">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="196" y="240" width="800" height="323"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
@@ -195,8 +183,8 @@
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <outlet property="dataSource" destination="-2" id="5fD-Eb-OXJ"/>
-                                        <outlet property="delegate" destination="-2" id="YTO-wb-61J"/>
+                                        <outlet property="dataSource" destination="QvC-M9-y7g" id="I0y-Zf-UaS"/>
+                                        <outlet property="delegate" destination="QvC-M9-y7g" id="O9w-3x-cet"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -244,7 +232,7 @@ Gw
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="cancelButtonClicked:" target="-2" id="nkg-uO-l70"/>
+                            <action selector="cancelButtonClicked:" target="QvC-M9-y7g" id="bNa-kO-aql"/>
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HPi-Ar-CM0">
@@ -300,7 +288,7 @@ Gw
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <connections>
-                                        <action selector="clipboardButtonClicked:" target="-2" id="moi-3N-9KJ"/>
+                                        <action selector="clipboardButtonClicked:" target="QvC-M9-y7g" id="EU3-nq-Heu"/>
                                     </connections>
                                 </buttonCell>
                             </button>
@@ -338,7 +326,7 @@ Gw
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </searchFieldCell>
                         <connections>
-                            <outlet property="delegate" destination="-2" id="qMt-3k-J9X"/>
+                            <outlet property="delegate" destination="QvC-M9-y7g" id="oj4-yh-RSK"/>
                         </connections>
                     </searchField>
                 </subviews>
@@ -371,7 +359,14 @@ Gw
                 </constraints>
             </view>
             <connections>
-                <outlet property="delegate" destination="-2" id="61o-Gf-g9D"/>
+                <outlet property="buildDurationTextField" destination="HPi-Ar-CM0" id="x0U-EN-FmZ"/>
+                <outlet property="cancelButton" destination="hRu-er-26V" id="eJZ-mz-y5i"/>
+                <outlet property="instructionsView" destination="spL-CI-Cvm" id="cm7-Yu-WRV"/>
+                <outlet property="progressIndicator" destination="Df5-K9-u4q" id="0Id-RP-9p4"/>
+                <outlet property="searchField" destination="bG3-gx-tf3" id="Im6-U7-AQ8"/>
+                <outlet property="statusTextField" destination="eSZ-xq-1Qq" id="yfa-rU-63O"/>
+                <outlet property="tableView" destination="z0w-Vo-Edp" id="wai-jj-9Ff"/>
+                <outlet property="tableViewContainerView" destination="qiX-rM-BSu" id="1t5-eI-ZLV"/>
             </connections>
             <point key="canvasLocation" x="90" y="223.5"/>
         </window>

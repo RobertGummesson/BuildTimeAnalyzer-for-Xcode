@@ -6,12 +6,14 @@
 //  Copyright © 2016 Robert Gummesson. All rights reserved.
 //
 
+import Foundation
+
 typealias CMUpdateClosure = (result: [CMCompileMeasure], didComplete: Bool) -> ()
 
 protocol CMLogProcessorProtocol: class {
     var rawMeasures: [String: CMRawMeasure] { get set }
     var updateHandler: CMUpdateClosure? { get set }
-    var workspace: CMXcodeWorkSpace? { get set }
+//    var workspace: CMXcodeWorkSpace? { get set }
     var shouldCancel: Bool { get set }
     
     func processingDidStart()
@@ -20,18 +22,18 @@ protocol CMLogProcessorProtocol: class {
 
 extension CMLogProcessorProtocol {
     func process(productName: String, buildCompletionDate: NSDate?, updateHandler: CMUpdateClosure?) {
-        workspace = CMXcodeWorkSpace(productName: productName, buildCompletionDate: buildCompletionDate)
-        workspace?.logTextForProduct() { [weak self] (text) in
-            guard let text = text else {
-                updateHandler?(result: [], didComplete: true)
-                return
-            }
-            
-            self?.updateHandler = updateHandler
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                self?.process(text: text)
-            }
-        }
+//        workspace = CMXcodeWorkSpace(productName: productName, buildCompletionDate: buildCompletionDate)
+//        workspace?.logTextForProduct() { [weak self] (text) in
+//            guard let text = text else {
+//                updateHandler?(result: [], didComplete: true)
+//                return
+//            }
+//            
+//            self?.updateHandler = updateHandler
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+//                self?.process(text: text)
+//            }
+//        }
     }
     
     // MARK: Private methods
@@ -111,7 +113,7 @@ class CMLogProcessor: NSObject, CMLogProcessorProtocol {
     
     var rawMeasures: [String: CMRawMeasure] = [:]
     var updateHandler: CMUpdateClosure?
-    var workspace: CMXcodeWorkSpace?
+//    var workspace: CMXcodeWorkSpace?
     var shouldCancel = false
     var timer: NSTimer?
     

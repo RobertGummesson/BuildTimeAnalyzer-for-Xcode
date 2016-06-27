@@ -8,6 +8,8 @@
 
 import XCTest
 
+@testable import BuildTimeAnalyzer
+
 class BuildTimeAnalyzerTests: XCTestCase {
     
     func testInit() {
