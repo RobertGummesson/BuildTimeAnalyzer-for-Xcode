@@ -10,51 +10,44 @@ import Cocoa
 
 protocol CMXcodeWorkspaceProtocol {
     var retryAttempts: Int { get }
-    var productName: String { get set }
-    var buildCompletionDate: NSDate? { get set }
     var focusLostHandler: (() -> ())? { get set }
     
-    init(productName: String, buildCompletionDate: NSDate?)
     func willOpenDocument(atLineNumber lineNumber: Int, usingTextView textView: NSTextView?)
 }
 
 extension CMXcodeWorkspaceProtocol {
     
+    func logText(forCacheAtPath path: String, completionHandler: ((text: String?) -> ())) {
+        guard let lastBuild = lastBuildKey(fromPath: path),
+            let folderURL = NSURL(fileURLWithPath: path).URLByDeletingLastPathComponent,
+            let logFile = folderURL.URLByAppendingPathComponent(lastBuild).URLByAppendingPathExtension("xcactivitylog").path else {
+            completionHandler(text: nil)
+            return
+        }
+        completionHandler(text: contentsOfFile(logFile))
+    }
+    
     func logTextForProduct(attemptIndex: Int = 0, completionHandler: ((text: String?) -> ())) {
-        guard let buildFolderPath = buildFolderPath(),
-            let buildFolderURL = NSURL(string: buildFolderPath),
-            let filenames = filesAtURL(buildFolderURL) else {
-                completionHandler(text: nil)
-                return
-        }
-        
-        var keyFilename: String?
-        var creationDates: [String: NSDate] = [:]
-        parseFiles(filenames, buildFolderURL: buildFolderURL, keyFilename: &keyFilename, creationDates: &creationDates)
-        
-        var lastLogPath: String?
-        var lastLogCreationDate: NSDate?
-        if let keyFilename = keyFilename, filename = buildFolderURL.URLByAppendingPathComponent(keyFilename).path {
-            lastLogPath = filename
-            lastLogCreationDate = creationDates[keyFilename]
-        }
-        validatePath(lastLogPath, creationDate: lastLogCreationDate, attemptIndex: attemptIndex, completionHandler: completionHandler)
-    }
-    
-    func productWorkspace() -> AnyObject? {
-        guard let windowControllers = Self.workspaceWindowControllers() else { return nil }
-        guard let keyWindow = windowControllers.filter({ ($0.valueForKeyPath("_workspace.name") as? String) == productName }).first else {
-            return locateWorkspace(fromWindowControllers: windowControllers)
-        }
-        return keyWindow.valueForKey("_workspace")
-    }
-    
-    func buildFolderFromWorkspace(workspace: AnyObject?) -> NSURL? {
-        return (workspace?.valueForKeyPath("_workspaceArena.logFolderPath.fileURL") as? NSURL)?.URLByAppendingPathComponent("Build")
-    }
-    
-    func buildFolderPath() -> String? {
-        return buildFolderFromWorkspace(productWorkspace())?.path
+//        guard let buildFolderPath = buildFolderPath(),
+//            let buildFolderURL = NSURL(string: buildFolderPath) else {
+//                completionHandler(text: nil)
+//                return
+//        }
+//        
+//        let files = CMFileManager.listFiles(at: buildFolderURL)
+//        guard files.count > 0 else { return }
+//        
+//        var keyFilename: String?
+//        var creationDates: [String: NSDate] = [:]
+//        parseFiles(files.map{ $0.path }, buildFolderURL: buildFolderURL, keyFilename: &keyFilename, creationDates: &creationDates)
+//        
+//        var lastLogPath: String?
+//        var lastLogCreationDate: NSDate?
+//        if let keyFilename = keyFilename, filename = buildFolderURL.URLByAppendingPathComponent(keyFilename).path {
+//            lastLogPath = filename
+//            lastLogCreationDate = creationDates[keyFilename]
+//        }
+//        validatePath(lastLogPath, creationDate: lastLogCreationDate, attemptIndex: attemptIndex, completionHandler: completionHandler)
     }
     
     mutating func openFile(atPath path: String, andLineNumber lineNumber: Int, focusLostHandler: () -> ()) {
@@ -129,50 +122,38 @@ extension CMXcodeWorkspaceProtocol {
     // MARK: Private methods
     
     private func locateWorkspace(fromWindowControllers windowControllers: [AnyObject]) -> AnyObject? {
-        if windowControllers.count == 1 {
-            return windowControllers.first?.valueForKey("_workspace")
-        } else {
-            for controller in windowControllers {
-                if let workspace = controller.valueForKey("_workspace"),
-                    let logFolderURL = buildFolderFromWorkspace(workspace),
-                    let files = filesAtURL(logFolderURL),
-                    let filename = files.filter({ $0.hasSuffix(".db") }).first,
-                    let path = logFolderURL.URLByAppendingPathComponent(filename).path,
-                    let schemeName = lastSchemeName(fromPath: path) where schemeName == productName {
-                    return workspace
-                }
-            }
-        }
+//        if windowControllers.count == 1 {
+//            return windowControllers.first?.valueForKey("_workspace")
+//        } else {
+//            for controller in windowControllers {
+//                if let workspace = controller.valueForKey("_workspace"),
+//                    let logFolderURL = buildFolderFromWorkspace(workspace),
+//                    let files = CMFileManager.listFiles(at: logFolderURL),
+//                    let filename = files.filter({ $0.path.hasSuffix(".db") }).first,
+//                    let path = logFolderURL.URLByAppendingPathComponent(filename.path).path,
+//                    let schemeName = lastSchemeName(fromPath: path) where schemeName == productName {
+//                    return workspace
+//                }
+//            }
+//        }
         return nil
     }
     
-    private func filesAtURL(url: NSURL) -> [String]? {
-        guard let path = url.path, enumerator = NSFileManager.defaultManager().enumeratorAtPath(path) else { return nil }
-        
-        var result: [String] = []
-        for file in enumerator {
-            if let filename = file as? String {
-                result.append(filename)
-            }
-        }
-        return result
-    }
-    
     private func validatePath(path: String?, creationDate: NSDate?, attemptIndex: Int, completionHandler: ((text: String?) -> ())) {
-        if let path = path, creationDate = creationDate where buildCompletionDate == nil || buildCompletionDate?.compare(creationDate) == .OrderedAscending || buildCompletionDate?.compare(creationDate) == .OrderedSame {
-            completionHandler(text: contentsOfFile(path))
-            return
-        } else if buildCompletionDate != nil {
-            let attemptIndex = attemptIndex + 1
-            if attemptIndex < retryAttempts {
-                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
-                dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                    self.logTextForProduct(attemptIndex, completionHandler: completionHandler)
-                }
-                return
-            }
-        }
-        completionHandler(text: nil)
+//        if let path = path, creationDate = creationDate where buildCompletionDate == nil || buildCompletionDate?.compare(creationDate) == .OrderedAscending || buildCompletionDate?.compare(creationDate) == .OrderedSame {
+//            completionHandler(text: contentsOfFile(path))
+//            return
+//        } else if buildCompletionDate != nil {
+//            let attemptIndex = attemptIndex + 1
+//            if attemptIndex < retryAttempts {
+//                let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC))
+//                dispatch_after(delay, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+//                    self.logTextForProduct(attemptIndex, completionHandler: completionHandler)
+//                }
+//                return
+//            }
+//        }
+//        completionHandler(text: nil)
     }
     
     private func parseFiles(filenames: [String], buildFolderURL: NSURL, inout keyFilename: String?, inout creationDates: [String: NSDate]) {
@@ -242,15 +223,8 @@ class CMXcodeWorkSpace: NSObject, CMXcodeWorkspaceProtocol {
     let notificationName = "IDESourceCodeEditorDidFinishSetup"
     
     var retryAttempts = 10
-    var productName: String
-    var buildCompletionDate: NSDate?
     var lineNumber = 0
     var focusLostHandler: (() -> ())?
-    
-    required init(productName: String, buildCompletionDate: NSDate?) {
-        self.productName = productName
-        self.buildCompletionDate = buildCompletionDate
-    }
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: notificationName, object: nil)

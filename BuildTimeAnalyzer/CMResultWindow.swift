@@ -35,9 +35,32 @@ class CMResultWindow: NSWindow {
         }
     }
     
+    static var odd = true
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         statusTextField.stringValue = CMProcessingState.waitingForBuildString
+        
+        if CMResultWindow.odd {
+            CMResultWindow.odd = false
+            self.start()
+        }
+    }
+    
+    func start() {
+        let cacheFiles = CMFileManager.listCacheFiles()
+        processingState = .processing
+        processor.processCacheFile(at: cacheFiles[1].path) { [weak self] (result, didComplete) in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.dataSource = result
+            strongSelf.tableView.reloadData()
+            
+            if didComplete {
+                let stateName = strongSelf.dataSource.isEmpty ? CMProcessingState.failedString : CMProcessingState.completedString
+                strongSelf.processingState = .completed(stateName: stateName)
+            }
+        }
     }
 //
 //    deinit {
@@ -59,27 +82,6 @@ class CMResultWindow: NSWindow {
 //            updateViewForState()
 //        }
 //    }
-    
-    func processLog(productName: String, buildCompletionDate: NSDate? = nil) {
-        guard processingState != .processing else { return }
-        processingState = .processing
-        
-        dataSource.removeAll()
-        searchField.stringValue = ""
-        tableView.reloadData()
-        
-        processor.process(productName, buildCompletionDate: buildCompletionDate, updateHandler: { [weak self] (result, didComplete) in
-            guard let strongSelf = self else { return }
-            
-            strongSelf.dataSource = result
-            strongSelf.tableView.reloadData()
-            
-            if didComplete {
-                let stateName = strongSelf.dataSource.isEmpty ? CMProcessingState.failedString : CMProcessingState.completedString
-                strongSelf.processingState = .completed(stateName: stateName)
-            }
-        })
-    }
     
     func updateViewForState() {
         switch processingState {
