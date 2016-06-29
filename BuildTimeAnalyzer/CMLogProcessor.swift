@@ -60,6 +60,7 @@ extension CMLogProcessorProtocol {
                 let value = text.substringFromIndex(text.startIndex.advancedBy(match.range.length - 1))
                 if var rawMeasure = rawMeasures[value] {
                     rawMeasure.time += time
+                    rawMeasure.references += 1
                     rawMeasures[value] = rawMeasure
                 } else {
                     rawMeasures[value] = CMRawMeasure(time: time, text: value)
@@ -88,7 +89,7 @@ extension CMLogProcessorProtocol {
         var result: [CMCompileMeasure] = []
         for entry in unprocessedResult {
             let code = entry.text.characters.split("\t").map(String.init)
-            if code.count >= 2, let measure = CMCompileMeasure(time: entry.time, rawPath: code[0], code: trimPrefixes(code[1])) {
+            if code.count >= 2, let measure = CMCompileMeasure(time: entry.time, rawPath: code[0], code: trimPrefixes(code[1]), references: entry.references) {
                 result.append(measure)
             }
         }

@@ -11,6 +11,13 @@ import Foundation
 struct CMRawMeasure {
     var time: Double
     var text: String
+    var references: Int
+    
+    init(time: Double, text: String) {
+        self.time = time
+        self.text = text
+        self.references = 1
+    }
 }
 
 // MARK: Equatable

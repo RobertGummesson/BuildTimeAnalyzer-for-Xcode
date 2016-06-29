@@ -21,9 +21,10 @@ class BuildTimeAnalyzerTests: XCTestCase {
         let path = "\(folder)\(filename)"
         let rawPath = "\(folder)\(fileInfo)"
         let code = "some code"
+        let references = 2
         
         // When
-        let resultOptional = CMCompileMeasure(time: time, rawPath: rawPath, code: code)
+        let resultOptional = CMCompileMeasure(time: time, rawPath: rawPath, code: code, references: references)
         
         // Then 
         XCTAssertNotNil(resultOptional)
@@ -36,5 +37,6 @@ class BuildTimeAnalyzerTests: XCTestCase {
         XCTAssertEqual(result.filename, filename)
         XCTAssertEqual(result.location, location)
         XCTAssertEqual(result.timeString, timeString)
+        XCTAssertEqual(result.references, references)
     }
 }

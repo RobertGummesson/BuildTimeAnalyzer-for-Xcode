@@ -107,8 +107,10 @@ class CMResultWindowController: NSWindowController {
                 progressIndicator.stopAnimation(self)
                 statusTextField.stringValue = CMProcessingState.waitingForBuildString
             }
+            progressIndicator.hidden = !shouldIndicate
             cancelButton.hidden = true
         }
+        searchField.hidden = !cancelButton.hidden
     }
     
     func showInstructions(show: Bool) {
