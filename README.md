@@ -3,7 +3,7 @@ Build Time Analyzer for Xcode
 
 ## Overview
 
-Build Time Analyzer is an Xcode plugin that shows you a break down of Swift build times. See [this post on Medium]( https://medium.com/p/fc92cdd91e31) for context.
+Build Time Analyzer is an Xcode plugin that shows you a break down of Swift build times. See [this post]( https://medium.com/p/fc92cdd91e31) and [this post](https://medium.com/p/37b0a7514cbe) on Medium for context.
 
 ## Usage
 
