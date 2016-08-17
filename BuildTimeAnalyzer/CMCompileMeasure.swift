@@ -16,7 +16,7 @@ struct CMCompileMeasure {
     var filename: String
     var references: Int
 
-    var locationArray: [Int]
+    private var locationArray: [Int]
 
     var fileAndLine: String {
         return "\(filename):\(locationArray[0])"
