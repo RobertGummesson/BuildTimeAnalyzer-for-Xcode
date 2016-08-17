@@ -51,7 +51,22 @@ struct CMCompileMeasure {
         self.locationArray = locations
         self.references = references
     }
-    
+
+    init?(rawPath: String, time: Double) {
+        let untrimmedFilename = rawPath.characters.split("/").map(String.init).last
+
+        guard let filepath = rawPath.characters.split(":").map(String.init).first else { return nil }
+        guard let filename = untrimmedFilename?.characters.split(":").map(String.init).first else { return nil }
+
+        self.time = time
+        self.code = ""
+        self.path = filepath
+        self.filename = filename
+        self.locationArray = [0,0]
+        self.references = 1
+    }
+
+
     subscript(column: Int) -> String {
         get {
             switch column {
