@@ -23,6 +23,7 @@ class CMResultWindowController: NSWindowController {
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
     @IBOutlet weak var perFileCheckbox: NSButton!
+    @IBOutlet weak var exportCSVButton: NSButton!
 
     var dataSource: [CMCompileMeasure] = []
 
@@ -155,6 +156,28 @@ class CMResultWindowController: NSWindowController {
     
     // MARK: Actions
     
+    @IBAction func exportCSVClicked(sender: AnyObject) {
+
+        let csvString = NSMutableString()
+        csvString.appendString("Time, Path, Code, Filename, References\n")
+        for measurement in dataSource where measurement.time > 0{
+            csvString.appendString("\(measurement.time),\(measurement.path),\(measurement.code.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())),\(measurement.filename),\(measurement.references) \n")
+        }
+
+        // Converting it to NSData.
+        let csvData = csvString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+
+        // Write out data
+        let desktopPath = NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0]
+
+        do {
+            try csvData?.writeToFile("\(desktopPath)/compile_times.csv", options:.AtomicWrite)
+        } catch {
+            // Write error, do nothing
+            statusTextField.stringValue = "File error."
+        }
+    }
+
     @IBAction func perFileCheckboxClicked(sender: AnyObject) {
         if perFileCheckbox.state == 0 {
             self.dataSource = self.perFunctionTimes
