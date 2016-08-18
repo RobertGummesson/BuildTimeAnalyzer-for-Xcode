@@ -62,7 +62,7 @@ struct CMCompileMeasure {
         self.code = ""
         self.path = filepath
         self.filename = filename
-        self.locationArray = [0,0]
+        self.locationArray = [1,1]
         self.references = 1
     }
 
