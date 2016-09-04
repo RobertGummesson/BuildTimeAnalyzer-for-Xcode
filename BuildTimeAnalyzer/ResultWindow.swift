@@ -24,7 +24,7 @@ class ResultWindow: NSWindow {
     
     fileprivate var dataSource: [CompileMeasure] = []
     fileprivate var filteredData: [CompileMeasure]? = nil
-    fileprivate var processor: LogProcessor = LogProcessor()
+    fileprivate var processor = LogProcessor()
     fileprivate var cacheFiles: [CacheFile]?
     
     fileprivate var perFunctionTimes: [CompileMeasure] = []
@@ -32,7 +32,7 @@ class ResultWindow: NSWindow {
     
     private var preventMultipleRunsDeleteMe = false
     
-    var processingState: ProcessingState = .completed(stateName: ProcessingState.completedString) {
+    var processingState: ProcessingState = .waiting(shouldIndicate: false) {
         didSet {
             updateViewForState()
         }
@@ -43,7 +43,10 @@ class ResultWindow: NSWindow {
         
         guard preventMultipleRunsDeleteMe == false else { return }
         preventMultipleRunsDeleteMe = true
+        
         delegate = self
+        
+        updateViewForState()
         
         projectSelection.listFolders()
         projectSelection.startMonitoringDerivedData()
