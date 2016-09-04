@@ -43,6 +43,7 @@ class ResultWindow: NSWindow {
         
         guard preventMultipleRunsDeleteMe == false else { return }
         preventMultipleRunsDeleteMe = true
+        delegate = self
         
         projectSelection.listFolders()
         projectSelection.startMonitoringDerivedData()
@@ -194,7 +195,6 @@ extension ResultWindow: NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
         processor.shouldCancel = true
-//        processingState = .completed(stateName: ProcessingState.cancelledString)
-//        removeObservers()
+        NSApp.terminate(self)
     }
 }
