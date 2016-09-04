@@ -10,9 +10,6 @@ import Cocoa
 
 class ResultWindow: NSWindow {
     
-    let IDEBuildOperationWillStartNotification              = "IDEBuildOperationWillStartNotification"
-    let IDEBuildOperationDidGenerateOutputFilesNotification = "IDEBuildOperationDidGenerateOutputFilesNotification"
-    
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var instructionsView: NSView!
     @IBOutlet weak var statusTextField: NSTextField!
@@ -41,7 +38,7 @@ class ResultWindow: NSWindow {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        guard preventMultipleRunsDeleteMe == false else { return }
+        guard !preventMultipleRunsDeleteMe else { return }
         preventMultipleRunsDeleteMe = true
         
         delegate = self
@@ -87,7 +84,7 @@ class ResultWindow: NSWindow {
             }
         }
         // Sort by time
-        return Array(fileTimes.values).sorted(by: { $0.time > $1.time })
+        return Array(fileTimes.values).sorted{ $0.time > $1.time }
     }
     
     func updateViewForState() {
