@@ -18,7 +18,6 @@ class CMResultWindow: NSWindow {
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
-    @IBOutlet weak var buildDurationTextField: NSTextField!
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
     

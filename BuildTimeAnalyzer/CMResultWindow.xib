@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11198.2" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11198.2"/>
+        <capability name="system font weights other than Regular or Bold" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -184,11 +185,10 @@
                                     </tableColumns>
                                     <connections>
                                         <outlet property="dataSource" destination="QvC-M9-y7g" id="I0y-Zf-UaS"/>
-                                        <outlet property="delegate" destination="QvC-M9-y7g" id="O9w-3x-cet"/>
+                                        <outlet property="delegate" destination="QvC-M9-y7g" id="V69-HF-6YK"/>
                                     </connections>
                                 </tableView>
                             </subviews>
-                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="f5J-rq-fvr">
                             <rect key="frame" x="1" y="236" width="758" height="16"/>
@@ -235,16 +235,8 @@ Gw
                             <action selector="cancelButtonClicked:" target="QvC-M9-y7g" id="bNa-kO-aql"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HPi-Ar-CM0">
-                        <rect key="frame" x="963" y="440" width="19" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0s" id="Dik-tb-3CQ">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="eMC-ZP-LNe">
-                        <rect key="frame" x="804" y="438" width="64" height="18"/>
+                        <rect key="frame" x="917" y="438" width="64" height="18"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="14" id="Fe5-jX-ubQ"/>
                             <constraint firstAttribute="width" constant="60" id="odO-bE-pf3"/>
@@ -257,14 +249,6 @@ Gw
                             </connections>
                         </buttonCell>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8tn-wh-FPf">
-                        <rect key="frame" x="871" y="440" width="96" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Build duration: " id="bwI-sj-T7l">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="spL-CI-Cvm">
                         <rect key="frame" x="0.0" y="0.0" width="999" height="472"/>
                         <subviews>
@@ -330,10 +314,7 @@ Gw
                         </constraints>
                     </customView>
                     <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bG3-gx-tf3">
-                        <rect key="frame" x="200" y="436" width="599" height="22"/>
-                        <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="400" id="3Uu-Zu-ofE"/>
-                        </constraints>
+                        <rect key="frame" x="200" y="436" width="712" height="22"/>
                         <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="fNH-gl-hEJ">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -345,30 +326,24 @@ Gw
                     </searchField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="bG3-gx-tf3" firstAttribute="centerX" secondItem="EiT-Mj-1SZ" secondAttribute="centerX" id="16b-Cb-7gH"/>
                     <constraint firstItem="eSZ-xq-1Qq" firstAttribute="centerY" secondItem="rub-4P-XDp" secondAttribute="centerY" id="1bx-DT-rZB"/>
-                    <constraint firstItem="8tn-wh-FPf" firstAttribute="centerY" secondItem="HPi-Ar-CM0" secondAttribute="centerY" id="4yb-cP-lEB"/>
                     <constraint firstItem="hRu-er-26V" firstAttribute="leading" secondItem="Df5-K9-u4q" secondAttribute="trailing" constant="10" id="5Yr-Yn-Z5t"/>
-                    <constraint firstItem="HPi-Ar-CM0" firstAttribute="centerY" secondItem="rub-4P-XDp" secondAttribute="centerY" id="5eT-8m-wEU"/>
                     <constraint firstAttribute="trailing" secondItem="spL-CI-Cvm" secondAttribute="trailing" id="9X3-7S-wsr"/>
                     <constraint firstItem="Df5-K9-u4q" firstAttribute="leading" secondItem="eSZ-xq-1Qq" secondAttribute="trailing" constant="5" id="Bz1-G6-1o1"/>
                     <constraint firstItem="bG3-gx-tf3" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="200" id="Gdq-9C-Abj"/>
                     <constraint firstAttribute="trailing" secondItem="qiX-rM-BSu" secondAttribute="trailing" constant="20" id="JEK-uZ-bgj"/>
-                    <constraint firstAttribute="trailing" secondItem="HPi-Ar-CM0" secondAttribute="trailing" constant="19" id="N87-M6-8Uo"/>
                     <constraint firstItem="Df5-K9-u4q" firstAttribute="centerY" secondItem="eSZ-xq-1Qq" secondAttribute="centerY" id="PHU-V6-DY7"/>
                     <constraint firstItem="rub-4P-XDp" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="15" id="PK1-2N-vw3"/>
                     <constraint firstAttribute="bottom" secondItem="spL-CI-Cvm" secondAttribute="bottom" id="RoP-Q2-9Po"/>
                     <constraint firstItem="spL-CI-Cvm" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="V5E-52-flB"/>
-                    <constraint firstItem="HPi-Ar-CM0" firstAttribute="leading" secondItem="8tn-wh-FPf" secondAttribute="trailing" id="YUB-TM-R0v"/>
                     <constraint firstItem="qiX-rM-BSu" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="50" id="Z9G-Wf-zn2"/>
                     <constraint firstItem="eSZ-xq-1Qq" firstAttribute="leading" secondItem="rub-4P-XDp" secondAttribute="trailing" id="ZSp-z4-nED"/>
                     <constraint firstItem="ntK-dD-iDV" firstAttribute="centerY" secondItem="rub-4P-XDp" secondAttribute="centerY" id="ZfL-RU-t7l"/>
                     <constraint firstItem="hRu-er-26V" firstAttribute="centerY" secondItem="Df5-K9-u4q" secondAttribute="centerY" id="ayV-cB-Iap"/>
-                    <constraint firstAttribute="trailing" secondItem="bG3-gx-tf3" secondAttribute="trailing" constant="200" id="bRU-kd-Y4P"/>
                     <constraint firstItem="qiX-rM-BSu" firstAttribute="top" secondItem="bG3-gx-tf3" secondAttribute="bottom" constant="14" id="cnd-ZH-7NZ"/>
                     <constraint firstItem="qiX-rM-BSu" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="dDY-HK-ZcC"/>
+                    <constraint firstAttribute="trailing" secondItem="eMC-ZP-LNe" secondAttribute="trailing" constant="20" id="epB-gs-JPJ"/>
                     <constraint firstItem="eMC-ZP-LNe" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="18" id="kCj-jr-aSb"/>
-                    <constraint firstItem="8tn-wh-FPf" firstAttribute="leading" secondItem="eMC-ZP-LNe" secondAttribute="trailing" constant="7" id="mHr-Tr-97C"/>
                     <constraint firstAttribute="bottom" secondItem="qiX-rM-BSu" secondAttribute="bottom" constant="20" id="pT5-B2-WJB"/>
                     <constraint firstItem="rub-4P-XDp" firstAttribute="leading" secondItem="qiX-rM-BSu" secondAttribute="leading" id="s3D-Bz-lJ5"/>
                     <constraint firstItem="spL-CI-Cvm" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="soX-vw-1ZI"/>
@@ -376,7 +351,6 @@ Gw
                 </constraints>
             </view>
             <connections>
-                <outlet property="buildDurationTextField" destination="HPi-Ar-CM0" id="x0U-EN-FmZ"/>
                 <outlet property="cancelButton" destination="hRu-er-26V" id="eJZ-mz-y5i"/>
                 <outlet property="instructionsView" destination="spL-CI-Cvm" id="cm7-Yu-WRV"/>
                 <outlet property="progressIndicator" destination="Df5-K9-u4q" id="0Id-RP-9p4"/>
