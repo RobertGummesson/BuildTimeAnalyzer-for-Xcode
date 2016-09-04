@@ -19,7 +19,6 @@
 		2A3164D91D21D7F800064045 /* CMXcodeWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D81D21D7F800064045 /* CMXcodeWorkspace.swift */; };
 		2A3164DA1D21D90100064045 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D41D21D77500064045 /* NSData+GZIP.m */; };
 		2AE775121D225D5D00D1A744 /* CMFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE775111D225D5D00D1A744 /* CMFileManager.swift */; };
-		2AE775141D227D6C00D1A744 /* NSDate+Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE775131D227D6C00D1A744 /* NSDate+Comparable.swift */; };
 		2AF821441D21D6B900D65186 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF821431D21D6B900D65186 /* AppDelegate.swift */; };
 		2AF821461D21D6B900D65186 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AF821451D21D6B900D65186 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -48,7 +47,6 @@
 		2A3164D41D21D77500064045 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+GZIP.m"; path = "GZIP/NSData+GZIP.m"; sourceTree = "<group>"; };
 		2A3164D81D21D7F800064045 /* CMXcodeWorkspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMXcodeWorkspace.swift; sourceTree = "<group>"; };
 		2AE775111D225D5D00D1A744 /* CMFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMFileManager.swift; sourceTree = "<group>"; };
-		2AE775131D227D6C00D1A744 /* NSDate+Comparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+Comparable.swift"; sourceTree = "<group>"; };
 		2AF821401D21D6B900D65186 /* BuildTimeAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildTimeAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AF821431D21D6B900D65186 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2AF821451D21D6B900D65186 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = BuildTimeAnalyzer/Assets.xcassets; sourceTree = "<group>"; };
@@ -134,7 +132,6 @@
 				2A3164C51D21D73F00064045 /* CMResultWindow.swift */,
 				2A3164C61D21D73F00064045 /* CMResultWindow.xib */,
 				2A3164D81D21D7F800064045 /* CMXcodeWorkspace.swift */,
-				2AE775131D227D6C00D1A744 /* NSDate+Comparable.swift */,
 				2A3164D11D21D74F00064045 /* Supporting Files */,
 			);
 			path = BuildTimeAnalyzer;
@@ -194,14 +191,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Cane Media Ltd";
 				TargetAttributes = {
 					2AF8213F1D21D6B900D65186 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 					2AF8214E1D21D6B900D65186 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 2AF8213F1D21D6B900D65186;
 					};
 				};
@@ -254,7 +253,6 @@
 				2A3164C91D21D73F00064045 /* CMLogProcessor.swift in Sources */,
 				2A3164CB1D21D73F00064045 /* CMProcessingState.swift in Sources */,
 				2AF821441D21D6B900D65186 /* AppDelegate.swift in Sources */,
-				2AE775141D227D6C00D1A744 /* NSDate+Comparable.swift in Sources */,
 				2AE775121D225D5D00D1A744 /* CMFileManager.swift in Sources */,
 				2A3164CC1D21D73F00064045 /* CMRawMeasure.swift in Sources */,
 				2A3164CD1D21D73F00064045 /* CMResultWindow.swift in Sources */,
@@ -297,8 +295,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -342,8 +342,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -362,6 +364,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -375,6 +378,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -388,6 +392,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -403,6 +408,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BuildTimeAnalyzer.app/Contents/MacOS/BuildTimeAnalyzer";
 			};
 			name = Debug;
@@ -418,6 +424,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BuildTimeAnalyzer.app/Contents/MacOS/BuildTimeAnalyzer";
 			};
 			name = Release;

@@ -16,7 +16,7 @@ struct CMCompileMeasure {
     var filename: String
     var references: Int
 
-    private var locationArray: [Int]
+    fileprivate var locationArray: [Int]
 
     var fileAndLine: String {
         return "\(filename):\(locationArray[0])"
@@ -35,13 +35,13 @@ struct CMCompileMeasure {
     }
     
     init?(time: Double, rawPath: String, code: String, references: Int) {
-        let untrimmedFilename = rawPath.characters.split("/").map(String.init).last
+        let untrimmedFilename = rawPath.characters.split(separator: "/").map(String.init).last
         
-        guard let filepath = rawPath.characters.split(":").map(String.init).first else { return nil }
-        guard let filename = untrimmedFilename?.characters.split(":").map(String.init).first else { return nil }
+        guard let filepath = rawPath.characters.split(separator: ":").map(String.init).first else { return nil }
+        guard let filename = untrimmedFilename?.characters.split(separator: ":").map(String.init).first else { return nil }
         
-        let locationString = String(rawPath.substringFromIndex(filepath.endIndex).characters.dropFirst())
-        let locations = locationString.characters.split(":").flatMap{ Int(String.init($0)) }
+        let locationString = String(rawPath.substring(from: filepath.endIndex).characters.dropFirst())
+        let locations = locationString.characters.split(separator: ":").flatMap{ Int(String.init($0)) }
         guard locations.count == 2 else { return nil }
         
         self.time = time
@@ -53,10 +53,10 @@ struct CMCompileMeasure {
     }
 
     init?(rawPath: String, time: Double) {
-        let untrimmedFilename = rawPath.characters.split("/").map(String.init).last
+        let untrimmedFilename = rawPath.characters.split(separator: "/").map(String.init).last
 
-        guard let filepath = rawPath.characters.split(":").map(String.init).first else { return nil }
-        guard let filename = untrimmedFilename?.characters.split(":").map(String.init).first else { return nil }
+        guard let filepath = rawPath.characters.split(separator: ":").map(String.init).first else { return nil }
+        guard let filename = untrimmedFilename?.characters.split(separator: ":").map(String.init).first else { return nil }
 
         self.time = time
         self.code = ""

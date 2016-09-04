@@ -20,11 +20,11 @@ struct CMBuildOperation {
     var productName: String
     var duration: Double
     var result: CMBuildResult
-    var startTime: NSDate
+    var startTime: Date
     
-    var endTime: NSDate {
+    var endTime: Date {
         // We will be looking for log files created after this date
         // Let's subtract a second to be on the safe side
-        return startTime.dateByAddingTimeInterval(duration - 1)
+        return startTime.addingTimeInterval(duration - 1)
     }
 }

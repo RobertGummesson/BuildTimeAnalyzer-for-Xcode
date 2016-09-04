@@ -22,13 +22,13 @@ class CMResultWindow: NSWindow {
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
     
-    private var dataSource: [CMCompileMeasure] = []
-    private var filteredData: [CMCompileMeasure]? = nil
-    private var processor: CMLogProcessor = CMLogProcessor()
-    private var cacheFiles: [CMFile]?
+    fileprivate var dataSource: [CMCompileMeasure] = []
+    fileprivate var filteredData: [CMCompileMeasure]? = nil
+    fileprivate var processor: CMLogProcessor = CMLogProcessor()
+    fileprivate var cacheFiles: [CMFile]?
     
-    private var perFunctionTimes: [CMCompileMeasure] = []
-    private var perFileTimes: [CMCompileMeasure] = []
+    fileprivate var perFunctionTimes: [CMCompileMeasure] = []
+    fileprivate var perFileTimes: [CMCompileMeasure] = []
     
     var processingState: CMProcessingState = .completed(stateName: CMProcessingState.completedString) {
         didSet {
@@ -49,7 +49,7 @@ class CMResultWindow: NSWindow {
         self.cacheFiles = cacheFiles
     }
     
-    func processCacheFile(cacheFile: CMFile) {
+    func processCacheFile(_ cacheFile: CMFile) {
         processingState = .processing
         
         processor.processCacheFile(at: cacheFile.path) { [weak self] (result, didComplete) in
@@ -70,7 +70,7 @@ class CMResultWindow: NSWindow {
     /*
      *  Aggregates all function times by file
      */
-    func aggregateTimesByFile(functionTimes: [CMCompileMeasure]) -> [CMCompileMeasure] {
+    func aggregateTimesByFile(_ functionTimes: [CMCompileMeasure]) -> [CMCompileMeasure] {
         var fileTimes = [String: CMCompileMeasure]()
 
         for measure in functionTimes {
@@ -84,24 +84,24 @@ class CMResultWindow: NSWindow {
             }
         }
         // Sort by time
-        return Array(fileTimes.values).sort({ $0.time > $1.time })
+        return Array(fileTimes.values).sorted(by: { $0.time > $1.time })
     }
     
     func updateViewForState() {
         switch processingState {
         case .processing:
-            progressIndicator.hidden = false
+            progressIndicator.isHidden = false
             progressIndicator.startAnimation(self)
             statusTextField.stringValue = CMProcessingState.processingString
             showInstructions(false)
-            cancelButton.hidden = false
+            cancelButton.isHidden = false
             
         case .completed(let stateName):
             progressIndicator.stopAnimation(self)
             statusTextField.stringValue = stateName
             showInstructions(stateName == CMProcessingState.failedString)
-            progressIndicator.hidden = true
-            cancelButton.hidden = true
+            progressIndicator.isHidden = true
+            cancelButton.isHidden = true
             
         case .waiting(let shouldIndicate):
             if shouldIndicate {
@@ -112,66 +112,66 @@ class CMResultWindow: NSWindow {
                 progressIndicator.stopAnimation(self)
                 statusTextField.stringValue = CMProcessingState.waitingForBuildString
             }
-            progressIndicator.hidden = !shouldIndicate
-            cancelButton.hidden = true
+            progressIndicator.isHidden = !shouldIndicate
+            cancelButton.isHidden = true
         }
-        searchField.hidden = !cancelButton.hidden
+        searchField.isHidden = !cancelButton.isHidden
     }
     
-    func showInstructions(show: Bool) {
-        instructionsView.hidden = !show
-        progressIndicator.hidden = show
-        tableViewContainerView.hidden = show
+    func showInstructions(_ show: Bool) {
+        instructionsView.isHidden = !show
+        progressIndicator.isHidden = show
+        tableViewContainerView.isHidden = show
     }
 
     // MARK: Actions
     
-    @IBAction func perFileCheckboxClicked(sender: NSButton) {
+    @IBAction func perFileCheckboxClicked(_ sender: NSButton) {
         dataSource = sender.state == 0 ? perFunctionTimes : perFileTimes
         tableView.reloadData()
     }
 
-    @IBAction func clipboardButtonClicked(sender: AnyObject) {
-        NSPasteboard.generalPasteboard().clearContents()
-        NSPasteboard.generalPasteboard().writeObjects(["-Xfrontend -debug-time-function-bodies"])
+    @IBAction func clipboardButtonClicked(_ sender: AnyObject) {
+        NSPasteboard.general().clearContents()
+        NSPasteboard.general().writeObjects(["-Xfrontend -debug-time-function-bodies" as NSPasteboardWriting])
     }
     
-    @IBAction func cancelButtonClicked(sender: AnyObject) {
+    @IBAction func cancelButtonClicked(_ sender: AnyObject) {
         processor.shouldCancel = true
     }
     
-    override func controlTextDidChange(obj: NSNotification) {
-		guard let field = obj.object as? NSSearchField where field == searchField else { return }
+    override func controlTextDidChange(_ obj: Notification) {
+		guard let field = obj.object as? NSSearchField , field == searchField else { return }
         
         filteredData = field.stringValue.isEmpty ? nil : dataSource.filter{ textContains($0.code) || textContains($0.filename) }
 		tableView.reloadData()
 	}
 
-    func textContains(text: String) -> Bool {
-        return text.lowercaseString.containsString(searchField.stringValue.lowercaseString)
+    func textContains(_ text: String) -> Bool {
+        return text.lowercased().contains(searchField.stringValue.lowercased())
     }
 }
 
 extension CMResultWindow: NSTableViewDataSource {
-	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+	func numberOfRows(in tableView: NSTableView) -> Int {
         return filteredData?.count ?? dataSource.count
 	}
 }
 
 extension CMResultWindow: NSTableViewDelegate {
 
-    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let tableColumn = tableColumn, columnIndex = tableView.tableColumns.indexOf(tableColumn) else { return nil }
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
         
-        let result = tableView.makeViewWithIdentifier("Cell\(columnIndex)", owner: self) as? NSTableCellView
+        let result = tableView.make(withIdentifier: "Cell\(columnIndex)", owner: self) as? NSTableCellView
         result?.textField?.stringValue = filteredData?[row][columnIndex] ?? dataSource[row][columnIndex]
         
         return result
     }
     
-	func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+	func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         let item = filteredData?[row] ?? dataSource[row]
-        NSApp.delegate?.application?(NSApp, openFile: item.path)
+        _ = NSApp.delegate?.application?(NSApp, openFile: item.path)
         
 		return true
 	}
@@ -179,7 +179,7 @@ extension CMResultWindow: NSTableViewDelegate {
 
 extension CMResultWindow: NSWindowDelegate {
     
-    func windowWillClose(notification: NSNotification) {
+    func windowWillClose(_ notification: Notification) {
         processor.shouldCancel = true
 //        processingState = .completed(stateName: CMProcessingState.cancelledString)
 //        removeObservers()
