@@ -1,5 +1,5 @@
 //
-//  CMXcodeWorkspace.swift
+//  XcodeWorkSpace.swift
 //  BuildTimeAnalyzer
 //
 //  Created by Robert Gummesson on 30/04/2016.
@@ -8,13 +8,13 @@
 
 import Cocoa
 
-protocol CMXcodeWorkspaceProtocol {
+protocol XcodeWorkSpaceProtocol {
     var focusLostHandler: (() -> ())? { get set }
     
     func willOpenDocument(atLineNumber lineNumber: Int, usingTextView textView: NSTextView?)
 }
 
-extension CMXcodeWorkspaceProtocol {
+extension XcodeWorkSpaceProtocol {
     
     func logText(forCacheAtPath path: String, completionHandler: ((_ text: String?) -> ())) {
         guard let lastBuild = lastBuildKey(fromPath: path),
@@ -78,7 +78,7 @@ extension CMXcodeWorkspaceProtocol {
     }
 }
 
-class CMXcodeWorkSpace: NSObject, CMXcodeWorkspaceProtocol {
+class XcodeWorkSpace: NSObject, XcodeWorkSpaceProtocol {
     
     var lineNumber = 0
     var focusLostHandler: (() -> ())?

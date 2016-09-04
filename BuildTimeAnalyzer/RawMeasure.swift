@@ -1,5 +1,5 @@
 //
-//  CMRawMeasure.swift
+//  RawMeasure.swift
 //  BuildTimeAnalyzer
 //
 //  Created by Robert Gummesson on 04/05/2016.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CMRawMeasure {
+struct RawMeasure {
     var time: Double
     var text: String
     var references: Int
@@ -22,15 +22,15 @@ struct CMRawMeasure {
 
 // MARK: Equatable
 
-extension CMRawMeasure: Equatable {}
+extension RawMeasure: Equatable {}
 
-func ==(lhs: CMRawMeasure, rhs: CMRawMeasure) -> Bool {
+func ==(lhs: RawMeasure, rhs: RawMeasure) -> Bool {
     return lhs.time == rhs.time && lhs.text == rhs.text
 }
 
 // MARK: Hashable
 
-extension CMRawMeasure: Hashable {
+extension RawMeasure: Hashable {
     var hashValue: Int {
         return time.hashValue ^ text.hashValue
     }

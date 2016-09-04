@@ -1,5 +1,5 @@
 //
-//  CMCompileMeasure.swift
+//  CompileMeasure.swift
 //  BuildTimeAnalyzer
 //
 //  Created by Robert Gummesson on 02/05/2016.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CMCompileMeasure {
+struct CompileMeasure {
     
     var time: Double
     var path: String

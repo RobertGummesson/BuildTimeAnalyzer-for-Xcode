@@ -1,5 +1,5 @@
 //
-//  CMFileManager.swift
+//  DerivedDataManager.swift
 //  BuildTimeAnalyzer
 //
 //  Created by Robert Gummesson on 28/06/2016.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-struct CMFile {
+struct CacheFile {
     let name: String
     let path: String
     let modificationDate: Date
 }
 
-class CMFileManager {
+class DerivedDataManager {
     
     static fileprivate var _derivedDataLocation: String?
     static fileprivate let DerivedDataLocationKey = "DerivedDataLocationKey"
@@ -35,32 +35,32 @@ class CMFileManager {
         }
     }
     
-    static func listCacheFiles() -> [CMFile] {
+    static func listCacheFiles() -> [CacheFile] {
         let cacheFiles = getCacheFiles(at: URL(fileURLWithPath: derivedDataLocation))
         let earliestDate = Date().addingTimeInterval(-24 * 60 * 60)
         return filterFiles(cacheFiles, byEarliestDate: earliestDate)
     }
     
-    static fileprivate func getCacheFiles(at url: URL) -> [CMFile] {
+    static fileprivate func getCacheFiles(at url: URL) -> [CacheFile] {
         let fileManager = FileManager.default
         let keys = [URLResourceKey.nameKey, URLResourceKey.isDirectoryKey]
         let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants]
         
         guard let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: keys, options: options, errorHandler: nil) else { return [] }
-        var result: [CMFile] = []
+        var result: [CacheFile] = []
         for case let fileURL as URL in enumerator {
             let name = fileURL.lastPathComponent
             let cachePath = fileURL.appendingPathComponent("Logs/Build/Cache.db").path
             
             if let properties = try? fileManager.attributesOfItem(atPath: cachePath),
                 let modificationDate = properties[FileAttributeKey.modificationDate] as? Date {
-                result.append(CMFile(name: name, path: cachePath, modificationDate: modificationDate))
+                result.append(CacheFile(name: name, path: cachePath, modificationDate: modificationDate))
             }
         }
         return result
     }
     
-    static fileprivate func filterFiles(_ files: [CMFile], byEarliestDate date: Date) -> [CMFile] {
+    static fileprivate func filterFiles(_ files: [CacheFile], byEarliestDate date: Date) -> [CacheFile] {
         guard files.count > 0 else { return [] }
         
         let sortedFiles = files.sorted(by: { $0.modificationDate > $1.modificationDate })

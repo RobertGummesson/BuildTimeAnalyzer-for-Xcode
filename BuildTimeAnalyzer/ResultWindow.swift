@@ -1,5 +1,5 @@
 //
-//  CMResultWindowController.swift
+//  ResultWindowController.swift
 //  BuildTimeAnalyzer
 //
 //  Created by Robert Gummesson on 01/05/2016.
@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class CMResultWindow: NSWindow {
+class ResultWindow: NSWindow {
     
     let IDEBuildOperationWillStartNotification              = "IDEBuildOperationWillStartNotification"
     let IDEBuildOperationDidGenerateOutputFilesNotification = "IDEBuildOperationDidGenerateOutputFilesNotification"
@@ -21,15 +21,15 @@ class CMResultWindow: NSWindow {
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
     
-    fileprivate var dataSource: [CMCompileMeasure] = []
-    fileprivate var filteredData: [CMCompileMeasure]? = nil
-    fileprivate var processor: CMLogProcessor = CMLogProcessor()
-    fileprivate var cacheFiles: [CMFile]?
+    fileprivate var dataSource: [CompileMeasure] = []
+    fileprivate var filteredData: [CompileMeasure]? = nil
+    fileprivate var processor: LogProcessor = LogProcessor()
+    fileprivate var cacheFiles: [CacheFile]?
     
-    fileprivate var perFunctionTimes: [CMCompileMeasure] = []
-    fileprivate var perFileTimes: [CMCompileMeasure] = []
+    fileprivate var perFunctionTimes: [CompileMeasure] = []
+    fileprivate var perFileTimes: [CompileMeasure] = []
     
-    var processingState: CMProcessingState = .completed(stateName: CMProcessingState.completedString) {
+    var processingState: ProcessingState = .completed(stateName: ProcessingState.completedString) {
         didSet {
             updateViewForState()
         }
@@ -39,16 +39,16 @@ class CMResultWindow: NSWindow {
         super.awakeFromNib()
         guard self.cacheFiles == nil else { return }
         
-        statusTextField.stringValue = CMProcessingState.waitingForBuildString
+        statusTextField.stringValue = ProcessingState.waitingForBuildString
         
-        let cacheFiles = CMFileManager.listCacheFiles()
+        let cacheFiles = DerivedDataManager.listCacheFiles()
         if let cacheFile = cacheFiles.first {
             processCacheFile(cacheFile)
         }
         self.cacheFiles = cacheFiles
     }
     
-    func processCacheFile(_ cacheFile: CMFile) {
+    func processCacheFile(_ cacheFile: CacheFile) {
         processingState = .processing
         
         processor.processCacheFile(at: cacheFile.path) { [weak self] (result, didComplete) in
@@ -60,7 +60,7 @@ class CMResultWindow: NSWindow {
             self.tableView.reloadData()
             
             if didComplete {
-                let stateName = self.dataSource.isEmpty ? CMProcessingState.failedString : CMProcessingState.completedString
+                let stateName = self.dataSource.isEmpty ? ProcessingState.failedString : ProcessingState.completedString
                 self.processingState = .completed(stateName: stateName)
             }
         }
@@ -69,8 +69,8 @@ class CMResultWindow: NSWindow {
     /*
      *  Aggregates all function times by file
      */
-    func aggregateTimesByFile(_ functionTimes: [CMCompileMeasure]) -> [CMCompileMeasure] {
-        var fileTimes = [String: CMCompileMeasure]()
+    func aggregateTimesByFile(_ functionTimes: [CompileMeasure]) -> [CompileMeasure] {
+        var fileTimes = [String: CompileMeasure]()
 
         for measure in functionTimes {
             if var fileMeasure = fileTimes[measure.path] {
@@ -78,7 +78,7 @@ class CMResultWindow: NSWindow {
                 fileMeasure.time += measure.time
                 fileTimes[measure.path] = fileMeasure
             } else {
-                let newFileMeasure = CMCompileMeasure(rawPath: measure.path, time: measure.time)
+                let newFileMeasure = CompileMeasure(rawPath: measure.path, time: measure.time)
                 fileTimes[measure.path] = newFileMeasure
             }
         }
@@ -91,25 +91,25 @@ class CMResultWindow: NSWindow {
         case .processing:
             progressIndicator.isHidden = false
             progressIndicator.startAnimation(self)
-            statusTextField.stringValue = CMProcessingState.processingString
+            statusTextField.stringValue = ProcessingState.processingString
             showInstructions(false)
             cancelButton.isHidden = false
             
         case .completed(let stateName):
             progressIndicator.stopAnimation(self)
             statusTextField.stringValue = stateName
-            showInstructions(stateName == CMProcessingState.failedString)
+            showInstructions(stateName == ProcessingState.failedString)
             progressIndicator.isHidden = true
             cancelButton.isHidden = true
             
         case .waiting(let shouldIndicate):
             if shouldIndicate {
                 progressIndicator.startAnimation(self)
-                statusTextField.stringValue = CMProcessingState.buildString
+                statusTextField.stringValue = ProcessingState.buildString
                 showInstructions(false)
             } else {
                 progressIndicator.stopAnimation(self)
-                statusTextField.stringValue = CMProcessingState.waitingForBuildString
+                statusTextField.stringValue = ProcessingState.waitingForBuildString
             }
             progressIndicator.isHidden = !shouldIndicate
             cancelButton.isHidden = true
@@ -151,13 +151,13 @@ class CMResultWindow: NSWindow {
     }
 }
 
-extension CMResultWindow: NSTableViewDataSource {
+extension ResultWindow: NSTableViewDataSource {
 	func numberOfRows(in tableView: NSTableView) -> Int {
         return filteredData?.count ?? dataSource.count
 	}
 }
 
-extension CMResultWindow: NSTableViewDelegate {
+extension ResultWindow: NSTableViewDelegate {
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
@@ -176,11 +176,11 @@ extension CMResultWindow: NSTableViewDelegate {
 	}
 }
 
-extension CMResultWindow: NSWindowDelegate {
+extension ResultWindow: NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
         processor.shouldCancel = true
-//        processingState = .completed(stateName: CMProcessingState.cancelledString)
+//        processingState = .completed(stateName: ProcessingState.cancelledString)
 //        removeObservers()
     }
 }

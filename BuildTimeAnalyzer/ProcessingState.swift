@@ -1,12 +1,12 @@
 //
-//  CMProcessingState.swift
+//  ProcessingState.swift
 //  BuildTimeAnalyzer
 //
 //  Created by Robert Gummesson on 01/05/2016.
 //  Copyright © 2016 Robert Gummesson. All rights reserved.
 //
 
-enum CMProcessingState {
+enum ProcessingState {
     case processing
     case waiting(shouldIndicate: Bool)
     case completed(stateName: String)
@@ -19,9 +19,9 @@ enum CMProcessingState {
     static let buildString           = "Building..."
 }
 
-extension CMProcessingState : Equatable {}
+extension ProcessingState : Equatable {}
 
-func ==(lhs: CMProcessingState, rhs: CMProcessingState) -> Bool {
+func ==(lhs: ProcessingState, rhs: ProcessingState) -> Bool {
     switch (lhs, rhs) {
     case (let .waiting(shouldIndicate1), let .waiting(shouldIndicate2)):
         return shouldIndicate1 == shouldIndicate2

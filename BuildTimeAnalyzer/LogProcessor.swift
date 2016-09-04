@@ -1,5 +1,5 @@
 //
-//  CMLogProcessor.swift
+//  LogProcessor.swift
 //  BuildTimeAnalyzer
 //
 //  Created by Robert Gummesson on 01/05/2016.
@@ -8,21 +8,21 @@
 
 import Foundation
 
-typealias CMUpdateClosure = (_ result: [CMCompileMeasure], _ didComplete: Bool) -> ()
+typealias CMUpdateClosure = (_ result: [CompileMeasure], _ didComplete: Bool) -> ()
 
-protocol CMLogProcessorProtocol: class {
-    var rawMeasures: [String: CMRawMeasure] { get set }
+protocol LogProcessorProtocol: class {
+    var rawMeasures: [String: RawMeasure] { get set }
     var updateHandler: CMUpdateClosure? { get set }
-    var workspace: CMXcodeWorkSpace? { get set }
+    var workspace: XcodeWorkSpace? { get set }
     var shouldCancel: Bool { get set }
     
     func processingDidStart()
     func processingDidFinish()
 }
 
-extension CMLogProcessorProtocol {
+extension LogProcessorProtocol {
     func processCacheFile(at path: String, updateHandler: CMUpdateClosure?) {
-        workspace = CMXcodeWorkSpace()
+        workspace = XcodeWorkSpace()
         workspace?.logText(forCacheAtPath: path) { [weak self] (text) in
             guard let text = text else {
                 updateHandler?([], true)
@@ -38,7 +38,7 @@ extension CMLogProcessorProtocol {
     
     // MARK: Private methods
     
-    fileprivate func process(text: String) {
+    private func process(text: String) {
         let characterSet = CharacterSet(charactersIn:"\r\"")
         var remainingRange = text.startIndex..<text.endIndex
         let regex = try! NSRegularExpression(pattern:  "^\\d*\\.?\\dms\\t/", options: [])
@@ -65,7 +65,7 @@ extension CMLogProcessorProtocol {
                     rawMeasure.references += 1
                     rawMeasures[value] = rawMeasure
                 } else {
-                    rawMeasures[value] = CMRawMeasure(time: time, text: value)
+                    rawMeasures[value] = RawMeasure(time: time, text: value)
                 }
             }
             guard !shouldCancel else { break }
@@ -87,18 +87,18 @@ extension CMLogProcessorProtocol {
         }
     }
     
-    fileprivate func processResult(_ unprocessedResult: [CMRawMeasure]) -> [CMCompileMeasure] {
-        var result: [CMCompileMeasure] = []
+    private func processResult(_ unprocessedResult: [RawMeasure]) -> [CompileMeasure] {
+        var result: [CompileMeasure] = []
         for entry in unprocessedResult {
             let code = entry.text.characters.split(separator: "\t").map(String.init)
-            if code.count >= 2, let measure = CMCompileMeasure(time: entry.time, rawPath: code[0], code: trimPrefixes(code[1]), references: entry.references) {
+            if code.count >= 2, let measure = CompileMeasure(time: entry.time, rawPath: code[0], code: trimPrefixes(code[1]), references: entry.references) {
                 result.append(measure)
             }
         }
         return result
     }
     
-    fileprivate func trimPrefixes(_ code: String) -> String {
+    private func trimPrefixes(_ code: String) -> String {
         var code = code
         ["@objc ", "final ", "@IBAction "].forEach { (prefix) in
             if code.hasPrefix(prefix) {
@@ -109,11 +109,11 @@ extension CMLogProcessorProtocol {
     }
 }
 
-class CMLogProcessor: NSObject, CMLogProcessorProtocol {
+class LogProcessor: NSObject, LogProcessorProtocol {
     
-    var rawMeasures: [String: CMRawMeasure] = [:]
+    var rawMeasures: [String: RawMeasure] = [:]
     var updateHandler: CMUpdateClosure?
-    var workspace: CMXcodeWorkSpace?
+    var workspace: XcodeWorkSpace?
     var shouldCancel = false
     var timer: Timer?
     

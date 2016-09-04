@@ -1,5 +1,5 @@
 //
-//  CMCompileMeasureTests.swift
+//  CompileMeasureTests.swift
 //  CMBuildTimeAnalyzerTests
 //
 //  Created by Robert Gummesson on 02/05/2016.
@@ -26,7 +26,7 @@ class BuildTimeAnalyzerTests: XCTestCase {
         let references = 2
         
         // When
-        let resultOptional = CMCompileMeasure(time: time, rawPath: rawPath, code: code, references: references)
+        let resultOptional = CompileMeasure(time: time, rawPath: rawPath, code: code, references: references)
         
         // Then 
         XCTAssertNotNil(resultOptional)

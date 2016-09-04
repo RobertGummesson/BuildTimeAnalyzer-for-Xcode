@@ -27,7 +27,7 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2016 Cane Media Ltd. All rights reserved.</string>
 	<key>NSMainNibFile</key>
-	<string>CMResultWindow</string>
+	<string>ResultWindow</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

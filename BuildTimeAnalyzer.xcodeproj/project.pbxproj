@@ -7,18 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A3164C71D21D73F00064045 /* CMBuildOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164BF1D21D73F00064045 /* CMBuildOperation.swift */; };
-		2A3164C81D21D73F00064045 /* CMCompileMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C01D21D73F00064045 /* CMCompileMeasure.swift */; };
-		2A3164C91D21D73F00064045 /* CMLogProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C11D21D73F00064045 /* CMLogProcessor.swift */; };
-		2A3164CB1D21D73F00064045 /* CMProcessingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C31D21D73F00064045 /* CMProcessingState.swift */; };
-		2A3164CC1D21D73F00064045 /* CMRawMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C41D21D73F00064045 /* CMRawMeasure.swift */; };
-		2A3164CD1D21D73F00064045 /* CMResultWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C51D21D73F00064045 /* CMResultWindow.swift */; };
-		2A3164CE1D21D73F00064045 /* CMResultWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A3164C61D21D73F00064045 /* CMResultWindow.xib */; };
-		2A3164D01D21D74A00064045 /* CMCompileMeasureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164CF1D21D74A00064045 /* CMCompileMeasureTests.swift */; };
+		2A3164C81D21D73F00064045 /* CompileMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C01D21D73F00064045 /* CompileMeasure.swift */; };
+		2A3164C91D21D73F00064045 /* LogProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C11D21D73F00064045 /* LogProcessor.swift */; };
+		2A3164CB1D21D73F00064045 /* ProcessingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C31D21D73F00064045 /* ProcessingState.swift */; };
+		2A3164CC1D21D73F00064045 /* RawMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C41D21D73F00064045 /* RawMeasure.swift */; };
+		2A3164CD1D21D73F00064045 /* ResultWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C51D21D73F00064045 /* ResultWindow.swift */; };
+		2A3164CE1D21D73F00064045 /* ResultWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A3164C61D21D73F00064045 /* ResultWindow.xib */; };
+		2A3164D01D21D74A00064045 /* CompileMeasureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164CF1D21D74A00064045 /* CompileMeasureTests.swift */; };
 		2A3164D51D21D77500064045 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D41D21D77500064045 /* NSData+GZIP.m */; };
-		2A3164D91D21D7F800064045 /* CMXcodeWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D81D21D7F800064045 /* CMXcodeWorkspace.swift */; };
+		2A3164D91D21D7F800064045 /* XcodeWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */; };
 		2A3164DA1D21D90100064045 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D41D21D77500064045 /* NSData+GZIP.m */; };
-		2AE775121D225D5D00D1A744 /* CMFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE775111D225D5D00D1A744 /* CMFileManager.swift */; };
+		2AE775121D225D5D00D1A744 /* DerivedDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */; };
 		2AF821441D21D6B900D65186 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF821431D21D6B900D65186 /* AppDelegate.swift */; };
 		2AF821461D21D6B900D65186 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AF821451D21D6B900D65186 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -34,19 +33,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2A3164BF1D21D73F00064045 /* CMBuildOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMBuildOperation.swift; sourceTree = "<group>"; };
-		2A3164C01D21D73F00064045 /* CMCompileMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMCompileMeasure.swift; sourceTree = "<group>"; };
-		2A3164C11D21D73F00064045 /* CMLogProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMLogProcessor.swift; sourceTree = "<group>"; };
-		2A3164C31D21D73F00064045 /* CMProcessingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMProcessingState.swift; sourceTree = "<group>"; };
-		2A3164C41D21D73F00064045 /* CMRawMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMRawMeasure.swift; sourceTree = "<group>"; };
-		2A3164C51D21D73F00064045 /* CMResultWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMResultWindow.swift; sourceTree = "<group>"; };
-		2A3164C61D21D73F00064045 /* CMResultWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CMResultWindow.xib; sourceTree = "<group>"; };
-		2A3164CF1D21D74A00064045 /* CMCompileMeasureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMCompileMeasureTests.swift; sourceTree = "<group>"; };
+		2A3164C01D21D73F00064045 /* CompileMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompileMeasure.swift; sourceTree = "<group>"; };
+		2A3164C11D21D73F00064045 /* LogProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogProcessor.swift; sourceTree = "<group>"; };
+		2A3164C31D21D73F00064045 /* ProcessingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessingState.swift; sourceTree = "<group>"; };
+		2A3164C41D21D73F00064045 /* RawMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawMeasure.swift; sourceTree = "<group>"; };
+		2A3164C51D21D73F00064045 /* ResultWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultWindow.swift; sourceTree = "<group>"; };
+		2A3164C61D21D73F00064045 /* ResultWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResultWindow.xib; sourceTree = "<group>"; };
+		2A3164CF1D21D74A00064045 /* CompileMeasureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompileMeasureTests.swift; sourceTree = "<group>"; };
 		2A3164D21D21D77500064045 /* BuildTimeAnalyzerTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BuildTimeAnalyzerTests-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		2A3164D31D21D77500064045 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+GZIP.h"; path = "GZIP/NSData+GZIP.h"; sourceTree = "<group>"; };
 		2A3164D41D21D77500064045 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+GZIP.m"; path = "GZIP/NSData+GZIP.m"; sourceTree = "<group>"; };
-		2A3164D81D21D7F800064045 /* CMXcodeWorkspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMXcodeWorkspace.swift; sourceTree = "<group>"; };
-		2AE775111D225D5D00D1A744 /* CMFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMFileManager.swift; sourceTree = "<group>"; };
+		2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeWorkspace.swift; sourceTree = "<group>"; };
+		2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DerivedDataManager.swift; sourceTree = "<group>"; };
 		2AF821401D21D6B900D65186 /* BuildTimeAnalyzer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildTimeAnalyzer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AF821431D21D6B900D65186 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2AF821451D21D6B900D65186 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = BuildTimeAnalyzer/Assets.xcassets; sourceTree = "<group>"; };
@@ -73,13 +71,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2A3164D11D21D74F00064045 /* Supporting Files */ = {
+		2A3164D11D21D74F00064045 /*  Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				2A3164D21D21D77500064045 /* BuildTimeAnalyzerTests-Bridging-Header.h */,
 				2AF8214A1D21D6B900D65186 /* Info.plist */,
 			);
-			name = "Supporting Files";
+			name = " Supporting Files";
 			sourceTree = "<group>";
 		};
 		2A3164D61D21D77E00064045 /* GZIP */ = {
@@ -122,17 +120,16 @@
 		2AF821421D21D6B900D65186 /* BuildTimeAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
+				2A3164D11D21D74F00064045 /*  Supporting Files */,
 				2AF821431D21D6B900D65186 /* AppDelegate.swift */,
-				2A3164BF1D21D73F00064045 /* CMBuildOperation.swift */,
-				2A3164C01D21D73F00064045 /* CMCompileMeasure.swift */,
-				2AE775111D225D5D00D1A744 /* CMFileManager.swift */,
-				2A3164C11D21D73F00064045 /* CMLogProcessor.swift */,
-				2A3164C31D21D73F00064045 /* CMProcessingState.swift */,
-				2A3164C41D21D73F00064045 /* CMRawMeasure.swift */,
-				2A3164C51D21D73F00064045 /* CMResultWindow.swift */,
-				2A3164C61D21D73F00064045 /* CMResultWindow.xib */,
-				2A3164D81D21D7F800064045 /* CMXcodeWorkspace.swift */,
-				2A3164D11D21D74F00064045 /* Supporting Files */,
+				2A3164C01D21D73F00064045 /* CompileMeasure.swift */,
+				2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */,
+				2A3164C11D21D73F00064045 /* LogProcessor.swift */,
+				2A3164C31D21D73F00064045 /* ProcessingState.swift */,
+				2A3164C41D21D73F00064045 /* RawMeasure.swift */,
+				2A3164C51D21D73F00064045 /* ResultWindow.swift */,
+				2A3164C61D21D73F00064045 /* ResultWindow.xib */,
+				2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */,
 			);
 			path = BuildTimeAnalyzer;
 			sourceTree = "<group>";
@@ -140,7 +137,7 @@
 		2AF821521D21D6B900D65186 /* BuildTimeAnalyzerTests */ = {
 			isa = PBXGroup;
 			children = (
-				2A3164CF1D21D74A00064045 /* CMCompileMeasureTests.swift */,
+				2A3164CF1D21D74A00064045 /* CompileMeasureTests.swift */,
 				2A3164D71D21D7A800064045 /* Supporting Files */,
 			);
 			path = BuildTimeAnalyzerTests;
@@ -229,7 +226,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A3164CE1D21D73F00064045 /* CMResultWindow.xib in Resources */,
+				2A3164CE1D21D73F00064045 /* ResultWindow.xib in Resources */,
 				2AF821461D21D6B900D65186 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,15 +246,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A3164DA1D21D90100064045 /* NSData+GZIP.m in Sources */,
-				2A3164C71D21D73F00064045 /* CMBuildOperation.swift in Sources */,
-				2A3164C91D21D73F00064045 /* CMLogProcessor.swift in Sources */,
-				2A3164CB1D21D73F00064045 /* CMProcessingState.swift in Sources */,
+				2A3164C91D21D73F00064045 /* LogProcessor.swift in Sources */,
+				2A3164CB1D21D73F00064045 /* ProcessingState.swift in Sources */,
 				2AF821441D21D6B900D65186 /* AppDelegate.swift in Sources */,
-				2AE775121D225D5D00D1A744 /* CMFileManager.swift in Sources */,
-				2A3164CC1D21D73F00064045 /* CMRawMeasure.swift in Sources */,
-				2A3164CD1D21D73F00064045 /* CMResultWindow.swift in Sources */,
-				2A3164C81D21D73F00064045 /* CMCompileMeasure.swift in Sources */,
-				2A3164D91D21D7F800064045 /* CMXcodeWorkspace.swift in Sources */,
+				2AE775121D225D5D00D1A744 /* DerivedDataManager.swift in Sources */,
+				2A3164CC1D21D73F00064045 /* RawMeasure.swift in Sources */,
+				2A3164CD1D21D73F00064045 /* ResultWindow.swift in Sources */,
+				2A3164C81D21D73F00064045 /* CompileMeasure.swift in Sources */,
+				2A3164D91D21D7F800064045 /* XcodeWorkspace.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,7 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A3164D51D21D77500064045 /* NSData+GZIP.m in Sources */,
-				2A3164D01D21D74A00064045 /* CMCompileMeasureTests.swift in Sources */,
+				2A3164D01D21D74A00064045 /* CompileMeasureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
