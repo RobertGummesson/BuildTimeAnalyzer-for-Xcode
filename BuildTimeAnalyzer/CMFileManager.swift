@@ -16,8 +16,24 @@ struct CMFile {
 
 class CMFileManager {
     
-    // TODO: Replace with a cache
-    static private let derivedDataLocation = "\(NSSearchPathForDirectoriesInDomains(.LibraryDirectory, .UserDomainMask, true)[0])/Developer/Xcode/DerivedData"
+    static private var _derivedDataLocation: String?
+    static private let DerivedDataLocationKey = "DerivedDataLocationKey"
+    
+    static var derivedDataLocation: String {
+        get {
+            if _derivedDataLocation == nil {
+                _derivedDataLocation = NSUserDefaults.standardUserDefaults().stringForKey(DerivedDataLocationKey)
+            }
+            if _derivedDataLocation == nil, let libraryFolder = NSSearchPathForDirectoriesInDomains(.LibraryDirectory, .UserDomainMask, true).first {
+                _derivedDataLocation = "\(libraryFolder)/Developer/Xcode/DerivedData"
+            }
+            return _derivedDataLocation ?? ""
+        }
+        set {
+            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: DerivedDataLocationKey)
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+    }
     
     static func listCacheFiles() -> [CMFile] {
         let cacheFiles = getCacheFiles(at: NSURL(fileURLWithPath: derivedDataLocation))

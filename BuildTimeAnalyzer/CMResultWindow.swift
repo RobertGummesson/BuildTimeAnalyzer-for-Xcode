@@ -22,12 +22,10 @@ class CMResultWindow: NSWindow {
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
 
-    var dataSource: [CMCompileMeasure] = []
-    var filteredData: [CMCompileMeasure]? = nil
-    var processor: CMLogProcessor = CMLogProcessor()
-    
-//    var buildOperationWillStartObserver: AnyObject?
-//    var buildOperationDidGenerateOutputFilesObserver: AnyObject?
+    private var dataSource: [CMCompileMeasure] = []
+    private var filteredData: [CMCompileMeasure]? = nil
+    private var processor: CMLogProcessor = CMLogProcessor()
+    private var cacheFiles: [CMFile]?
     
     var processingState: CMProcessingState = .completed(stateName: CMProcessingState.completedString) {
         didSet {
@@ -35,53 +33,34 @@ class CMResultWindow: NSWindow {
         }
     }
     
-    static var odd = true
-    
     override func awakeFromNib() {
         super.awakeFromNib()
+        guard self.cacheFiles == nil else { return }
+        
         statusTextField.stringValue = CMProcessingState.waitingForBuildString
         
-        if CMResultWindow.odd {
-            CMResultWindow.odd = false
-            self.start()
+        let cacheFiles = CMFileManager.listCacheFiles()
+        if let cacheFile = cacheFiles.first {
+            processCacheFile(cacheFile)
         }
+        self.cacheFiles = cacheFiles
     }
     
-    func start() {
-        let cacheFiles = CMFileManager.listCacheFiles()
+    func processCacheFile(cacheFile: CMFile) {
         processingState = .processing
-        processor.processCacheFile(at: cacheFiles[1].path) { [weak self] (result, didComplete) in
-            guard let strongSelf = self else { return }
+        
+        processor.processCacheFile(at: cacheFile.path) { [weak self] (result, didComplete) in
+            guard let `self` = self else { return }
             
-            strongSelf.dataSource = result
-            strongSelf.tableView.reloadData()
+            self.dataSource = result
+            self.tableView.reloadData()
             
             if didComplete {
-                let stateName = strongSelf.dataSource.isEmpty ? CMProcessingState.failedString : CMProcessingState.completedString
-                strongSelf.processingState = .completed(stateName: stateName)
+                let stateName = self.dataSource.isEmpty ? CMProcessingState.failedString : CMProcessingState.completedString
+                self.processingState = .completed(stateName: stateName)
             }
         }
     }
-//
-//    deinit {
-//        removeObservers()
-//    }
-//    
-//    func show() {
-//        showWindow(self)
-//        addObservers()
-//        
-//        // Get currentProduct needs to be run before resultWindow.makeMainWindow()
-//        if let currentProduct = CMXcodeWorkSpace.currentProductName() {
-//            processLog(currentProduct)
-//        }
-//        
-//        if let window = resultWindow {
-//            window.makeMainWindow()
-//            window.level = Int(CGWindowLevelKey.OverlayWindowLevelKey.rawValue)
-//            updateViewForState()
-//        }
-//    }
     
     func updateViewForState() {
         switch processingState {
@@ -128,36 +107,8 @@ class CMResultWindow: NSWindow {
     }
     
     @IBAction func cancelButtonClicked(sender: AnyObject) {
-//        processor.shouldCancel = true
+        processor.shouldCancel = true
     }
-//    // MARK: Observers
-//    
-//    func addObservers() {
-//        buildOperationWillStartObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationWillStartNotification, usingBlock: { [weak self] (note) in
-//            if let stateDescription = note.object?.valueForKeyPath("_buildStatus._stateDescription") as? String {
-//                self?.processingState = .waiting(shouldIndicate: stateDescription == "Build")
-//            }
-//        })
-//        
-//        buildOperationDidGenerateOutputFilesObserver = NSNotificationCenter.addObserverForName(IDEBuildOperationDidGenerateOutputFilesNotification, usingBlock: { [weak self] (note) in
-//            guard let buildOperation = CMXcodeWorkSpace.buildOperation(fromData: note.object) else { return  }
-//            let result = buildOperation.result
-//            let action = buildOperation.actionName
-//            
-//            guard (action == "Build" || action == "Compile") && (result == .success || result == .failed || result == .cancelled) else {
-//                self?.processingState = .waiting(shouldIndicate: false)
-//                return
-//            }
-//            
-//            self?.buildDurationTextField.stringValue = String(format: "%.0fs", round(buildOperation.duration))
-//            self?.processLog(buildOperation.productName, buildCompletionDate: buildOperation.endTime)
-//        })
-//    }
-//    
-//    func removeObservers() {
-//        NSNotificationCenter.removeObserver(buildOperationWillStartObserver, name: IDEBuildOperationWillStartNotification)
-//        NSNotificationCenter.removeObserver(buildOperationDidGenerateOutputFilesObserver, name: IDEBuildOperationWillStartNotification)
-//    }
     
     override func controlTextDidChange(obj: NSNotification) {
 		guard let field = obj.object as? NSSearchField where field == searchField else { return }
@@ -189,10 +140,9 @@ extension CMResultWindow: NSTableViewDelegate {
     }
     
 	func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-//        let item = filteredData?[row] ?? dataSource[row]
-//		processor.workspace?.openFile(atPath: item.path, andLineNumber: item.location, focusLostHandler: { [weak self] in
-//			self?.resultWindow.makeKeyWindow()
-//        })
+        let item = filteredData?[row] ?? dataSource[row]
+        NSApp.delegate?.application?(NSApp, openFile: item.path)
+        
 		return true
 	}
 }
@@ -200,7 +150,7 @@ extension CMResultWindow: NSTableViewDelegate {
 extension CMResultWindow: NSWindowDelegate {
     
     func windowWillClose(notification: NSNotification) {
-//        processor.shouldCancel = true
+        processor.shouldCancel = true
 //        processingState = .completed(stateName: CMProcessingState.cancelledString)
 //        removeObservers()
     }
