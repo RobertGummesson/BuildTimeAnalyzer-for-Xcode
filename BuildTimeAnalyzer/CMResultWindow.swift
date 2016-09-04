@@ -21,11 +21,14 @@ class CMResultWindow: NSWindow {
     @IBOutlet weak var buildDurationTextField: NSTextField!
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
-
+    
     private var dataSource: [CMCompileMeasure] = []
     private var filteredData: [CMCompileMeasure]? = nil
     private var processor: CMLogProcessor = CMLogProcessor()
     private var cacheFiles: [CMFile]?
+    
+    private var perFunctionTimes: [CMCompileMeasure] = []
+    private var perFileTimes: [CMCompileMeasure] = []
     
     var processingState: CMProcessingState = .completed(stateName: CMProcessingState.completedString) {
         didSet {
@@ -53,6 +56,8 @@ class CMResultWindow: NSWindow {
             guard let `self` = self else { return }
             
             self.dataSource = result
+            self.perFunctionTimes = result
+            self.perFileTimes = self.aggregateTimesByFile(self.perFunctionTimes)
             self.tableView.reloadData()
             
             if didComplete {
@@ -60,6 +65,26 @@ class CMResultWindow: NSWindow {
                 self.processingState = .completed(stateName: stateName)
             }
         }
+    }
+
+    /*
+     *  Aggregates all function times by file
+     */
+    func aggregateTimesByFile(functionTimes: [CMCompileMeasure]) -> [CMCompileMeasure] {
+        var fileTimes = [String: CMCompileMeasure]()
+
+        for measure in functionTimes {
+            if var fileMeasure = fileTimes[measure.path] {
+                // File exists, increment time
+                fileMeasure.time += measure.time
+                fileTimes[measure.path] = fileMeasure
+            } else {
+                let newFileMeasure = CMCompileMeasure(rawPath: measure.path, time: measure.time)
+                fileTimes[measure.path] = newFileMeasure
+            }
+        }
+        // Sort by time
+        return Array(fileTimes.values).sort({ $0.time > $1.time })
     }
     
     func updateViewForState() {
@@ -101,6 +126,15 @@ class CMResultWindow: NSWindow {
 
     // MARK: Actions
     
+    @IBAction func perFileCheckboxClicked(sender: NSButton) {
+        if sender.state == 0 {
+            self.dataSource = self.perFunctionTimes
+        } else {
+            self.dataSource = self.perFileTimes
+        }
+        self.tableView.reloadData()
+    }
+
     @IBAction func clipboardButtonClicked(sender: AnyObject) {
         NSPasteboard.generalPasteboard().clearContents()
         NSPasteboard.generalPasteboard().writeObjects(["-Xfrontend -debug-time-function-bodies"])
