@@ -22,6 +22,13 @@ class ProjectSelection: NSObject {
     private var directoryMonitor: DirectoryMonitor?
     fileprivate var dataSource: [SourceType] = []
     
+    static fileprivate let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .medium
+        return dateFormatter
+    }()
+    
     func startMonitoringDerivedData() {
         if directoryMonitor == nil {
             directoryMonitor = DirectoryMonitor(path: DerivedDataManager.derivedDataLocation)
@@ -42,7 +49,8 @@ class ProjectSelection: NSObject {
         let fileManager = FileManager.default
         
         dataSource = folders.flatMap{ (url) -> SourceType? in
-            if let properties = try? fileManager.attributesOfItem(atPath: url.path),
+            if url.lastPathComponent != "ModuleCache",
+                let properties = try? fileManager.attributesOfItem(atPath: url.path),
                 let modificationDate = properties[FileAttributeKey.modificationDate] as? Date {
                 return SourceType(date: modificationDate, url: url)
             }
@@ -76,7 +84,7 @@ extension ProjectSelection: NSTableViewDelegate {
         case 0:
             value = source.url.lastPathComponent
         default:
-            value = source.date.description
+            value = ProjectSelection.dateFormatter.string(from: source.date)
         }
         cellView?.textField?.stringValue = value
         
@@ -84,6 +92,7 @@ extension ProjectSelection: NSTableViewDelegate {
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        stopMonitoringDerivedData()
         delegate?.didSelectProject(with: dataSource[row].url)
         
         return true
