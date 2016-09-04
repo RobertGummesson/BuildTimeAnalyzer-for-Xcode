@@ -127,12 +127,8 @@ class CMResultWindow: NSWindow {
     // MARK: Actions
     
     @IBAction func perFileCheckboxClicked(sender: NSButton) {
-        if sender.state == 0 {
-            self.dataSource = self.perFunctionTimes
-        } else {
-            self.dataSource = self.perFileTimes
-        }
-        self.tableView.reloadData()
+        dataSource = sender.state == 0 ? perFunctionTimes : perFileTimes
+        tableView.reloadData()
     }
 
     @IBAction func clipboardButtonClicked(sender: AnyObject) {
