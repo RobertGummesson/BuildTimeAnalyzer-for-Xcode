@@ -35,18 +35,29 @@ class DerivedDataManager {
         }
     }
     
+    static func listFolders(at url: URL) -> [URL] {
+        let fileManager = FileManager.default
+        let keys = [URLResourceKey.nameKey, URLResourceKey.isDirectoryKey]
+        let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants]
+        
+        guard let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: keys, options: options, errorHandler: nil) else { return [] }
+        
+        return enumerator.map{ $0 as! URL }
+    }
+    
     static func listCacheFiles() -> [CacheFile] {
         let cacheFiles = getCacheFiles(at: URL(fileURLWithPath: derivedDataLocation))
         let earliestDate = Date().addingTimeInterval(-24 * 60 * 60)
         return filterFiles(cacheFiles, byEarliestDate: earliestDate)
     }
     
-    static fileprivate func getCacheFiles(at url: URL) -> [CacheFile] {
+    static private func getCacheFiles(at url: URL) -> [CacheFile] {
         let fileManager = FileManager.default
         let keys = [URLResourceKey.nameKey, URLResourceKey.isDirectoryKey]
         let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants]
         
         guard let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: keys, options: options, errorHandler: nil) else { return [] }
+        
         var result: [CacheFile] = []
         for case let fileURL as URL in enumerator {
             let name = fileURL.lastPathComponent
@@ -60,7 +71,7 @@ class DerivedDataManager {
         return result
     }
     
-    static fileprivate func filterFiles(_ files: [CacheFile], byEarliestDate date: Date) -> [CacheFile] {
+    static private func filterFiles(_ files: [CacheFile], byEarliestDate date: Date) -> [CacheFile] {
         guard files.count > 0 else { return [] }
         
         let sortedFiles = files.sorted(by: { $0.modificationDate > $1.modificationDate })

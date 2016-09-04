@@ -20,6 +20,7 @@ class ResultWindow: NSWindow {
     @IBOutlet weak var tableViewContainerView: NSScrollView!
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
+    @IBOutlet weak var projectSelection: ProjectSelection!
     
     fileprivate var dataSource: [CompileMeasure] = []
     fileprivate var filteredData: [CompileMeasure]? = nil
@@ -29,6 +30,8 @@ class ResultWindow: NSWindow {
     fileprivate var perFunctionTimes: [CompileMeasure] = []
     fileprivate var perFileTimes: [CompileMeasure] = []
     
+    private var preventMultipleRunsDeleteMe = false
+    
     var processingState: ProcessingState = .completed(stateName: ProcessingState.completedString) {
         didSet {
             updateViewForState()
@@ -37,21 +40,18 @@ class ResultWindow: NSWindow {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        guard self.cacheFiles == nil else { return }
         
-        statusTextField.stringValue = ProcessingState.waitingForBuildString
+        guard preventMultipleRunsDeleteMe == false else { return }
+        preventMultipleRunsDeleteMe = true
         
-        let cacheFiles = DerivedDataManager.listCacheFiles()
-        if let cacheFile = cacheFiles.first {
-            processCacheFile(cacheFile)
-        }
-        self.cacheFiles = cacheFiles
+        projectSelection.listFolders()
+        projectSelection.startMonitoringDerivedData()
     }
     
-    func processCacheFile(_ cacheFile: CacheFile) {
+    func processFile(at url: URL) {
         processingState = .processing
         
-        processor.processCacheFile(at: cacheFile.path) { [weak self] (result, didComplete) in
+        processor.processCacheFile(at: url.path) { [weak self] (result, didComplete) in
             guard let `self` = self else { return }
             
             self.dataSource = result
@@ -122,6 +122,10 @@ class ResultWindow: NSWindow {
         progressIndicator.isHidden = show
         tableViewContainerView.isHidden = show
     }
+    
+    func textContains(_ text: String) -> Bool {
+        return text.lowercased().contains(searchField.stringValue.lowercased())
+    }
 
     // MARK: Actions
     
@@ -144,18 +148,18 @@ class ResultWindow: NSWindow {
         
         filteredData = field.stringValue.isEmpty ? nil : dataSource.filter{ textContains($0.code) || textContains($0.filename) }
 		tableView.reloadData()
-	}
-
-    func textContains(_ text: String) -> Bool {
-        return text.lowercased().contains(searchField.stringValue.lowercased())
     }
 }
+
+// MARK: NSTableViewDataSource
 
 extension ResultWindow: NSTableViewDataSource {
 	func numberOfRows(in tableView: NSTableView) -> Int {
         return filteredData?.count ?? dataSource.count
 	}
 }
+
+// MARK: NSTableViewDelegate
 
 extension ResultWindow: NSTableViewDelegate {
 
@@ -175,6 +179,16 @@ extension ResultWindow: NSTableViewDelegate {
 		return true
 	}
 }
+
+// MARK: ProjectSelectionDelegate
+
+extension ResultWindow: ProjectSelectionDelegate {
+    func didSelectProject(with url: URL) {
+        processFile(at: url.appendingPathComponent("Logs/Build/Cache.db"))
+    }
+}
+
+// MARK: NSWindowDelegate
 
 extension ResultWindow: NSWindowDelegate {
     
