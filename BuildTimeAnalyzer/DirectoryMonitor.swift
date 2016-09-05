@@ -29,6 +29,7 @@ class DirectoryMonitor {
         guard dispatchSource == nil && fileDescriptor == -1 else { return }
         
         fileDescriptor = open(path, O_EVTONLY)
+        guard fileDescriptor != -1 else { return }
         
         dispatchSource = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fileDescriptor, eventMask: .all, queue: dispatchQueue)
         dispatchSource?.setEventHandler {

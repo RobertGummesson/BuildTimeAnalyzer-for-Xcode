@@ -12,10 +12,13 @@ class ResultWindow: NSWindow {
     
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var instructionsView: NSView!
+    @IBOutlet weak var statusLabel: NSTextField!
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
+    @IBOutlet weak var derivedDataTextField: NSTextField!
     @IBOutlet weak var cancelButton: NSButton!
+    @IBOutlet weak var perFileButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
     @IBOutlet weak var projectSelection: ProjectSelection!
     
@@ -42,11 +45,25 @@ class ResultWindow: NSWindow {
         preventMultipleRunsDeleteMe = true
         
         delegate = self
+        derivedDataTextField.stringValue = DerivedDataManager.derivedDataLocation
         
         updateViewForState()
         
+        showInstructions(true)
+        
         projectSelection.listFolders()
         projectSelection.startMonitoringDerivedData()
+    }
+    
+    func showInstructions(_ show: Bool) {
+        instructionsView.isHidden = !show
+
+        perFileButton.isHidden = show
+        progressIndicator.isHidden = show
+        searchField.isHidden = show
+        statusLabel.isHidden = show
+        statusTextField.isHidden = show
+        tableViewContainerView.isHidden = show
     }
     
     func processFile(at url: URL) {
@@ -118,12 +135,6 @@ class ResultWindow: NSWindow {
         searchField.isHidden = !cancelButton.isHidden
     }
     
-    func showInstructions(_ show: Bool) {
-        instructionsView.isHidden = !show
-        progressIndicator.isHidden = show
-        tableViewContainerView.isHidden = show
-    }
-    
     func textContains(_ text: String) -> Bool {
         return text.lowercased().contains(searchField.stringValue.lowercased())
     }
@@ -145,10 +156,17 @@ class ResultWindow: NSWindow {
     }
     
     override func controlTextDidChange(_ obj: Notification) {
-		guard let field = obj.object as? NSSearchField , field == searchField else { return }
-        
-        filteredData = field.stringValue.isEmpty ? nil : dataSource.filter{ textContains($0.code) || textContains($0.filename) }
-		tableView.reloadData()
+        if let field = obj.object as? NSSearchField, field == searchField {
+            filteredData = field.stringValue.isEmpty ? nil : dataSource.filter{ textContains($0.code) || textContains($0.filename) }
+            tableView.reloadData()
+        } else if let field = obj.object as? NSTextField, field == derivedDataTextField {
+            projectSelection.stopMonitoringDerivedData()
+            
+            DerivedDataManager.derivedDataLocation = field.stringValue
+            
+            projectSelection.listFolders()
+            projectSelection.startMonitoringDerivedData()
+        }
     }
 }
 
@@ -163,7 +181,6 @@ extension ResultWindow: NSTableViewDataSource {
 // MARK: NSTableViewDelegate
 
 extension ResultWindow: NSTableViewDelegate {
-
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
         
@@ -192,7 +209,6 @@ extension ResultWindow: ProjectSelectionDelegate {
 // MARK: NSWindowDelegate
 
 extension ResultWindow: NSWindowDelegate {
-    
     func windowWillClose(_ notification: Notification) {
         processor.shouldCancel = true
         NSApp.terminate(self)

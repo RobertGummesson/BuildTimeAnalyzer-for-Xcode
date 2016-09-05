@@ -30,6 +30,7 @@ class DerivedDataManager {
             return _derivedDataLocation ?? ""
         }
         set {
+            _derivedDataLocation = newValue
             UserDefaults.standard.set(newValue, forKey: DerivedDataLocationKey)
             UserDefaults.standard.synchronize()
         }
