@@ -1,14 +1,14 @@
 //
-//  ResultWindowController.swift
+//  ViewController.swift
 //  BuildTimeAnalyzer
 //
-//  Created by Robert Gummesson on 01/05/2016.
-//  Copyright © 2016 Robert Gummesson. All rights reserved.
+//  Created by Robert Gummesson on 07/09/2016.
+//  Copyright © 2016 Cane Media Ltd. All rights reserved.
 //
 
 import Cocoa
 
-class ResultWindow: NSWindow {
+class ViewController: NSViewController {
     
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var instructionsView: NSView!
@@ -23,14 +23,11 @@ class ResultWindow: NSWindow {
     @IBOutlet weak var projectSelection: ProjectSelection!
     
     fileprivate var dataSource: [CompileMeasure] = []
-    fileprivate var filteredData: [CompileMeasure]? = nil
-    fileprivate var processor = LogProcessor()
-    fileprivate var cacheFiles: [CacheFile]?
+    fileprivate var filteredData: [CompileMeasure]?
     
-    fileprivate var perFunctionTimes: [CompileMeasure] = []
-    fileprivate var perFileTimes: [CompileMeasure] = []
-    
-    private var preventMultipleRunsDeleteMe = false
+    private var processor = LogProcessor()
+    private var perFunctionTimes: [CompileMeasure] = []
+    private var perFileTimes: [CompileMeasure] = []
     
     var processingState: ProcessingState = .waiting(shouldIndicate: false) {
         didSet {
@@ -38,26 +35,35 @@ class ResultWindow: NSWindow {
         }
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    // MARK: Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        guard !preventMultipleRunsDeleteMe else { return }
-        preventMultipleRunsDeleteMe = true
-        
-        delegate = self
-        derivedDataTextField.stringValue = DerivedDataManager.derivedDataLocation
-        
-        updateViewForState()
-        
-        showInstructions(true)
+        configureLayout()
         
         projectSelection.listFolders()
         projectSelection.startMonitoringDerivedData()
     }
     
+    override func viewDidDisappear() {
+        super.viewDidDisappear()
+        
+        processor.shouldCancel = true
+        NSApp.terminate(self)
+    }
+    
+    // MARK: Layout
+    
+    func configureLayout() {
+        derivedDataTextField.stringValue = DerivedDataManager.derivedDataLocation
+        updateViewForState()
+        showInstructions(true)
+    }
+    
     func showInstructions(_ show: Bool) {
         instructionsView.isHidden = !show
-
+        
         perFileButton.isHidden = show
         progressIndicator.isHidden = show
         searchField.isHidden = show
@@ -66,30 +72,9 @@ class ResultWindow: NSWindow {
         tableViewContainerView.isHidden = show
     }
     
-    func processFile(at url: URL) {
-        processingState = .processing
-        
-        processor.processCacheFile(at: url.path) { [weak self] (result, didComplete) in
-            guard let `self` = self else { return }
-            
-            self.dataSource = result
-            self.perFunctionTimes = result
-            self.perFileTimes = self.aggregateTimesByFile(self.perFunctionTimes)
-            self.tableView.reloadData()
-            
-            if didComplete {
-                let stateName = self.dataSource.isEmpty ? ProcessingState.failedString : ProcessingState.completedString
-                self.processingState = .completed(stateName: stateName)
-            }
-        }
-    }
-
-    /*
-     *  Aggregates all function times by file
-     */
     func aggregateTimesByFile(_ functionTimes: [CompileMeasure]) -> [CompileMeasure] {
         var fileTimes = [String: CompileMeasure]()
-
+        
         for measure in functionTimes {
             if var fileMeasure = fileTimes[measure.path] {
                 // File exists, increment time
@@ -135,17 +120,13 @@ class ResultWindow: NSWindow {
         searchField.isHidden = !cancelButton.isHidden
     }
     
-    func textContains(_ text: String) -> Bool {
-        return text.lowercased().contains(searchField.stringValue.lowercased())
-    }
-
     // MARK: Actions
     
     @IBAction func perFileCheckboxClicked(_ sender: NSButton) {
         dataSource = sender.state == 0 ? perFunctionTimes : perFileTimes
         tableView.reloadData()
     }
-
+    
     @IBAction func clipboardButtonClicked(_ sender: AnyObject) {
         NSPasteboard.general().clearContents()
         NSPasteboard.general().writeObjects(["-Xfrontend -debug-time-function-bodies" as NSPasteboardWriting])
@@ -168,19 +149,43 @@ class ResultWindow: NSWindow {
             projectSelection.startMonitoringDerivedData()
         }
     }
+    
+    // MARK: Utilities
+    
+    func processFile(at url: URL) {
+        processingState = .processing
+        
+        processor.processCacheFile(at: url.path) { [weak self] (result, didComplete) in
+            guard let `self` = self else { return }
+            
+            self.dataSource = result
+            self.perFunctionTimes = result
+            self.perFileTimes = self.aggregateTimesByFile(self.perFunctionTimes)
+            self.tableView.reloadData()
+            
+            if didComplete {
+                let stateName = self.dataSource.isEmpty ? ProcessingState.failedString : ProcessingState.completedString
+                self.processingState = .completed(stateName: stateName)
+            }
+        }
+    }
+    
+    func textContains(_ text: String) -> Bool {
+        return text.lowercased().contains(searchField.stringValue.lowercased())
+    }
 }
 
 // MARK: NSTableViewDataSource
 
-extension ResultWindow: NSTableViewDataSource {
-	func numberOfRows(in tableView: NSTableView) -> Int {
+extension ViewController: NSTableViewDataSource {
+    func numberOfRows(in tableView: NSTableView) -> Int {
         return filteredData?.count ?? dataSource.count
-	}
+    }
 }
 
 // MARK: NSTableViewDelegate
 
-extension ResultWindow: NSTableViewDelegate {
+extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
         
@@ -190,27 +195,18 @@ extension ResultWindow: NSTableViewDelegate {
         return result
     }
     
-	func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         let item = filteredData?[row] ?? dataSource[row]
         _ = NSApp.delegate?.application?(NSApp, openFile: item.path)
         
-		return true
-	}
+        return true
+    }
 }
 
 // MARK: ProjectSelectionDelegate
 
-extension ResultWindow: ProjectSelectionDelegate {
+extension ViewController: ProjectSelectionDelegate {
     func didSelectProject(with url: URL) {
         processFile(at: url.appendingPathComponent("Logs/Build/Cache.db"))
-    }
-}
-
-// MARK: NSWindowDelegate
-
-extension ResultWindow: NSWindowDelegate {
-    func windowWillClose(_ notification: Notification) {
-        processor.shouldCancel = true
-        NSApp.terminate(self)
     }
 }

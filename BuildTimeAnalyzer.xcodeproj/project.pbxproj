@@ -11,12 +11,12 @@
 		2A3164C91D21D73F00064045 /* LogProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C11D21D73F00064045 /* LogProcessor.swift */; };
 		2A3164CB1D21D73F00064045 /* ProcessingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C31D21D73F00064045 /* ProcessingState.swift */; };
 		2A3164CC1D21D73F00064045 /* RawMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C41D21D73F00064045 /* RawMeasure.swift */; };
-		2A3164CD1D21D73F00064045 /* ResultWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C51D21D73F00064045 /* ResultWindow.swift */; };
-		2A3164CE1D21D73F00064045 /* ResultWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A3164C61D21D73F00064045 /* ResultWindow.xib */; };
 		2A3164D01D21D74A00064045 /* CompileMeasureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164CF1D21D74A00064045 /* CompileMeasureTests.swift */; };
 		2A3164D51D21D77500064045 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D41D21D77500064045 /* NSData+GZIP.m */; };
 		2A3164D91D21D7F800064045 /* XcodeWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */; };
 		2A3164DA1D21D90100064045 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D41D21D77500064045 /* NSData+GZIP.m */; };
+		2A3698AA1D80A1AC002C5CDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A3698A91D80A1AC002C5CDA /* Main.storyboard */; };
+		2A3698AC1D80A33B002C5CDA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3698AB1D80A33B002C5CDA /* ViewController.swift */; };
 		2A9807DD1D7C71F900B9232C /* DirectoryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9807DC1D7C71F900B9232C /* DirectoryMonitor.swift */; };
 		2A9807DF1D7C76FD00B9232C /* ProjectSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */; };
 		2AE775121D225D5D00D1A744 /* DerivedDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */; };
@@ -39,13 +39,13 @@
 		2A3164C11D21D73F00064045 /* LogProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogProcessor.swift; sourceTree = "<group>"; };
 		2A3164C31D21D73F00064045 /* ProcessingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessingState.swift; sourceTree = "<group>"; };
 		2A3164C41D21D73F00064045 /* RawMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawMeasure.swift; sourceTree = "<group>"; };
-		2A3164C51D21D73F00064045 /* ResultWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultWindow.swift; sourceTree = "<group>"; };
-		2A3164C61D21D73F00064045 /* ResultWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ResultWindow.xib; sourceTree = "<group>"; };
 		2A3164CF1D21D74A00064045 /* CompileMeasureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompileMeasureTests.swift; sourceTree = "<group>"; };
 		2A3164D21D21D77500064045 /* BuildTimeAnalyzerTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BuildTimeAnalyzerTests-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		2A3164D31D21D77500064045 /* NSData+GZIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+GZIP.h"; path = "GZIP/NSData+GZIP.h"; sourceTree = "<group>"; };
 		2A3164D41D21D77500064045 /* NSData+GZIP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+GZIP.m"; path = "GZIP/NSData+GZIP.m"; sourceTree = "<group>"; };
 		2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeWorkspace.swift; sourceTree = "<group>"; };
+		2A3698A91D80A1AC002C5CDA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		2A3698AB1D80A33B002C5CDA /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2A9807DC1D7C71F900B9232C /* DirectoryMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryMonitor.swift; sourceTree = "<group>"; };
 		2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectSelection.swift; sourceTree = "<group>"; };
 		2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DerivedDataManager.swift; sourceTree = "<group>"; };
@@ -126,6 +126,7 @@
 			children = (
 				2A3164D11D21D74F00064045 /*  Supporting Files */,
 				2AF821431D21D6B900D65186 /* AppDelegate.swift */,
+				2A3698A91D80A1AC002C5CDA /* Main.storyboard */,
 				2A3164C01D21D73F00064045 /* CompileMeasure.swift */,
 				2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */,
 				2A9807DC1D7C71F900B9232C /* DirectoryMonitor.swift */,
@@ -133,9 +134,8 @@
 				2A3164C31D21D73F00064045 /* ProcessingState.swift */,
 				2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */,
 				2A3164C41D21D73F00064045 /* RawMeasure.swift */,
-				2A3164C51D21D73F00064045 /* ResultWindow.swift */,
-				2A3164C61D21D73F00064045 /* ResultWindow.xib */,
 				2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */,
+				2A3698AB1D80A33B002C5CDA /* ViewController.swift */,
 			);
 			path = BuildTimeAnalyzer;
 			sourceTree = "<group>";
@@ -232,7 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A3164CE1D21D73F00064045 /* ResultWindow.xib in Resources */,
+				2A3698AA1D80A1AC002C5CDA /* Main.storyboard in Resources */,
 				2AF821461D21D6B900D65186 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,8 +257,8 @@
 				2A3164CB1D21D73F00064045 /* ProcessingState.swift in Sources */,
 				2AF821441D21D6B900D65186 /* AppDelegate.swift in Sources */,
 				2AE775121D225D5D00D1A744 /* DerivedDataManager.swift in Sources */,
+				2A3698AC1D80A33B002C5CDA /* ViewController.swift in Sources */,
 				2A3164CC1D21D73F00064045 /* RawMeasure.swift in Sources */,
-				2A3164CD1D21D73F00064045 /* ResultWindow.swift in Sources */,
 				2A3164C81D21D73F00064045 /* CompileMeasure.swift in Sources */,
 				2A3164D91D21D7F800064045 /* XcodeWorkspace.swift in Sources */,
 				2A9807DF1D7C76FD00B9232C /* ProjectSelection.swift in Sources */,
