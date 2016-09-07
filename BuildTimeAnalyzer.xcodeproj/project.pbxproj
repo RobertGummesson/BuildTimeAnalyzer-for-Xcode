@@ -126,16 +126,16 @@
 			children = (
 				2A3164D11D21D74F00064045 /*  Supporting Files */,
 				2AF821431D21D6B900D65186 /* AppDelegate.swift */,
-				2A3698A91D80A1AC002C5CDA /* Main.storyboard */,
 				2A3164C01D21D73F00064045 /* CompileMeasure.swift */,
 				2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */,
 				2A9807DC1D7C71F900B9232C /* DirectoryMonitor.swift */,
 				2A3164C11D21D73F00064045 /* LogProcessor.swift */,
+				2A3698A91D80A1AC002C5CDA /* Main.storyboard */,
 				2A3164C31D21D73F00064045 /* ProcessingState.swift */,
 				2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */,
 				2A3164C41D21D73F00064045 /* RawMeasure.swift */,
-				2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */,
 				2A3698AB1D80A33B002C5CDA /* ViewController.swift */,
+				2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */,
 			);
 			path = BuildTimeAnalyzer;
 			sourceTree = "<group>";
