@@ -280,6 +280,23 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Navigate" id="dzK-lU-FKH" userLabel="Navigate">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Navigate" autoenablesItems="NO" id="4cu-Mh-AKu">
+                                    <items>
+                                        <menuItem title="Project Selection" enabled="NO" keyEquivalent="0" id="JMA-rD-5Ql">
+                                            <connections>
+                                                <action selector="navigateToProjectSelection:" target="Voe-Tx-rLC" id="DMt-ga-nyF"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Build Times" enabled="NO" keyEquivalent="1" id="SfY-cQ-Dau">
+                                            <connections>
+                                                <action selector="navigateToBuildTimes:" target="Voe-Tx-rLC" id="O18-0k-1fo"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Window" id="aUF-d1-5bR">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
@@ -320,10 +337,15 @@
                         </items>
                     </menu>
                     <connections>
-                        <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
+                        <outlet property="delegate" destination="Voe-Tx-rLC" id="Xt6-Qh-l1j"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="BuildTimeAnalyzer" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="BuildTimeAnalyzer" customModuleProvider="target">
+                    <connections>
+                        <outlet property="buildTimesMenuItem" destination="SfY-cQ-Dau" id="aXl-6m-zoY"/>
+                        <outlet property="projectSelectionMenuItem" destination="JMA-rD-5Ql" id="ErS-4H-fO2"/>
+                    </connections>
+                </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
@@ -344,7 +366,7 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="76" y="194"/>
+            <point key="canvasLocation" x="258" y="196"/>
         </scene>
         <!--Delegate-->
         <scene sceneID="hIz-AP-VOD">

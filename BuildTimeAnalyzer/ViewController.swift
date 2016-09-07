@@ -24,6 +24,7 @@ class ViewController: NSViewController {
     
     fileprivate var dataSource: [CompileMeasure] = []
     fileprivate var filteredData: [CompileMeasure]?
+    fileprivate var canUpdateViewForState = true
     
     private var processor = LogProcessor()
     private var perFunctionTimes: [CompileMeasure] = []
@@ -70,6 +71,11 @@ class ViewController: NSViewController {
         statusLabel.isHidden = show
         statusTextField.isHidden = show
         tableViewContainerView.isHidden = show
+        
+        if show && processingState == .processing {
+            processor.shouldCancel = true
+            cancelButton.isHidden = true
+        }
     }
     
     func aggregateTimesByFile(_ functionTimes: [CompileMeasure]) -> [CompileMeasure] {
@@ -90,6 +96,8 @@ class ViewController: NSViewController {
     }
     
     func updateViewForState() {
+        guard canUpdateViewForState else { return }
+        
         switch processingState {
         case .processing:
             progressIndicator.isHidden = false
@@ -117,7 +125,10 @@ class ViewController: NSViewController {
             progressIndicator.isHidden = !shouldIndicate
             cancelButton.isHidden = true
         }
-        searchField.isHidden = !cancelButton.isHidden
+        
+        if instructionsView.isHidden {
+            searchField.isHidden = !cancelButton.isHidden
+        }
     }
     
     // MARK: Actions
@@ -150,10 +161,20 @@ class ViewController: NSViewController {
         }
     }
     
+    func cancelProcessing() {
+        guard processingState == .processing else { return }
+        
+        processor.shouldCancel = true
+        cancelButton.isHidden = true
+        canUpdateViewForState = false
+    }
+    
     // MARK: Utilities
     
     func processFile(at url: URL) {
         processingState = .processing
+        
+        // TODO: Show an alert if invalid log file
         
         processor.processCacheFile(at: url.path) { [weak self] (result, didComplete) in
             guard let `self` = self else { return }
@@ -207,6 +228,12 @@ extension ViewController: NSTableViewDelegate {
 
 extension ViewController: ProjectSelectionDelegate {
     func didSelectProject(with url: URL) {
+        canUpdateViewForState = true
+        
+        let appDelegate = NSApp.delegate as? AppDelegate
+        appDelegate?.projectSelectionMenuItem.isEnabled = true
+        appDelegate?.buildTimesMenuItem.isEnabled = false
+        
         processFile(at: url.appendingPathComponent("Logs/Build/Cache.db"))
     }
 }
