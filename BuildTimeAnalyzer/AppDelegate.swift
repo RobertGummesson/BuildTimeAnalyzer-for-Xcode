@@ -38,5 +38,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         configureMenuItems(showBuildTimesMenuItem: false)
         viewController?.showInstructions(false)
     }
+    
+    @IBAction func visitGitHubPage(_ sender: AnyObject) {
+        let path = "https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode"
+        if let url = URL(string: path) {
+            NSWorkspace.shared().open(url)
+        }
+    }
 }
 
