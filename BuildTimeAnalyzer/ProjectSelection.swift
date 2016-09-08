@@ -58,6 +58,13 @@ class ProjectSelection: NSObject {
         }.sorted{ $0.date > $1.date }
         tableView.reloadData()
     }
+    
+    // MARK: Actions
+    
+    @IBAction func didSelectCell(_ sender: NSTableView) {
+        stopMonitoringDerivedData()
+        delegate?.didSelectProject(with: dataSource[sender.selectedRow].url)
+    }
 }
 
 // MARK: NSTableViewDataSource
@@ -89,13 +96,6 @@ extension ProjectSelection: NSTableViewDelegate {
         cellView?.textField?.stringValue = value
         
         return cellView
-    }
-    
-    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        stopMonitoringDerivedData()
-        delegate?.didSelectProject(with: dataSource[row].url)
-        
-        return true
     }
 }
 

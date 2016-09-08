@@ -66,7 +66,6 @@ class ViewController: NSViewController {
         instructionsView.isHidden = !show
         
         perFileButton.isHidden = show
-        progressIndicator.isHidden = show
         searchField.isHidden = show
         statusLabel.isHidden = show
         statusTextField.isHidden = show
@@ -100,16 +99,15 @@ class ViewController: NSViewController {
         
         switch processingState {
         case .processing:
+            showInstructions(false)
             progressIndicator.isHidden = false
             progressIndicator.startAnimation(self)
             statusTextField.stringValue = ProcessingState.processingString
-            showInstructions(false)
             cancelButton.isHidden = false
             
-        case .completed(let stateName):
+        case .completed(_, let stateName):
             progressIndicator.stopAnimation(self)
             statusTextField.stringValue = stateName
-            showInstructions(stateName == ProcessingState.failedString)
             progressIndicator.isHidden = true
             cancelButton.isHidden = true
             
@@ -171,10 +169,14 @@ class ViewController: NSViewController {
     
     // MARK: Utilities
     
+    func configureMenuItems(showBuildTimesMenuItem: Bool) {
+        if let appDelegate = NSApp.delegate as? AppDelegate {
+            appDelegate.configureMenuItems(showBuildTimesMenuItem: showBuildTimesMenuItem)
+        }
+    }
+    
     func processFile(at url: URL) {
         processingState = .processing
-        
-        // TODO: Show an alert if invalid log file
         
         processor.processCacheFile(at: url.path) { [weak self] (result, didComplete) in
             guard let `self` = self else { return }
@@ -185,8 +187,16 @@ class ViewController: NSViewController {
             self.tableView.reloadData()
             
             if didComplete {
-                let stateName = self.dataSource.isEmpty ? ProcessingState.failedString : ProcessingState.completedString
-                self.processingState = .completed(stateName: stateName)
+                let didSucceed = !self.dataSource.isEmpty
+                let stateName = didSucceed ? ProcessingState.completedString : ProcessingState.failedString
+                self.processingState = .completed(didSucceed: didSucceed, stateName: stateName)
+                
+                if !didSucceed {
+                    NSAlert.show(withMessage: ProcessingState.failedString)
+                    
+                    self.showInstructions(true)
+                    self.configureMenuItems(showBuildTimesMenuItem: true)
+                }
             }
         }
     }
@@ -215,13 +225,6 @@ extension ViewController: NSTableViewDelegate {
         
         return result
     }
-    
-    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        let item = filteredData?[row] ?? dataSource[row]
-        _ = NSApp.delegate?.application?(NSApp, openFile: item.path)
-        
-        return true
-    }
 }
 
 // MARK: ProjectSelectionDelegate
@@ -230,10 +233,7 @@ extension ViewController: ProjectSelectionDelegate {
     func didSelectProject(with url: URL) {
         canUpdateViewForState = true
         
-        let appDelegate = NSApp.delegate as? AppDelegate
-        appDelegate?.projectSelectionMenuItem.isEnabled = true
-        appDelegate?.buildTimesMenuItem.isEnabled = false
-        
+        configureMenuItems(showBuildTimesMenuItem: false)        
         processFile(at: url.appendingPathComponent("Logs/Build/Cache.db"))
     }
 }

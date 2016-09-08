@@ -18,20 +18,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return NSApplication.shared().mainWindow?.contentViewController as? ViewController
     }
     
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
-        
-    }
-    
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+    func configureMenuItems(showBuildTimesMenuItem: Bool) {
+        projectSelectionMenuItem.isEnabled = !showBuildTimesMenuItem
+        buildTimesMenuItem.isEnabled = showBuildTimesMenuItem
     }
     
     // MARK: Actions
     
     @IBAction func navigateToProjectSelection(_ sender: NSMenuItem) {
-        sender.isEnabled = false
-        buildTimesMenuItem.isEnabled = true
+        configureMenuItems(showBuildTimesMenuItem: true)
         
         guard let viewController = viewController else { return }
     
@@ -40,9 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func navigateToBuildTimes(_ sender: NSMenuItem) {
-        sender.isEnabled = false
-        projectSelectionMenuItem.isEnabled = true
-        
+        configureMenuItems(showBuildTimesMenuItem: false)
         viewController?.showInstructions(false)
     }
 }

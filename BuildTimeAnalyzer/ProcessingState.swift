@@ -9,7 +9,7 @@
 enum ProcessingState {
     case processing
     case waiting(shouldIndicate: Bool)
-    case completed(stateName: String)
+    case completed(didSucceed: Bool, stateName: String)
 
     static let cancelledString       = "Cancelled"
     static let completedString       = "Completed"
@@ -26,8 +26,8 @@ func ==(lhs: ProcessingState, rhs: ProcessingState) -> Bool {
     case (let .waiting(shouldIndicate1), let .waiting(shouldIndicate2)):
         return shouldIndicate1 == shouldIndicate2
         
-    case (let .completed(stateName1), let .completed(stateName2)):
-        return stateName1 == stateName2
+    case (let .completed(didSucceed1, _), let .completed(didSucceed2, _)):
+        return didSucceed1 == didSucceed2
         
     case (.processing, .processing):
         return true
