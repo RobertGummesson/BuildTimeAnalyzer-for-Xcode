@@ -2,9 +2,6 @@
 //  LogProcessor.swift
 //  BuildTimeAnalyzer
 //
-//  Created by Robert Gummesson on 01/05/2016.
-//  Copyright © 2016 Robert Gummesson. All rights reserved.
-//
 
 import Foundation
 

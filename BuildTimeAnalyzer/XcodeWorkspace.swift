@@ -2,9 +2,6 @@
 //  XcodeWorkSpace.swift
 //  BuildTimeAnalyzer
 //
-//  Created by Robert Gummesson on 30/04/2016.
-//  Copyright © 2016 Robert Gummesson. All rights reserved.
-//
 
 import Cocoa
 

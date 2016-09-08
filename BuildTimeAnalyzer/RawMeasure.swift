@@ -2,9 +2,6 @@
 //  RawMeasure.swift
 //  BuildTimeAnalyzer
 //
-//  Created by Robert Gummesson on 04/05/2016.
-//  Copyright © 2016 Robert Gummesson. All rights reserved.
-//
 
 import Foundation
 

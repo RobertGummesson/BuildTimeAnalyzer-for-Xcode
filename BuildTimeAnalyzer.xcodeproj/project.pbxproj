@@ -77,13 +77,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2A3164D11D21D74F00064045 /*  Supporting Files */ = {
+		2A3164D11D21D74F00064045 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				2A3164D21D21D77500064045 /* BuildTimeAnalyzerTests-Bridging-Header.h */,
 				2AF8214A1D21D6B900D65186 /* Info.plist */,
 			);
-			name = " Supporting Files";
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		2A3164D61D21D77E00064045 /* GZIP */ = {
@@ -103,30 +103,51 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		2ABFB6CF1D81F34300D060BF /*  Extensions */ = {
+		2ABFB6CF1D81F34300D060BF /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				2ABFB6CD1D81F2DE00D060BF /* NSAlert+Extensions.swift */,
 			);
-			name = " Extensions";
+			name = Extensions;
 			sourceTree = "<group>";
 		};
-		2ABFB6D01D81F35400D060BF /*  Application */ = {
+		2ABFB6D01D81F35400D060BF /* Application */ = {
 			isa = PBXGroup;
 			children = (
 				2AF821431D21D6B900D65186 /* AppDelegate.swift */,
 				2A3698A91D80A1AC002C5CDA /* Main.storyboard */,
 			);
-			name = " Application";
+			name = Application;
 			sourceTree = "<group>";
 		};
-		2ABFB6D11D81F37300D060BF /*  Models */ = {
+		2ABFB6D11D81F37300D060BF /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				2A3164C01D21D73F00064045 /* CompileMeasure.swift */,
+				2A3164C31D21D73F00064045 /* ProcessingState.swift */,
 				2A3164C41D21D73F00064045 /* RawMeasure.swift */,
 			);
-			name = " Models";
+			name = Models;
+			sourceTree = "<group>";
+		};
+		2ABFB6D21D81F81400D060BF /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2A3698AB1D80A33B002C5CDA /* ViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2ABFB6D31D81F82600D060BF /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */,
+				2A9807DC1D7C71F900B9232C /* DirectoryMonitor.swift */,
+				2A3164C11D21D73F00064045 /* LogProcessor.swift */,
+				2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */,
+				2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */,
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 		2AF821371D21D6B900D65186 = {
@@ -152,17 +173,12 @@
 		2AF821421D21D6B900D65186 /* BuildTimeAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
-				2ABFB6D01D81F35400D060BF /*  Application */,
-				2ABFB6CF1D81F34300D060BF /*  Extensions */,
-				2ABFB6D11D81F37300D060BF /*  Models */,
-				2A3164D11D21D74F00064045 /*  Supporting Files */,
-				2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */,
-				2A9807DC1D7C71F900B9232C /* DirectoryMonitor.swift */,
-				2A3164C11D21D73F00064045 /* LogProcessor.swift */,
-				2A3164C31D21D73F00064045 /* ProcessingState.swift */,
-				2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */,
-				2A3698AB1D80A33B002C5CDA /* ViewController.swift */,
-				2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */,
+				2ABFB6D01D81F35400D060BF /* Application */,
+				2ABFB6CF1D81F34300D060BF /* Extensions */,
+				2ABFB6D11D81F37300D060BF /* Models */,
+				2A3164D11D21D74F00064045 /* Supporting Files */,
+				2ABFB6D31D81F82600D060BF /* Utilities */,
+				2ABFB6D21D81F81400D060BF /* ViewControllers */,
 			);
 			path = BuildTimeAnalyzer;
 			sourceTree = "<group>";

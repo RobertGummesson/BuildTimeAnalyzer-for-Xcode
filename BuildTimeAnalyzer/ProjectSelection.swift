@@ -2,9 +2,6 @@
 //  ProjectSelection.swift
 //  BuildTimeAnalyzer
 //
-//  Created by Robert Gummesson on 04/09/2016.
-//  Copyright © 2016 Cane Media Ltd. All rights reserved.
-//
 
 import Cocoa
 

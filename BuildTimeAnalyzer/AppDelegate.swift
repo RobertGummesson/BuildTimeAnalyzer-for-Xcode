@@ -2,9 +2,6 @@
 //  AppDelegate.swift
 //  BuildTimeAnalyzer
 //
-//  Created by Robert Gummesson on 27/06/2016.
-//  Copyright © 2016 Cane Media Ltd. All rights reserved.
-//
 
 import Cocoa
 
