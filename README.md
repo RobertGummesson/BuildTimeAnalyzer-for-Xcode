@@ -13,11 +13,11 @@ Open the analyzer window by tapping `Shift+Ctrl+B` or `View` > `Build Time Analy
 
 ## Installation
 
-** Xcode 7 **
+**Xcode 7**
 
 To install the plug-in, build the project and restart Xcode. The plug-in will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. To uninstall, just remove the plugin from there (and restart Xcode).
 
-** Xcode 8 **
+**Xcode 8**
 
 With Xcode 8 and above, plug-ins are no longer supported. I am working around this by [turning the project into a standalone app](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/issues/38). This will unfortunately limit the functionality.
 
