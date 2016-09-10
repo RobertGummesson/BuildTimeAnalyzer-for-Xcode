@@ -21,7 +21,7 @@ To install the plug-in, build the project and restart Xcode. The plug-in will au
 
 With Xcode 8 and above, plug-ins are no longer supported. I am working around this by [turning the project into a standalone app](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/issues/38). This will unfortunately limit the functionality.
 
-There is still some work and Q.A to be done but if you'd like to access it now, you can [give it a try from here](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/tree/Standalone-for-Xcode-8). Consider it a bit experimental. If not, stay tuned. The branch should make it to master soon.
+There is still some work and Q.A to be done but if you'd like to access it now, you can [give it a try from here](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/tree/Standalone-for-Xcode-8). Consider it a bit experimental. If you rather wait, the branch should make it to master soon.
 
 ## Contributions
 
