@@ -5,12 +5,6 @@
 
 import Foundation
 
-struct CacheFile {
-    let name: String
-    let path: String
-    let modificationDate: Date
-}
-
 class DerivedDataManager {
     
     static fileprivate var _derivedDataLocation: String?

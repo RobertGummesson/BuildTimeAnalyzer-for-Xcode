@@ -7,17 +7,17 @@ import Cocoa
 
 class ViewController: NSViewController {
     
-    @IBOutlet weak var tableView: NSTableView!
+    @IBOutlet weak var cancelButton: NSButton!
+    @IBOutlet weak var derivedDataTextField: NSTextField!
     @IBOutlet weak var instructionsView: NSView!
+    @IBOutlet weak var perFileButton: NSButton!
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var projectSelection: ProjectSelection!
+    @IBOutlet weak var searchField: NSSearchField!
     @IBOutlet weak var statusLabel: NSTextField!
     @IBOutlet weak var statusTextField: NSTextField!
-    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
-    @IBOutlet weak var derivedDataTextField: NSTextField!
-    @IBOutlet weak var cancelButton: NSButton!
-    @IBOutlet weak var perFileButton: NSButton!
-    @IBOutlet weak var searchField: NSSearchField!
-    @IBOutlet weak var projectSelection: ProjectSelection!
     
     fileprivate var dataSource: [CompileMeasure] = []
     fileprivate var filteredData: [CompileMeasure]?
@@ -27,7 +27,7 @@ class ViewController: NSViewController {
     private var perFunctionTimes: [CompileMeasure] = []
     private var perFileTimes: [CompileMeasure] = []
     
-    var processingState: ProcessingState = .waiting(shouldIndicate: false) {
+    var processingState: ProcessingState = .waiting() {
         didSet {
             updateViewForState()
         }
@@ -103,21 +103,15 @@ class ViewController: NSViewController {
             cancelButton.isHidden = false
             
         case .completed(_, let stateName):
+            progressIndicator.isHidden = true
             progressIndicator.stopAnimation(self)
             statusTextField.stringValue = stateName
-            progressIndicator.isHidden = true
             cancelButton.isHidden = true
             
-        case .waiting(let shouldIndicate):
-            if shouldIndicate {
-                progressIndicator.startAnimation(self)
-                statusTextField.stringValue = ProcessingState.buildString
-                showInstructions(false)
-            } else {
-                progressIndicator.stopAnimation(self)
-                statusTextField.stringValue = ProcessingState.waitingForBuildString
-            }
-            progressIndicator.isHidden = !shouldIndicate
+        case .waiting():
+            progressIndicator.isHidden = true
+            progressIndicator.stopAnimation(self)
+            statusTextField.stringValue = ProcessingState.waitingForBuildString
             cancelButton.isHidden = true
         }
         
@@ -156,6 +150,8 @@ class ViewController: NSViewController {
         }
     }
     
+    // MARK: Utilities
+    
     func cancelProcessing() {
         guard processingState == .processing else { return }
         
@@ -163,8 +159,6 @@ class ViewController: NSViewController {
         cancelButton.isHidden = true
         canUpdateViewForState = false
     }
-    
-    // MARK: Utilities
     
     func configureMenuItems(showBuildTimesMenuItem: Bool) {
         if let appDelegate = NSApp.delegate as? AppDelegate {

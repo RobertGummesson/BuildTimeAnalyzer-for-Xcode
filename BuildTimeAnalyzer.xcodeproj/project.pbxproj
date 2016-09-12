@@ -17,6 +17,7 @@
 		2A3164DA1D21D90100064045 /* NSData+GZIP.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164D41D21D77500064045 /* NSData+GZIP.m */; };
 		2A3698AA1D80A1AC002C5CDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A3698A91D80A1AC002C5CDA /* Main.storyboard */; };
 		2A3698AC1D80A33B002C5CDA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3698AB1D80A33B002C5CDA /* ViewController.swift */; };
+		2A5B32C21D86C629000705E1 /* CacheFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5B32C11D86C629000705E1 /* CacheFile.swift */; };
 		2A9807DD1D7C71F900B9232C /* DirectoryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9807DC1D7C71F900B9232C /* DirectoryMonitor.swift */; };
 		2A9807DF1D7C76FD00B9232C /* ProjectSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */; };
 		2ABFB6CE1D81F2DE00D060BF /* NSAlert+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABFB6CD1D81F2DE00D060BF /* NSAlert+Extensions.swift */; };
@@ -47,6 +48,7 @@
 		2A3164D81D21D7F800064045 /* XcodeWorkspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeWorkspace.swift; sourceTree = "<group>"; };
 		2A3698A91D80A1AC002C5CDA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		2A3698AB1D80A33B002C5CDA /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2A5B32C11D86C629000705E1 /* CacheFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheFile.swift; sourceTree = "<group>"; };
 		2A9807DC1D7C71F900B9232C /* DirectoryMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectoryMonitor.swift; sourceTree = "<group>"; };
 		2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectSelection.swift; sourceTree = "<group>"; };
 		2ABFB6CD1D81F2DE00D060BF /* NSAlert+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSAlert+Extensions.swift"; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 		2ABFB6D11D81F37300D060BF /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				2A5B32C11D86C629000705E1 /* CacheFile.swift */,
 				2A3164C01D21D73F00064045 /* CompileMeasure.swift */,
 				2A3164C31D21D73F00064045 /* ProcessingState.swift */,
 				2A3164C41D21D73F00064045 /* RawMeasure.swift */,
@@ -296,6 +299,7 @@
 			files = (
 				2A9807DD1D7C71F900B9232C /* DirectoryMonitor.swift in Sources */,
 				2A3164DA1D21D90100064045 /* NSData+GZIP.m in Sources */,
+				2A5B32C21D86C629000705E1 /* CacheFile.swift in Sources */,
 				2A3164C91D21D73F00064045 /* LogProcessor.swift in Sources */,
 				2ABFB6CE1D81F2DE00D060BF /* NSAlert+Extensions.swift in Sources */,
 				2A3164CB1D21D73F00064045 /* ProcessingState.swift in Sources */,

@@ -25,10 +25,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func navigateToProjectSelection(_ sender: NSMenuItem) {
         configureMenuItems(showBuildTimesMenuItem: true)
         
-        guard let viewController = viewController else { return }
-    
-        viewController.cancelProcessing()
-        viewController.showInstructions(true)
+        viewController?.cancelProcessing()
+        viewController?.showInstructions(true)
     }
     
     @IBAction func navigateToBuildTimes(_ sender: NSMenuItem) {

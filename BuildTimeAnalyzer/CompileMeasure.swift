@@ -13,7 +13,7 @@ struct CompileMeasure {
     var filename: String
     var references: Int
 
-    fileprivate var locationArray: [Int]
+    private var locationArray: [Int]
 
     var fileAndLine: String {
         return "\(filename):\(locationArray[0])"
