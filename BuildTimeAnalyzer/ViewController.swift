@@ -203,6 +203,13 @@ extension ViewController: NSTableViewDataSource {
     func numberOfRows(in tableView: NSTableView) -> Int {
         return filteredData?.count ?? dataSource.count
     }
+    
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        let item = filteredData?[row] ?? dataSource[row]
+        NSWorkspace.shared().openFile(item.path)
+        
+        return true
+    }
 }
 
 // MARK: NSTableViewDelegate
