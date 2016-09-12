@@ -19,6 +19,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
+    @IBOutlet weak var leftButton: NSButton!
     
     fileprivate var dataSource: [CompileMeasure] = []
     fileprivate var filteredData: [CompileMeasure]?
@@ -69,6 +70,7 @@ class ViewController: NSViewController {
     func showInstructions(_ show: Bool) {
         instructionsView.isHidden = !show
         
+        leftButton.isHidden = show
         perFileButton.isHidden = show
         searchField.isHidden = show
         statusLabel.isHidden = show
@@ -78,6 +80,7 @@ class ViewController: NSViewController {
         if show && processingState == .processing {
             processor.shouldCancel = true
             cancelButton.isHidden = true
+            progressIndicator.isHidden = true
         }
     }
     
@@ -141,6 +144,13 @@ class ViewController: NSViewController {
     
     @IBAction func cancelButtonClicked(_ sender: AnyObject) {
         processor.shouldCancel = true
+    }
+    
+    @IBAction func leftButtonClicked(_ sender: NSButton) {
+        configureMenuItems(showBuildTimesMenuItem: false)
+        
+        cancelProcessing()
+        showInstructions(true)
     }
     
     override func controlTextDidChange(_ obj: Notification) {
