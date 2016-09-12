@@ -200,34 +200,39 @@ class ViewController: NSViewController {
         currentKey = database.key
         
         processor.processDatabase(database: database) { [weak self] (result, didComplete) in
-            guard let `self` = self else { return }
+            self?.handleProcessorUpdate(result: result, didComplete: didComplete)
+        }
+    }
+    
+    func handleProcessorUpdate(result: [CompileMeasure], didComplete: Bool) {
+        dataSource = result
+        perFunctionTimes = result
+        perFileTimes = aggregateTimesByFile(perFunctionTimes)
+        tableView.reloadData()
+        
+        if didComplete {
+            completeProcessorUpdate()
+        }
+    }
+    
+    func completeProcessorUpdate() {
+        let didSucceed = !dataSource.isEmpty
+        let stateName = didSucceed ? ProcessingState.completedString : ProcessingState.failedString
+        
+        processingState = .completed(didSucceed: didSucceed, stateName: stateName)
+        currentKey = nil
+        
+        if let nextDatabase = nextDatabase {
+            self.nextDatabase = nil
+            processLog(with: nextDatabase)
+        }
+        
+        if !didSucceed {
+            let text = "Ensure the Swift compiler flags has been added."
+            NSAlert.show(withMessage: ProcessingState.failedString, andInformativeText: text)
             
-            self.dataSource = result
-            self.perFunctionTimes = result
-            self.perFileTimes = self.aggregateTimesByFile(self.perFunctionTimes)
-            self.tableView.reloadData()
-            
-            if didComplete {
-                NSLog("Did complete %@", database.key)
-                let didSucceed = !self.dataSource.isEmpty
-                let stateName = didSucceed ? ProcessingState.completedString : ProcessingState.failedString
-                self.processingState = .completed(didSucceed: didSucceed, stateName: stateName)
-                
-                self.currentKey = nil
-                
-                if let nextDatabase = self.nextDatabase {
-                    self.nextDatabase = nil
-                    self.processLog(with: nextDatabase)
-                }
-                
-                if !didSucceed {
-                    let text = "Ensure the Swift compiler flags has been added."
-                    NSAlert.show(withMessage: ProcessingState.failedString, andInformativeText: text)
-                    
-                    self.showInstructions(true)
-                    self.configureMenuItems(showBuildTimesMenuItem: true)
-                }
-            }
+            showInstructions(true)
+            configureMenuItems(showBuildTimesMenuItem: true)
         }
     }
     
