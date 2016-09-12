@@ -6,23 +6,32 @@
 import Foundation
 
 protocol DirectoryMonitorDelegate: class {
-    func directoryMonitorDidObserveChange(_ directoryMonitor: DirectoryMonitor)
+    func directoryMonitorDidObserveChange(_ directoryMonitor: DirectoryMonitor, isDerivedData: Bool)
 }
 
 class DirectoryMonitor {
-    let dispatchQueue = DispatchQueue(label: "uk.co.canemedia.directorymonitor", attributes: .concurrent)
+    var dispatchQueue: DispatchQueue
     
     weak var delegate: DirectoryMonitorDelegate?
     
     var fileDescriptor: Int32 = -1
     var dispatchSource: DispatchSourceFileSystemObject?
-    var path: String
+    var isDerivedData: Bool
+    var path: String?
+    var timer: Timer?
+    var lastDerivedDataDate = Date()
+    var isMonitoringDates = false
     
-    init(path: String) {
-        self.path = path
+    init(isDerivedData: Bool) {
+        self.isDerivedData = isDerivedData
+        
+        let suffix = isDerivedData ? "deriveddata" : "logfolder"
+        dispatchQueue = DispatchQueue(label: "uk.co.canemedia.directorymonitor.\(suffix)", attributes: .concurrent)
     }
     
-    func startMonitoring() {
+    func startMonitoring(path: String) {
+        self.path = path
+        
         guard dispatchSource == nil && fileDescriptor == -1 else { return }
         
         fileDescriptor = open(path, O_EVTONLY)
@@ -31,7 +40,7 @@ class DirectoryMonitor {
         dispatchSource = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fileDescriptor, eventMask: .all, queue: dispatchQueue)
         dispatchSource?.setEventHandler {
             DispatchQueue.main.async {
-                self.delegate?.directoryMonitorDidObserveChange(self)
+                self.delegate?.directoryMonitorDidObserveChange(self, isDerivedData: self.isDerivedData)
             }
         }
         dispatchSource?.setCancelHandler {
@@ -39,11 +48,33 @@ class DirectoryMonitor {
             
             self.fileDescriptor = -1
             self.dispatchSource = nil
+            self.path = nil
         }
         dispatchSource?.resume()
+        
+        if isDerivedData && !isMonitoringDates {
+            isMonitoringDates = true
+            monitorModificationDates()
+        }
     }
     
     func stopMonitoring() {
         dispatchSource?.cancel()
+        path = nil
+    }
+    
+    func monitorModificationDates() {
+        if let date = DerivedDataManager.derivedData().first?.date, date > lastDerivedDataDate {
+            lastDerivedDataDate = date
+            self.delegate?.directoryMonitorDidObserveChange(self, isDerivedData: self.isDerivedData)
+        }
+        
+        if path != nil {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.monitorModificationDates()
+            }
+        } else {
+            isMonitoringDates = false
+        }
     }
 }

@@ -7,6 +7,7 @@ import Cocoa
 
 class ViewController: NSViewController {
     
+    @IBOutlet var buildManager: BuildManager!
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var derivedDataTextField: NSTextField!
     @IBOutlet weak var instructionsView: NSView!
@@ -22,6 +23,9 @@ class ViewController: NSViewController {
     fileprivate var dataSource: [CompileMeasure] = []
     fileprivate var filteredData: [CompileMeasure]?
     fileprivate var canUpdateViewForState = true
+    
+    private var currentKey: String?
+    private var nextDatabase: XcodeDatabase?
     
     private var processor = LogProcessor()
     private var perFunctionTimes: [CompileMeasure] = []
@@ -39,6 +43,9 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         
         configureLayout()
+        
+        buildManager.delegate = self
+        projectSelection.delegate = self
         
         projectSelection.listFolders()
         projectSelection.startMonitoringDerivedData()
@@ -166,10 +173,23 @@ class ViewController: NSViewController {
         }
     }
     
-    func processFile(at url: URL) {
-        processingState = .processing
+    func processLog(with database: XcodeDatabase) {
+        guard processingState != .processing else {
+            if let currentKey = currentKey, currentKey != database.key {
+                nextDatabase = database
+                processor.shouldCancel = true
+            }
+            return
+        }
         
-        processor.processCacheFile(at: url.path) { [weak self] (result, didComplete) in
+        canUpdateViewForState = true
+        configureMenuItems(showBuildTimesMenuItem: false)
+        NSLog("Starting \(database.key)")
+        
+        processingState = .processing
+        currentKey = database.key
+        
+        processor.processDatabase(database: database) { [weak self] (result, didComplete) in
             guard let `self` = self else { return }
             
             self.dataSource = result
@@ -178,12 +198,21 @@ class ViewController: NSViewController {
             self.tableView.reloadData()
             
             if didComplete {
+                NSLog("Did complete %@", database.key)
                 let didSucceed = !self.dataSource.isEmpty
                 let stateName = didSucceed ? ProcessingState.completedString : ProcessingState.failedString
                 self.processingState = .completed(didSucceed: didSucceed, stateName: stateName)
                 
+                self.currentKey = nil
+                
+                if let nextDatabase = self.nextDatabase {
+                    self.nextDatabase = nil
+                    self.processLog(with: nextDatabase)
+                }
+                
                 if !didSucceed {
-                    NSAlert.show(withMessage: ProcessingState.failedString)
+                    let text = "Ensure the Swift compiler flags has been added."
+                    NSAlert.show(withMessage: ProcessingState.failedString, andInformativeText: text)
                     
                     self.showInstructions(true)
                     self.configureMenuItems(showBuildTimesMenuItem: true)
@@ -225,13 +254,18 @@ extension ViewController: NSTableViewDelegate {
     }
 }
 
+// MARK: BuildManagerDelegate 
+
+extension ViewController: BuildManagerDelegate {
+    func buildManager(_ buildManager: BuildManager, shouldParseLogWithDatabase database: XcodeDatabase) {
+        processLog(with: database)
+    }
+}
+
 // MARK: ProjectSelectionDelegate
 
 extension ViewController: ProjectSelectionDelegate {
-    func didSelectProject(with url: URL) {
-        canUpdateViewForState = true
-        
-        configureMenuItems(showBuildTimesMenuItem: false)        
-        processFile(at: url.appendingPathComponent("Logs/Build/Cache.db"))
+    func didSelectProject(with database: XcodeDatabase) {
+        processLog(with: database)
     }
 }

@@ -10,7 +10,6 @@ typealias CMUpdateClosure = (_ result: [CompileMeasure], _ didComplete: Bool) ->
 protocol LogProcessorProtocol: class {
     var rawMeasures: [String: RawMeasure] { get set }
     var updateHandler: CMUpdateClosure? { get set }
-    var workspace: XcodeWorkSpace? { get set }
     var shouldCancel: Bool { get set }
     
     func processingDidStart()
@@ -18,18 +17,15 @@ protocol LogProcessorProtocol: class {
 }
 
 extension LogProcessorProtocol {
-    func processCacheFile(at path: String, updateHandler: CMUpdateClosure?) {
-        workspace = XcodeWorkSpace()
-        workspace?.logText(forCacheAtPath: path) { [weak self] (text) in
-            guard let text = text else {
-                updateHandler?([], true)
-                return
-            }
-            
-            self?.updateHandler = updateHandler
-            DispatchQueue.global().async {
-                self?.process(text: text)
-            }
+    func processDatabase(database: XcodeDatabase, updateHandler: CMUpdateClosure?) {
+        guard let text = database.processLog() else {
+            updateHandler?([], true)
+            return
+        }
+        
+        self.updateHandler = updateHandler
+        DispatchQueue.global().async {
+            self.process(text: text)
         }
     }
     
@@ -110,7 +106,6 @@ class LogProcessor: NSObject, LogProcessorProtocol {
     
     var rawMeasures: [String: RawMeasure] = [:]
     var updateHandler: CMUpdateClosure?
-    var workspace: XcodeWorkSpace?
     var shouldCancel = false
     var timer: Timer?
     

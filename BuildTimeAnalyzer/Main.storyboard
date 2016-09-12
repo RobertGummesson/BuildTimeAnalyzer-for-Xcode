@@ -362,7 +362,7 @@
             </objects>
             <point key="canvasLocation" x="258" y="196"/>
         </scene>
-        <!--Delegate-->
+        <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -660,8 +660,8 @@ Gw
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="O5K-4i-z6g">
-                                        <rect key="frame" x="190" y="201" width="144" height="17"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="4) Choose your project" id="j64-c6-4L7">
+                                        <rect key="frame" x="190" y="201" width="245" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Alternatively, choose an existing project" id="j64-c6-4L7">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -839,6 +839,7 @@ Gw
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="buildManager" destination="f4z-Qu-43g" id="aek-kF-HmQ"/>
                         <outlet property="cancelButton" destination="Phm-qp-QGE" id="q44-19-Lli"/>
                         <outlet property="derivedDataTextField" destination="ptj-Cb-LDq" id="Hqz-Sh-zea"/>
                         <outlet property="instructionsView" destination="wyZ-eU-XEt" id="CSN-0u-vnQ"/>
@@ -854,10 +855,10 @@ Gw
                 </viewController>
                 <customObject id="Ffg-BK-bSD" customClass="ProjectSelection" customModule="BuildTimeAnalyzer" customModuleProvider="target">
                     <connections>
-                        <outlet property="delegate" destination="XfG-lQ-9wD" id="Tw5-3K-uMd"/>
                         <outlet property="tableView" destination="vE3-G0-gZw" id="Mkh-Ri-cQN"/>
                     </connections>
                 </customObject>
+                <customObject id="f4z-Qu-43g" customClass="BuildManager" customModule="BuildTimeAnalyzer" customModuleProvider="target"/>
             </objects>
             <point key="canvasLocation" x="76" y="844"/>
         </scene>

@@ -5,19 +5,17 @@
 
 import Cocoa
 
-@objc protocol ProjectSelectionDelegate: class {
-    func didSelectProject(with url: URL)
+protocol ProjectSelectionDelegate: class {
+    func didSelectProject(with database: XcodeDatabase)
 }
 
 class ProjectSelection: NSObject {
     
-    typealias SourceType = (date: Date, url: URL)
-    
     @IBOutlet weak var tableView: NSTableView!
-    @IBOutlet weak var delegate: ProjectSelectionDelegate?
+    weak var delegate: ProjectSelectionDelegate?
     
     private var directoryMonitor: DirectoryMonitor?
-    fileprivate var dataSource: [SourceType] = []
+    fileprivate var dataSource: [XcodeDatabase] = []
     
     static fileprivate let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -28,10 +26,10 @@ class ProjectSelection: NSObject {
     
     func startMonitoringDerivedData() {
         if directoryMonitor == nil {
-            directoryMonitor = DirectoryMonitor(path: DerivedDataManager.derivedDataLocation)
+            directoryMonitor = DirectoryMonitor(isDerivedData: true)
             directoryMonitor?.delegate = self
         }
-        directoryMonitor?.startMonitoring()
+        directoryMonitor?.startMonitoring(path: DerivedDataManager.derivedDataLocation)
     }
     
     func stopMonitoringDerivedData() {
@@ -39,20 +37,9 @@ class ProjectSelection: NSObject {
     }
     
     func listFolders() {
-        let url = URL(fileURLWithPath: DerivedDataManager.derivedDataLocation)
-        
-
-        let folders = DerivedDataManager.listFolders(at: url)
-        let fileManager = FileManager.default
-        
-        dataSource = folders.flatMap{ (url) -> SourceType? in
-            if url.lastPathComponent != "ModuleCache",
-                let properties = try? fileManager.attributesOfItem(atPath: url.path),
-                let modificationDate = properties[FileAttributeKey.modificationDate] as? Date {
-                return SourceType(date: modificationDate, url: url)
-            }
-            return nil
-        }.sorted{ $0.date > $1.date }
+        dataSource =  DerivedDataManager.derivedData().flatMap{
+            XcodeDatabase(fromPath: $0.url.appendingPathComponent("Logs/Build/Cache.db").path)
+        }.filter{ $0.isBuildType }
         tableView.reloadData()
     }
     
@@ -60,7 +47,7 @@ class ProjectSelection: NSObject {
     
     @IBAction func didSelectCell(_ sender: NSTableView) {
         stopMonitoringDerivedData()
-        delegate?.didSelectProject(with: dataSource[sender.selectedRow].url)
+        delegate?.didSelectProject(with: dataSource[sender.selectedRow])
     }
 }
 
@@ -86,9 +73,9 @@ extension ProjectSelection: NSTableViewDelegate {
         
         switch columnIndex {
         case 0:
-            value = source.url.lastPathComponent
+            value = source.schemeName
         default:
-            value = ProjectSelection.dateFormatter.string(from: source.date)
+            value = ProjectSelection.dateFormatter.string(from: source.modificationDate)
         }
         cellView?.textField?.stringValue = value
         
@@ -99,7 +86,7 @@ extension ProjectSelection: NSTableViewDelegate {
 // MARK: DirectoryMonitorDelegate
 
 extension ProjectSelection: DirectoryMonitorDelegate {
-    func directoryMonitorDidObserveChange(_ directoryMonitor: DirectoryMonitor) {
+    func directoryMonitorDidObserveChange(_ directoryMonitor: DirectoryMonitor, isDerivedData: Bool) {
         listFolders()
     }
 }

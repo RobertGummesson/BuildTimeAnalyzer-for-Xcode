@@ -27,6 +27,22 @@ class DerivedDataManager {
         }
     }
     
+    static func derivedData() -> [File] {
+        let url = URL(fileURLWithPath: derivedDataLocation)
+        
+        let folders = DerivedDataManager.listFolders(at: url)
+        let fileManager = FileManager.default
+        
+        return folders.flatMap{ (url) -> File? in
+            if url.lastPathComponent != "ModuleCache",
+                let properties = try? fileManager.attributesOfItem(atPath: url.path),
+                let modificationDate = properties[FileAttributeKey.modificationDate] as? Date {
+                return File(date: modificationDate, url: url)
+            }
+            return nil
+        }.sorted{ $0.date > $1.date }
+    }
+    
     static func listFolders(at url: URL) -> [URL] {
         let fileManager = FileManager.default
         let keys = [URLResourceKey.nameKey, URLResourceKey.isDirectoryKey]
@@ -38,12 +54,12 @@ class DerivedDataManager {
     }
     
     static func listCacheFiles() -> [CacheFile] {
-        let cacheFiles = getCacheFiles(at: URL(fileURLWithPath: derivedDataLocation))
+        let files = cacheFiles(at: URL(fileURLWithPath: derivedDataLocation))
         let earliestDate = Date().addingTimeInterval(-24 * 60 * 60)
-        return filterFiles(cacheFiles, byEarliestDate: earliestDate)
+        return filterFiles(files, byEarliestDate: earliestDate)
     }
     
-    static private func getCacheFiles(at url: URL) -> [CacheFile] {
+    static private func cacheFiles(at url: URL) -> [CacheFile] {
         let fileManager = FileManager.default
         let keys = [URLResourceKey.nameKey, URLResourceKey.isDirectoryKey]
         let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants]
