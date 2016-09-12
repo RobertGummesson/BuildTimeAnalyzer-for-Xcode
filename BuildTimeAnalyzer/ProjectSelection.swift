@@ -46,7 +46,6 @@ class ProjectSelection: NSObject {
     // MARK: Actions
     
     @IBAction func didSelectCell(_ sender: NSTableView) {
-        stopMonitoringDerivedData()
         delegate?.didSelectProject(with: dataSource[sender.selectedRow])
     }
 }
