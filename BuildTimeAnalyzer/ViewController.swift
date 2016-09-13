@@ -49,10 +49,12 @@ class ViewController: NSViewController {
         projectSelection.delegate = self
         
         projectSelection.listFolders()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose), name: .NSWindowWillClose, object: nil)
     }
     
-    override func viewDidDisappear() {
-        super.viewDidDisappear()
+    func windowWillClose() {
+        NotificationCenter.default.removeObserver(self)
         
         processor.shouldCancel = true
         NSApp.terminate(self)
