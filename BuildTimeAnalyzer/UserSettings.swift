@@ -39,7 +39,7 @@ class UserSettings {
         }
         set {
             _windowLevelIsNormal = !newValue
-            UserDefaults.standard.set(newValue, forKey: windowLevelIsNormalKey)
+            UserDefaults.standard.set(_windowLevelIsNormal, forKey: windowLevelIsNormalKey)
             UserDefaults.standard.synchronize()
         }
     }

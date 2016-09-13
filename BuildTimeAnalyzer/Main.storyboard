@@ -193,6 +193,7 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="BuildTimeAnalyzer" customModuleProvider="target">
                     <connections>
+                        <outlet property="alwaysInFrontMenuItem" destination="vT5-eJ-cMt" id="hyc-ts-nzJ"/>
                         <outlet property="buildTimesMenuItem" destination="SfY-cQ-Dau" id="aXl-6m-zoY"/>
                         <outlet property="projectSelectionMenuItem" destination="JMA-rD-5Ql" id="ErS-4H-fO2"/>
                     </connections>
