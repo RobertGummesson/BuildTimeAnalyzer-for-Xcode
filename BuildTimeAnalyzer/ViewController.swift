@@ -252,12 +252,12 @@ class ViewController: NSViewController {
     
     func updateTotalLabel(with buildTime: Int) {
         if buildTime < 60 {
-            compileTimeTextField.stringValue = "Build Time: \(buildTime)s"
+            compileTimeTextField.stringValue = "Build duration: \(buildTime)s"
         } else {
             let minutes = buildTime / 60
             let seconds = String(format: "%02d", buildTime % 60)
             
-            compileTimeTextField.stringValue = "Build Time: \(minutes)m \(seconds)s"
+            compileTimeTextField.stringValue = "Build duration: \(minutes)m \(seconds)s"
         }
     }
     
