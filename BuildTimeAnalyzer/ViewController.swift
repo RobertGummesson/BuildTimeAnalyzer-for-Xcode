@@ -47,7 +47,6 @@ class ViewController: NSViewController {
         
         buildManager.delegate = self
         projectSelection.delegate = self
-        
         projectSelection.listFolders()
         
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose), name: .NSWindowWillClose, object: nil)
@@ -74,13 +73,8 @@ class ViewController: NSViewController {
     func showInstructions(_ show: Bool) {
         instructionsView.isHidden = !show
         
-        compileTimeTextField.isHidden = show
-        leftButton.isHidden = show
-        perFileButton.isHidden = show
-        searchField.isHidden = show
-        statusLabel.isHidden = show
-        statusTextField.isHidden = show
-        tableViewContainerView.isHidden = show
+        let views: [NSView] = [compileTimeTextField, leftButton, perFileButton, searchField, statusLabel, statusTextField, tableViewContainerView]
+        views.forEach{ $0.isHidden = show }
         
         if show && processingState == .processing {
             processor.shouldCancel = true
@@ -90,11 +84,10 @@ class ViewController: NSViewController {
     }
     
     func aggregateTimesByFile(_ functionTimes: [CompileMeasure]) -> [CompileMeasure] {
-        var fileTimes = [String: CompileMeasure]()
+        var fileTimes: [String: CompileMeasure] = [:]
         
         for measure in functionTimes {
             if var fileMeasure = fileTimes[measure.path] {
-                // File exists, increment time
                 fileMeasure.time += measure.time
                 fileTimes[measure.path] = fileMeasure
             } else {
@@ -102,7 +95,6 @@ class ViewController: NSViewController {
                 fileTimes[measure.path] = newFileMeasure
             }
         }
-        // Sort by time
         return Array(fileTimes.values).sorted{ $0.time > $1.time }
     }
     
@@ -251,14 +243,8 @@ class ViewController: NSViewController {
     }
     
     func updateTotalLabel(with buildTime: Int) {
-        if buildTime < 60 {
-            compileTimeTextField.stringValue = "Build duration: \(buildTime)s"
-        } else {
-            let minutes = buildTime / 60
-            let seconds = String(format: "%02d", buildTime % 60)
-            
-            compileTimeTextField.stringValue = "Build duration: \(minutes)m \(seconds)s"
-        }
+        let text = "Build duration: " + (buildTime < 60 ? "\(buildTime)s" : "\(buildTime / 60)m \(buildTime % 60)s")
+        compileTimeTextField.stringValue = text
     }
     
     func textContains(_ text: String) -> Bool {
