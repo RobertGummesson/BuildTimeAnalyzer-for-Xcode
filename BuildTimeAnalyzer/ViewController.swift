@@ -49,7 +49,6 @@ class ViewController: NSViewController {
         projectSelection.delegate = self
         
         projectSelection.listFolders()
-        projectSelection.startMonitoringDerivedData()
     }
     
     override func viewDidDisappear() {
@@ -158,12 +157,11 @@ class ViewController: NSViewController {
             filteredData = field.stringValue.isEmpty ? nil : dataSource.filter{ textContains($0.code) || textContains($0.filename) }
             tableView.reloadData()
         } else if let field = obj.object as? NSTextField, field == derivedDataTextField {
-            projectSelection.stopMonitoringDerivedData()
-            
+            buildManager.stopMonitoring()
             DerivedDataManager.derivedDataLocation = field.stringValue
-            
+
             projectSelection.listFolders()
-            projectSelection.startMonitoringDerivedData()
+            buildManager.startMonitoring()
         }
     }
     
@@ -274,6 +272,10 @@ extension ViewController: NSTableViewDelegate {
 extension ViewController: BuildManagerDelegate {
     func buildManager(_ buildManager: BuildManager, shouldParseLogWithDatabase database: XcodeDatabase) {
         processLog(with: database)
+    }
+    
+    func derivedDataDidChange() {
+        projectSelection.listFolders()
     }
 }
 

@@ -9,6 +9,7 @@
 import Cocoa
 
 protocol BuildManagerDelegate: class {
+    func derivedDataDidChange()
     func buildManager(_ buildManager: BuildManager, shouldParseLogWithDatabase database: XcodeDatabase)
 }
 
@@ -23,15 +24,20 @@ class BuildManager: NSObject {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        derivedDataDirectoryMonitor.delegate = self
+        logFolderDirectoryMonitor.delegate = self
+        
         startMonitoring()
     }
     
     func startMonitoring() {
-        derivedDataDirectoryMonitor.delegate = self
-        logFolderDirectoryMonitor.delegate = self
-        
-        derivedDataDirectoryMonitor.stopMonitoring()
+        stopMonitoring()
         derivedDataDirectoryMonitor.startMonitoring(path: DerivedDataManager.derivedDataLocation)
+    }
+    
+    func stopMonitoring() {
+        derivedDataDirectoryMonitor.stopMonitoring()
     }
     
     func database(forFolder URL: URL) -> XcodeDatabase? {
@@ -62,6 +68,7 @@ class BuildManager: NSObject {
 extension BuildManager: DirectoryMonitorDelegate {
     func directoryMonitorDidObserveChange(_ directoryMonitor: DirectoryMonitor, isDerivedData: Bool) {
         if isDerivedData {
+            delegate?.derivedDataDidChange()
             processDerivedData()
         } else if let path = directoryMonitor.path {
             // TODO: If we don't dispatch, it seems it fires off too soon

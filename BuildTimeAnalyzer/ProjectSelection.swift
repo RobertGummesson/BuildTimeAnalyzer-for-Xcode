@@ -14,7 +14,6 @@ class ProjectSelection: NSObject {
     @IBOutlet weak var tableView: NSTableView!
     weak var delegate: ProjectSelectionDelegate?
     
-    private var directoryMonitor: DirectoryMonitor?
     fileprivate var dataSource: [XcodeDatabase] = []
     
     static fileprivate let dateFormatter: DateFormatter = {
@@ -23,18 +22,6 @@ class ProjectSelection: NSObject {
         dateFormatter.dateStyle = .medium
         return dateFormatter
     }()
-    
-    func startMonitoringDerivedData() {
-        if directoryMonitor == nil {
-            directoryMonitor = DirectoryMonitor(isDerivedData: true)
-            directoryMonitor?.delegate = self
-        }
-        directoryMonitor?.startMonitoring(path: DerivedDataManager.derivedDataLocation)
-    }
-    
-    func stopMonitoringDerivedData() {
-        directoryMonitor?.stopMonitoring()
-    }
     
     func listFolders() {
         dataSource =  DerivedDataManager.derivedData().flatMap{
@@ -79,13 +66,5 @@ extension ProjectSelection: NSTableViewDelegate {
         cellView?.textField?.stringValue = value
         
         return cellView
-    }
-}
-
-// MARK: DirectoryMonitorDelegate
-
-extension ProjectSelection: DirectoryMonitorDelegate {
-    func directoryMonitorDidObserveChange(_ directoryMonitor: DirectoryMonitor, isDerivedData: Bool) {
-        listFolders()
     }
 }
