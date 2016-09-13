@@ -5,7 +5,7 @@
 
 import Foundation
 
-typealias CMUpdateClosure = (_ result: [CompileMeasure], _ didComplete: Bool) -> ()
+typealias CMUpdateClosure = (_ result: [CompileMeasure], _ didComplete: Bool, _ didCancel: Bool) -> ()
 
 protocol LogProcessorProtocol: class {
     var rawMeasures: [String: RawMeasure] { get set }
@@ -19,7 +19,7 @@ protocol LogProcessorProtocol: class {
 extension LogProcessorProtocol {
     func processDatabase(database: XcodeDatabase, updateHandler: CMUpdateClosure?) {
         guard let text = database.processLog() else {
-            updateHandler?([], true)
+            updateHandler?([], true, false)
             return
         }
         
@@ -66,16 +66,16 @@ extension LogProcessorProtocol {
         processingDidFinish()
     }
     
-    fileprivate func updateResults(_ didComplete: Bool) {
-        var filteredResults = rawMeasures.values.filter({ $0.time > 10 })
+    fileprivate func updateResults(didComplete completed: Bool, didCancel: Bool) {
+        var filteredResults = rawMeasures.values.filter{ $0.time > 10 }
         if filteredResults.count < 20 {
-            filteredResults = rawMeasures.values.filter({ $0.time > 0.1 })
+            filteredResults = rawMeasures.values.filter{ $0.time > 0.1 }
         }
         
         let sortedResults = filteredResults.sorted(by: { $0.time > $1.time })
-        updateHandler?(processResult(sortedResults), didComplete)
+        updateHandler?(processResult(sortedResults), completed, didCancel)
         
-        if didComplete {
+        if completed {
             rawMeasures.removeAll()
         }
     }
@@ -119,12 +119,13 @@ class LogProcessor: NSObject, LogProcessorProtocol {
         DispatchQueue.main.async {
             self.timer?.invalidate()
             self.timer = nil
+            let didCancel = self.shouldCancel
             self.shouldCancel = false
-            self.updateResults(true)
+            self.updateResults(didComplete: true, didCancel: didCancel)
         }
     }
     
     func timerCallback(_ timer: Timer) {
-        updateResults(false)
+        updateResults(didComplete: false, didCancel: false)
     }
 }

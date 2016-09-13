@@ -24,7 +24,6 @@ class ViewController: NSViewController {
     
     fileprivate var dataSource: [CompileMeasure] = []
     fileprivate var filteredData: [CompileMeasure]?
-    fileprivate var canUpdateViewForState = true
     
     private var currentKey: String?
     private var nextDatabase: XcodeDatabase?
@@ -33,7 +32,7 @@ class ViewController: NSViewController {
     private var perFunctionTimes: [CompileMeasure] = []
     private var perFileTimes: [CompileMeasure] = []
     
-    var processingState: ProcessingState = .waiting() {
+    var processingState: ProcessingState = .waiting {
         didSet {
             updateViewForState()
         }
@@ -104,8 +103,6 @@ class ViewController: NSViewController {
     }
     
     func updateViewForState() {
-        guard canUpdateViewForState else { return }
-        
         switch processingState {
         case .processing:
             showInstructions(false)
@@ -175,7 +172,6 @@ class ViewController: NSViewController {
         
         processor.shouldCancel = true
         cancelButton.isHidden = true
-        canUpdateViewForState = false
     }
     
     func configureMenuItems(showBuildTimesMenuItem: Bool) {
@@ -193,7 +189,6 @@ class ViewController: NSViewController {
             return
         }
         
-        canUpdateViewForState = true
         configureMenuItems(showBuildTimesMenuItem: false)
         
         processingState = .processing
@@ -201,25 +196,31 @@ class ViewController: NSViewController {
         
         updateTotalLabel(with: database.buildTime)
         
-        processor.processDatabase(database: database) { [weak self] (result, didComplete) in
-            self?.handleProcessorUpdate(result: result, didComplete: didComplete)
+        processor.processDatabase(database: database) { [weak self] (result, didComplete, didCancel) in
+            self?.handleProcessorUpdate(result: result, didComplete: didComplete, didCancel: didCancel)
         }
     }
     
-    func handleProcessorUpdate(result: [CompileMeasure], didComplete: Bool) {
+    func handleProcessorUpdate(result: [CompileMeasure], didComplete: Bool, didCancel: Bool) {
         dataSource = result
         perFunctionTimes = result
         perFileTimes = aggregateTimesByFile(perFunctionTimes)
         tableView.reloadData()
         
         if didComplete {
-            completeProcessorUpdate()
+            completeProcessorUpdate(didCancel: didCancel)
         }
     }
     
-    func completeProcessorUpdate() {
+    func completeProcessorUpdate(didCancel: Bool) {
         let didSucceed = !dataSource.isEmpty
-        let stateName = didSucceed ? ProcessingState.completedString : ProcessingState.failedString
+        
+        var stateName = ProcessingState.failedString
+        if didCancel {
+            stateName = ProcessingState.cancelledString
+        } else if didSucceed {
+            stateName = ProcessingState.completedString
+        }
         
         processingState = .completed(didSucceed: didSucceed, stateName: stateName)
         currentKey = nil

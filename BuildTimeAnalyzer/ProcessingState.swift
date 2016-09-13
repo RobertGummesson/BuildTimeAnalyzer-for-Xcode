@@ -5,7 +5,7 @@
 
 enum ProcessingState {
     case processing
-    case waiting()
+    case waiting
     case completed(didSucceed: Bool, stateName: String)
 
     static let cancelledString       = "Cancelled"
