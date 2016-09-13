@@ -9,6 +9,7 @@ class ViewController: NSViewController {
     
     @IBOutlet var buildManager: BuildManager!
     @IBOutlet weak var cancelButton: NSButton!
+    @IBOutlet weak var compileTimeTextField: NSTextField!
     @IBOutlet weak var derivedDataTextField: NSTextField!
     @IBOutlet weak var instructionsView: NSView!
     @IBOutlet weak var leftButton: NSButton!
@@ -62,6 +63,7 @@ class ViewController: NSViewController {
     
     func configureLayout() {
         derivedDataTextField.stringValue = DerivedDataManager.derivedDataLocation
+        updateTotalLabel(with: 0)
         updateViewForState()
         showInstructions(true)
     }
@@ -69,6 +71,7 @@ class ViewController: NSViewController {
     func showInstructions(_ show: Bool) {
         instructionsView.isHidden = !show
         
+        compileTimeTextField.isHidden = show
         leftButton.isHidden = show
         perFileButton.isHidden = show
         searchField.isHidden = show
@@ -192,10 +195,11 @@ class ViewController: NSViewController {
         
         canUpdateViewForState = true
         configureMenuItems(showBuildTimesMenuItem: false)
-        NSLog("Starting \(database.key)")
         
         processingState = .processing
         currentKey = database.key
+        
+        updateTotalLabel(with: database.buildTime)
         
         processor.processDatabase(database: database) { [weak self] (result, didComplete) in
             self?.handleProcessorUpdate(result: result, didComplete: didComplete)
@@ -231,6 +235,17 @@ class ViewController: NSViewController {
             
             showInstructions(true)
             configureMenuItems(showBuildTimesMenuItem: true)
+        }
+    }
+    
+    func updateTotalLabel(with buildTime: Int) {
+        if buildTime < 60 {
+            compileTimeTextField.stringValue = "Build Time: \(buildTime)s"
+        } else {
+            let minutes = buildTime / 60
+            let seconds = String(format: "%02d", buildTime % 60)
+            
+            compileTimeTextField.stringValue = "Build Time: \(minutes)m \(seconds)s"
         }
     }
     

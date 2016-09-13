@@ -15,6 +15,8 @@ struct XcodeDatabase {
     var key: String
     var schemeName: String
     var title: String
+    var timeStartedRecording: Int
+    var timeStoppedRecording: Int
     
     var isBuildType: Bool {
         return title.hasPrefix("Build ") ||  title.hasPrefix("Compile ")
@@ -32,12 +34,18 @@ struct XcodeDatabase {
         return url.deletingLastPathComponent()
     }
     
+    var buildTime: Int {
+        return timeStoppedRecording - timeStartedRecording
+    }
+    
     init?(fromPath path: String) {
         guard let data = NSDictionary(contentsOfFile: path)?["logs"] as? [String: AnyObject],
             let key = XcodeDatabase.sortKeys(usingData: data).last?.key,
             let value = data[key] as? [String : AnyObject],
             let schemeName = value["schemeIdentifier-schemeName"] as? String,
             let title = value["title"] as? String,
+            let timeStartedRecording = value["timeStartedRecording"] as? Int,
+            let timeStoppedRecording = value["timeStoppedRecording"] as? Int,
             let fileAttributes = try? FileManager.default.attributesOfItem(atPath: path),
             let modificationDate = fileAttributes[FileAttributeKey.modificationDate] as? Date
             else { return nil }
@@ -47,6 +55,8 @@ struct XcodeDatabase {
         self.key = key
         self.schemeName = schemeName
         self.title = title
+        self.timeStartedRecording = timeStartedRecording
+        self.timeStoppedRecording = timeStoppedRecording
     }
     
     func processLog() -> String? {
@@ -57,11 +67,11 @@ struct XcodeDatabase {
         return nil
     }
     
-    static private func sortKeys(usingData data: [String: AnyObject]) -> [(UInt, key: String)] {
-        var sortedKeys: [(UInt, key: String)] = []
+    static private func sortKeys(usingData data: [String: AnyObject]) -> [(Int, key: String)] {
+        var sortedKeys: [(Int, key: String)] = []
         for key in data.keys {
             if let value = data[key] as? [String: AnyObject],
-                let timeStoppedRecording = value["timeStoppedRecording"] as? UInt {
+                let timeStoppedRecording = value["timeStoppedRecording"] as? Int {
                 sortedKeys.append((timeStoppedRecording, key))
             }
         }
