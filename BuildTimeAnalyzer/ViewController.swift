@@ -11,6 +11,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var cancelButton: NSButton!
     @IBOutlet weak var derivedDataTextField: NSTextField!
     @IBOutlet weak var instructionsView: NSView!
+    @IBOutlet weak var leftButton: NSButton!
     @IBOutlet weak var perFileButton: NSButton!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var projectSelection: ProjectSelection!
@@ -19,7 +20,6 @@ class ViewController: NSViewController {
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
-    @IBOutlet weak var leftButton: NSButton!
     
     fileprivate var dataSource: [CompileMeasure] = []
     fileprivate var filteredData: [CompileMeasure]?
@@ -146,7 +146,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func leftButtonClicked(_ sender: NSButton) {
-        configureMenuItems(showBuildTimesMenuItem: false)
+        configureMenuItems(showBuildTimesMenuItem: true)
         
         cancelProcessing()
         showInstructions(true)
