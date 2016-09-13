@@ -2,9 +2,6 @@
 //  BuildManager.swift
 //  BuildTimeAnalyzer
 //
-//  Created by Robert Gummesson on 12/09/2016.
-//  Copyright © 2016 Cane Media Ltd. All rights reserved.
-//
 
 import Cocoa
 
@@ -33,7 +30,7 @@ class BuildManager: NSObject {
     
     func startMonitoring() {
         stopMonitoring()
-        derivedDataDirectoryMonitor.startMonitoring(path: DerivedDataManager.derivedDataLocation)
+        derivedDataDirectoryMonitor.startMonitoring(path: UserSettings.derivedDataLocation)
     }
     
     func stopMonitoring() {

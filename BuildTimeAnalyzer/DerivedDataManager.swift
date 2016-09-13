@@ -7,28 +7,8 @@ import Foundation
 
 class DerivedDataManager {
     
-    static fileprivate var _derivedDataLocation: String?
-    static fileprivate let DerivedDataLocationKey = "DerivedDataLocationKey"
-    
-    static var derivedDataLocation: String {
-        get {
-            if _derivedDataLocation == nil {
-                _derivedDataLocation = UserDefaults.standard.string(forKey: DerivedDataLocationKey)
-            }
-            if _derivedDataLocation == nil, let libraryFolder = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first {
-                _derivedDataLocation = "\(libraryFolder)/Developer/Xcode/DerivedData"
-            }
-            return _derivedDataLocation ?? ""
-        }
-        set {
-            _derivedDataLocation = newValue
-            UserDefaults.standard.set(newValue, forKey: DerivedDataLocationKey)
-            UserDefaults.standard.synchronize()
-        }
-    }
-    
     static func derivedData() -> [File] {
-        let url = URL(fileURLWithPath: derivedDataLocation)
+        let url = URL(fileURLWithPath: UserSettings.derivedDataLocation)
         
         let folders = DerivedDataManager.listFolders(at: url)
         let fileManager = FileManager.default
@@ -54,7 +34,7 @@ class DerivedDataManager {
     }
     
     static func listCacheFiles() -> [CacheFile] {
-        let files = cacheFiles(at: URL(fileURLWithPath: derivedDataLocation))
+        let files = cacheFiles(at: URL(fileURLWithPath: UserSettings.derivedDataLocation))
         let earliestDate = Date().addingTimeInterval(-24 * 60 * 60)
         return filterFiles(files, byEarliestDate: earliestDate)
     }

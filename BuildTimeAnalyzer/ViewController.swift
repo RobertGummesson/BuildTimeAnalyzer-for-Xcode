@@ -61,10 +61,12 @@ class ViewController: NSViewController {
     // MARK: Layout
     
     func configureLayout() {
-        derivedDataTextField.stringValue = DerivedDataManager.derivedDataLocation
         updateTotalLabel(with: 0)
         updateViewForState()
         showInstructions(true)
+        
+        derivedDataTextField.stringValue = UserSettings.derivedDataLocation
+        makeWindowTopMost(topMost: UserSettings.windowShouldBeTopMost)
     }
     
     func showInstructions(_ show: Bool) {
@@ -129,6 +131,13 @@ class ViewController: NSViewController {
         }
     }
     
+    func makeWindowTopMost(topMost: Bool) {
+        if let window = NSApplication.shared().windows.first {
+            let level: CGWindowLevelKey = topMost ? .floatingWindow : .normalWindow
+            window.level = Int(CGWindowLevelForKey(level))
+        }
+    }
+    
     // MARK: Actions
     
     @IBAction func perFileCheckboxClicked(_ sender: NSButton) {
@@ -158,7 +167,7 @@ class ViewController: NSViewController {
             tableView.reloadData()
         } else if let field = obj.object as? NSTextField, field == derivedDataTextField {
             buildManager.stopMonitoring()
-            DerivedDataManager.derivedDataLocation = field.stringValue
+            UserSettings.derivedDataLocation = field.stringValue
 
             projectSelection.listFolders()
             buildManager.startMonitoring()

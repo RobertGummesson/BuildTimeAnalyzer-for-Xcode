@@ -176,6 +176,12 @@
                                                 <action selector="arrangeInFront:" target="Ady-hI-5gd" id="DRN-fu-gQh"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Always in Front" state="on" id="vT5-eJ-cMt">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="toggleAlwaysInFront:" target="Voe-Tx-rLC" id="a4N-d5-ic4"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -735,7 +741,7 @@ Gw
                 </customObject>
                 <customObject id="f4z-Qu-43g" customClass="BuildManager" customModule="BuildTimeAnalyzer" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="76" y="844"/>
+            <point key="canvasLocation" x="258" y="786"/>
         </scene>
     </scenes>
     <resources>

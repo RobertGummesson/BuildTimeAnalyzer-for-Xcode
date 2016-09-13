@@ -40,5 +40,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSWorkspace.shared().open(url)
         }
     }
+    
+    @IBAction func toggleAlwaysInFront(_ sender: NSMenuItem) {
+        let alwaysInFront = sender.state == NSOffState
+        
+        sender.state = alwaysInFront ? NSOnState : NSOffState
+        UserSettings.windowShouldBeTopMost = alwaysInFront
+        
+        viewController?.makeWindowTopMost(topMost: alwaysInFront)
+    }
 }
 
