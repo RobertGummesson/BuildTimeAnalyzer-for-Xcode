@@ -2,9 +2,6 @@
 //  CompileMeasureTests.swift
 //  CMBuildTimeAnalyzerTests
 //
-//  Created by Robert Gummesson on 02/05/2016.
-//  Copyright © 2016 Robert Gummesson. All rights reserved.
-//
 
 import XCTest
 
