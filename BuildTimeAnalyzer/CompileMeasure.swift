@@ -28,7 +28,7 @@ struct CompileMeasure {
     }
     
     var timeString: String {
-        return "\(time)ms"
+        return String(format: "%.1fms", time)
     }
     
     init?(time: Double, rawPath: String, code: String, references: Int) {
