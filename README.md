@@ -3,7 +3,7 @@ Build Time Analyzer for Xcode
 
 ## Overview
 
-Build Time Analyzer is an OSX app that shows you a break down of Swift build times. See [this post]( https://medium.com/p/fc92cdd91e31) and [this post](https://medium.com/p/37b0a7514cbe) on Medium for context. Since Xcode 8 came out, the analyzer is a standalone app rather than an Xcode plug-in.
+Build Time Analyzer is an OS X app that shows you a break down of Swift build times. See [this post]( https://medium.com/p/fc92cdd91e31) and [this post](https://medium.com/p/37b0a7514cbe) on Medium for context. Since Xcode 8 came out, the analyzer is a standalone app rather than an Xcode plug-in.
 
 ## Usage
 
@@ -15,7 +15,7 @@ Open up the app and follow the instructions.
 
 Download the code and open it in Xcode, archive the project and export the build. Easy, right?
 
-If you are on Xcode 7, instead download the Xcode plug-in [from here](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/releases/tag/v0.0.0-Plugin-for-Xcode7).
+If you are using on Xcode 7, instead use the [Xcode plug-in](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/releases/tag/v0.0.0-Plugin-for-Xcode7).
 
 ## Contributions
 
