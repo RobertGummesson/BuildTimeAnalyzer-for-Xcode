@@ -49,10 +49,11 @@ class ViewController: NSViewController {
         projectSelection.delegate = self
         projectSelection.listFolders()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose), name: .NSWindowWillClose, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(notification:)), name: .NSWindowWillClose, object: nil)
     }
     
-    func windowWillClose() {
+    func windowWillClose(notification: NSNotification) {
+        guard let object = notification.object, !(object is NSPanel) else { return }
         NotificationCenter.default.removeObserver(self)
         
         processor.shouldCancel = true
