@@ -3,25 +3,19 @@ Build Time Analyzer for Xcode
 
 ## Overview
 
-Build Time Analyzer is an Xcode plugin that shows you a break down of Swift build times. See [this post]( https://medium.com/p/fc92cdd91e31) and [this post](https://medium.com/p/37b0a7514cbe) on Medium for context.
+Build Time Analyzer is an OS X app that shows you a break down of Swift build times. See [this post]( https://medium.com/p/fc92cdd91e31) and [this post](https://medium.com/p/37b0a7514cbe) on Medium for context. Since Xcode 8 came out, the analyzer is a standalone app rather than an Xcode plug-in.
 
 ## Usage
 
-Open the analyzer window by tapping `Shift+Ctrl+B` or `View` > `Build Time Analyzer`. From there just follow the instructions.
+Open up the app and follow the instructions.
 
-![screenshot.png](https://raw.githubusercontent.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/master/Screenshots/screenshot2.png)
+![screenshot.png](https://raw.githubusercontent.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/master/Screenshots/screenshot.png)
 
 ## Installation
 
-**Xcode 7**
+Download the code and open it in Xcode, archive the project and export the build. Easy, right?
 
-To install the plug-in, build the project and restart Xcode. The plug-in will automatically be installed in `~/Library/Application Support/Developer/Shared/Xcode/Plug-ins`. To uninstall, just remove the plugin from there (and restart Xcode).
-
-**Xcode 8**
-
-With Xcode 8 and above, plug-ins are no longer supported. I am working around this by [turning the project into a standalone app](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/issues/38). This will unfortunately limit the functionality.
-
-There is still some work and Q.A to be done but if you'd like to access it now, you can [give it a try from here](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/tree/Standalone-for-Xcode-8). Consider it a bit experimental. If you rather wait, the branch should make it to master soon.
+If you are using on Xcode 7, instead use the [Xcode plug-in](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/releases/tag/v0.0.0-Plugin-for-Xcode7).
 
 ## Contributions
 
