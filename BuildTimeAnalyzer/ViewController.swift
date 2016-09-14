@@ -154,6 +154,7 @@ class ViewController: NSViewController {
         
         cancelProcessing()
         showInstructions(true)
+        projectSelection.listFolders()
     }
     
     override func controlTextDidChange(_ obj: Notification) {
