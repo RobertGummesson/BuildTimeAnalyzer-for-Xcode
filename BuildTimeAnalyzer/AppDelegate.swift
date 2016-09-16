@@ -12,12 +12,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var buildTimesMenuItem: NSMenuItem!
     @IBOutlet weak var alwaysInFrontMenuItem: NSMenuItem!
     
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        alwaysInFrontMenuItem.state = UserSettings.windowShouldBeTopMost ? NSOnState : NSOffState
-    }
-    
     var viewController: ViewController? {
         return NSApplication.shared().mainWindow?.contentViewController as? ViewController
+    }
+    
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        alwaysInFrontMenuItem.state = UserSettings.windowShouldBeTopMost ? NSOnState : NSOffState
     }
     
     func configureMenuItems(showBuildTimesMenuItem: Bool) {

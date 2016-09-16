@@ -34,8 +34,8 @@ struct CompileMeasure {
     init?(time: Double, rawPath: String, code: String, references: Int) {
         let untrimmedFilename = rawPath.characters.split(separator: "/").map(String.init).last
         
-        guard let filepath = rawPath.characters.split(separator: ":").map(String.init).first else { return nil }
-        guard let filename = untrimmedFilename?.characters.split(separator: ":").map(String.init).first else { return nil }
+        guard let filepath = rawPath.characters.split(separator: ":").map(String.init).first,
+            let filename = untrimmedFilename?.characters.split(separator: ":").map(String.init).first else { return nil }
         
         let locationString = String(rawPath.substring(from: filepath.endIndex).characters.dropFirst())
         let locations = locationString.characters.split(separator: ":").flatMap{ Int(String.init($0)) }
@@ -52,8 +52,8 @@ struct CompileMeasure {
     init?(rawPath: String, time: Double) {
         let untrimmedFilename = rawPath.characters.split(separator: "/").map(String.init).last
 
-        guard let filepath = rawPath.characters.split(separator: ":").map(String.init).first else { return nil }
-        guard let filename = untrimmedFilename?.characters.split(separator: ":").map(String.init).first else { return nil }
+        guard let filepath = rawPath.characters.split(separator: ":").map(String.init).first,
+            let filename = untrimmedFilename?.characters.split(separator: ":").map(String.init).first else { return nil }
 
         self.time = time
         self.code = ""
@@ -63,19 +63,16 @@ struct CompileMeasure {
         self.references = 1
     }
 
-
     subscript(column: Int) -> String {
-        get {
-            switch column {
-            case 0:
-                return timeString
-            case 1:
-                return fileInfo
-            case 2:
-                return "\(references)"
-            default:
-                return code
-            }
+        switch column {
+        case 0:
+            return timeString
+        case 1:
+            return fileInfo
+        case 2:
+            return "\(references)"
+        default:
+            return code
         }
     }
 }

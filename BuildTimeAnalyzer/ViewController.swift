@@ -114,7 +114,7 @@ class ViewController: NSViewController {
             statusTextField.stringValue = stateName
             cancelButton.isHidden = true
             
-        case .waiting():
+        case .waiting:
             progressIndicator.isHidden = true
             progressIndicator.stopAnimation(self)
             statusTextField.stringValue = ProcessingState.waitingForBuildString
