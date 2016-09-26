@@ -34,6 +34,7 @@ class ProjectSelection: NSObject {
     // MARK: Actions
     
     @IBAction func didSelectCell(_ sender: NSTableView) {
+        guard sender.selectedRow != -1 else { return }
         delegate?.didSelectProject(with: dataSource[sender.selectedRow])
     }
 }
