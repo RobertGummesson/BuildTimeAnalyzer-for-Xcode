@@ -669,6 +669,16 @@ Gw
                                             <outlet property="delegate" destination="XfG-lQ-9wD" id="kcF-Uo-l1I"/>
                                         </connections>
                                     </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="coU-tR-Iyy">
+                                        <rect key="frame" x="816" y="28" width="18" height="19"/>
+                                        <buttonCell key="cell" type="inline" bezelStyle="inline" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zPS-Vu-Noe">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystemBold"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="visitDerivedData:" target="XfG-lQ-9wD" id="HW7-Il-IM3"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="ddp-S7-yG2" firstAttribute="trailing" secondItem="Um0-zQ-09O" secondAttribute="trailing" id="7s6-Yg-1kY"/>
@@ -680,6 +690,7 @@ Gw
                                     <constraint firstItem="O5K-4i-z6g" firstAttribute="leading" secondItem="PV7-TD-diE" secondAttribute="leading" id="Dpn-sp-Fni"/>
                                     <constraint firstItem="c6J-cx-fi8" firstAttribute="leading" secondItem="Um0-zQ-09O" secondAttribute="leading" id="NIy-Q9-e38"/>
                                     <constraint firstItem="Um0-zQ-09O" firstAttribute="centerX" secondItem="wyZ-eU-XEt" secondAttribute="centerX" id="O4l-6w-kjo"/>
+                                    <constraint firstItem="coU-tR-Iyy" firstAttribute="leading" secondItem="ptj-Cb-LDq" secondAttribute="trailing" constant="8" id="Ou4-bQ-rT0"/>
                                     <constraint firstItem="ddp-S7-yG2" firstAttribute="leading" secondItem="Um0-zQ-09O" secondAttribute="leading" id="QZf-de-QEb"/>
                                     <constraint firstItem="ptj-Cb-LDq" firstAttribute="trailing" secondItem="ddp-S7-yG2" secondAttribute="trailing" id="QsI-Oh-lIn"/>
                                     <constraint firstItem="PV7-TD-diE" firstAttribute="leading" secondItem="Zkv-Tf-sdq" secondAttribute="leading" id="U3M-6g-IlA"/>
@@ -691,6 +702,7 @@ Gw
                                     <constraint firstItem="NbS-C3-WfY" firstAttribute="centerY" secondItem="c6J-cx-fi8" secondAttribute="centerY" id="lGh-3Z-UEi"/>
                                     <constraint firstItem="ddp-S7-yG2" firstAttribute="top" secondItem="O5K-4i-z6g" secondAttribute="bottom" constant="5" id="oCY-Ao-8bF"/>
                                     <constraint firstItem="Zkv-Tf-sdq" firstAttribute="top" secondItem="Um0-zQ-09O" secondAttribute="bottom" constant="35" id="oan-Z5-mK3"/>
+                                    <constraint firstItem="coU-tR-Iyy" firstAttribute="centerY" secondItem="ptj-Cb-LDq" secondAttribute="centerY" id="rN7-rQ-Q8B"/>
                                     <constraint firstItem="NbS-C3-WfY" firstAttribute="top" secondItem="wyZ-eU-XEt" secondAttribute="top" constant="20" id="rsF-no-xAd"/>
                                     <constraint firstItem="O5K-4i-z6g" firstAttribute="top" secondItem="PV7-TD-diE" secondAttribute="bottom" constant="35" id="wss-bT-SAy"/>
                                 </constraints>
@@ -748,10 +760,11 @@ Gw
                 </customObject>
                 <customObject id="f4z-Qu-43g" customClass="BuildManager" customModule="BuildTimeAnalyzer" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="258" y="786"/>
+            <point key="canvasLocation" x="257.5" y="785.5"/>
         </scene>
     </scenes>
     <resources>
+        <image name="NSFollowLinkFreestandingTemplate" width="14" height="14"/>
         <image name="NSGoLeftTemplate" width="9" height="12"/>
         <image name="ScreenShot" width="616" height="69"/>
     </resources>

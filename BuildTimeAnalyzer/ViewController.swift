@@ -145,6 +145,15 @@ class ViewController: NSViewController {
         NSPasteboard.general().writeObjects(["-Xfrontend -debug-time-function-bodies" as NSPasteboardWriting])
     }
     
+    @IBAction func visitDerivedData(_ sender: AnyObject) {
+        
+        let path = self.derivedDataTextField.stringValue
+            
+        NSWorkspace.shared().openFile(path)
+        
+    }
+    
+    
     @IBAction func cancelButtonClicked(_ sender: AnyObject) {
         processor.shouldCancel = true
     }
