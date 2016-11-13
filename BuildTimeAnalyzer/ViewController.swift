@@ -34,6 +34,7 @@ class ViewController: NSViewController {
     
     fileprivate var canAddCommentWhenClick: Bool = false
 
+    let NEW_LINE_DELIMITER = "NEW_LINE_DELIMITER"
     var processingState: ProcessingState = .waiting {
         didSet {
             updateViewForState()
@@ -275,13 +276,22 @@ class ViewController: NSViewController {
         // use NSUTF8StringEncoding to read UTF-8 text
         do{
             
-            let multiLineString =  try String(contentsOfFile: filePath, encoding:  String.Encoding.utf8)
+            var multiLineString =  try String(contentsOfFile: filePath, encoding:  String.Encoding.utf8)
             
-            let newlineChars = NSCharacterSet.newlines
-            var lineArray = multiLineString.components(separatedBy: newlineChars)
+            
+             multiLineString = multiLineString.replacingOccurrences(of: "\r\n", with: "\r\n\(NEW_LINE_DELIMITER)")
+
+            
+            
+            //let newlineChars = NSCharacterSet.newlines
+            //var lineArray = multiLineString.components(separatedBy: newlineChars)
+
+            var lineArray = multiLineString.components(separatedBy: "\r\n") // ["Hello", "World"]
             lineArray.insert(comment, at: lineNumber)
-            let result = lineArray.joined(separator:  "\r\n")
-            try? result.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+            
+            multiLineString = lineArray.joined(separator:  "")
+            multiLineString = multiLineString.replacingOccurrences(of: "NEW_LINE_DELIMITER", with: "\r\n")
+            try? multiLineString.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
                         
         }catch{
             
@@ -306,7 +316,7 @@ extension ViewController: NSTableViewDataSource {
         NSPasteboard.general().clearContents()
         NSPasteboard.general().writeObjects(["//Build Time for this method is \(item.time)" as NSPasteboardWriting])
         if canAddCommentWhenClick {
-        self.writeTo(filePath: item.path, comment: "//Build Time for this method is \(item.time) ms", lineNumber: item.location)
+        self.writeTo(filePath: item.path, comment: "\(NEW_LINE_DELIMITER) //Build Time for this method is \(item.time) ms \(NEW_LINE_DELIMITER)", lineNumber: item.location - 1)
         }
         return true
     }
@@ -344,4 +354,3 @@ extension ViewController: ProjectSelectionDelegate {
         processLog(with: database)
     }
 }
-
