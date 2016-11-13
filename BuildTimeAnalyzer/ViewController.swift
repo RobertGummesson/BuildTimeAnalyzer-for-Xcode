@@ -4,7 +4,6 @@
 //
 
 import Cocoa
-
 class ViewController: NSViewController {
     
     @IBOutlet var buildManager: BuildManager!
@@ -14,6 +13,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var instructionsView: NSView!
     @IBOutlet weak var leftButton: NSButton!
     @IBOutlet weak var perFileButton: NSButton!
+    @IBOutlet weak var addCommentButton: NSButton!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var projectSelection: ProjectSelection!
     @IBOutlet weak var searchField: NSSearchField!
@@ -32,6 +32,9 @@ class ViewController: NSViewController {
     private var perFunctionTimes: [CompileMeasure] = []
     private var perFileTimes: [CompileMeasure] = []
     
+    fileprivate var canAddCommentWhenClick: Bool = false
+
+    let NEW_LINE_DELIMITER = "NEW_LINE_DELIMITER"
     var processingState: ProcessingState = .waiting {
         didSet {
             updateViewForState()
@@ -39,7 +42,7 @@ class ViewController: NSViewController {
     }
     
     // MARK: Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -74,7 +77,7 @@ class ViewController: NSViewController {
     func showInstructions(_ show: Bool) {
         instructionsView.isHidden = !show
         
-        let views: [NSView] = [compileTimeTextField, leftButton, perFileButton, searchField, statusLabel, statusTextField, tableViewContainerView]
+        let views: [NSView] = [compileTimeTextField, leftButton, perFileButton, searchField, statusLabel, statusTextField, tableViewContainerView,addCommentButton]
         views.forEach{ $0.isHidden = show }
         
         if show && processingState == .processing {
@@ -139,6 +142,11 @@ class ViewController: NSViewController {
         dataSource = sender.state == 0 ? perFunctionTimes : perFileTimes
         tableView.reloadData()
     }
+
+    @IBAction func addCommentWhenClick(_ sender: NSButton) {
+        
+        canAddCommentWhenClick = !canAddCommentWhenClick
+    }
     
     @IBAction func clipboardButtonClicked(_ sender: AnyObject) {
         NSPasteboard.general().clearContents()
@@ -148,7 +156,7 @@ class ViewController: NSViewController {
     @IBAction func visitDerivedData(_ sender: AnyObject) {
         
         let path = self.derivedDataTextField.stringValue
-            
+        
         NSWorkspace.shared().openFile(path)
         
     }
@@ -173,7 +181,7 @@ class ViewController: NSViewController {
         } else if let field = obj.object as? NSTextField, field == derivedDataTextField {
             buildManager.stopMonitoring()
             UserSettings.derivedDataLocation = field.stringValue
-
+            
             projectSelection.listFolders()
             buildManager.startMonitoring()
         }
@@ -261,6 +269,37 @@ class ViewController: NSViewController {
     func textContains(_ text: String) -> Bool {
         return text.lowercased().contains(searchField.stringValue.lowercased())
     }
+    
+    func writeTo(filePath:String,comment:String,lineNumber:Int) {
+        
+        
+        // use NSUTF8StringEncoding to read UTF-8 text
+        do{
+            
+            var multiLineString =  try String(contentsOfFile: filePath, encoding:  String.Encoding.utf8)
+            
+            
+             multiLineString = multiLineString.replacingOccurrences(of: "\r\n", with: "\r\n\(NEW_LINE_DELIMITER)")
+
+            
+            
+            //let newlineChars = NSCharacterSet.newlines
+            //var lineArray = multiLineString.components(separatedBy: newlineChars)
+
+            var lineArray = multiLineString.components(separatedBy: "\r\n") // ["Hello", "World"]
+            lineArray.insert(comment, at: lineNumber)
+            
+            multiLineString = lineArray.joined(separator:  "")
+            multiLineString = multiLineString.replacingOccurrences(of: "NEW_LINE_DELIMITER", with: "\r\n")
+            try? multiLineString.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+                        
+        }catch{
+            
+            /* error handling here */
+            
+        }
+        
+    }
 }
 
 // MARK: NSTableViewDataSource
@@ -274,6 +313,11 @@ extension ViewController: NSTableViewDataSource {
         let item = filteredData?[row] ?? dataSource[row]
         NSWorkspace.shared().openFile(item.path)
         
+        NSPasteboard.general().clearContents()
+        NSPasteboard.general().writeObjects(["//Build Time for this method is \(item.time)" as NSPasteboardWriting])
+        if canAddCommentWhenClick {
+        self.writeTo(filePath: item.path, comment: "\(NEW_LINE_DELIMITER) //Build Time for this method is \(item.time) ms \(NEW_LINE_DELIMITER)", lineNumber: item.location - 1)
+        }
         return true
     }
 }
@@ -291,7 +335,7 @@ extension ViewController: NSTableViewDelegate {
     }
 }
 
-// MARK: BuildManagerDelegate 
+// MARK: BuildManagerDelegate
 
 extension ViewController: BuildManagerDelegate {
     func buildManager(_ buildManager: BuildManager, shouldParseLogWithDatabase database: XcodeDatabase) {
