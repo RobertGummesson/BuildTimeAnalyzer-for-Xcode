@@ -146,11 +146,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func visitDerivedData(_ sender: AnyObject) {
-        
-        let path = self.derivedDataTextField.stringValue
-            
-        NSWorkspace.shared().openFile(path)
-        
+        NSWorkspace.shared().openFile(derivedDataTextField.stringValue)
     }
     
     
