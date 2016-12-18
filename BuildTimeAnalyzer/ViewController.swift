@@ -52,6 +52,21 @@ class ViewController: NSViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(notification:)), name: .NSWindowWillClose, object: nil)
     }
     
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        
+        // Set window level before view is displayed
+        makeWindowTopMost(topMost: UserSettings.windowShouldBeTopMost)
+    }
+    
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+
+        // Reset window level before view is hidden
+        // Reference: https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/WinPanel/Concepts/WindowLevel.html
+        makeWindowTopMost(topMost: false)
+    }
+    
     func windowWillClose(notification: NSNotification) {
         guard let object = notification.object, !(object is NSPanel) else { return }
         NotificationCenter.default.removeObserver(self)
