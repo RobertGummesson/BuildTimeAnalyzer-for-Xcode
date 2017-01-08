@@ -1,0 +1,3 @@
+language: objective-c
+osx_image: xcode8.2
+script: xcodebuild -project BuildTimeAnalyzer.xcodeproj -scheme BuildTimeAnalyzer build test
