@@ -1,6 +1,12 @@
 Build Time Analyzer for Xcode
 ======================
 
+[![Build Status](https://travis-ci.org/RobertGummesson/BuildTimeAnalyzer-for-Xcode.svg?branch=master)](https://travis-ci.org/RobertGummesson/BuildTimeAnalyzer-for-Xcode)
+[![Swift](https://img.shields.io/badge/Swift-3.0-orange.svg)](https://swift.org)
+[![Platform](https://img.shields.io/badge/platform-osx-lightgrey.svg)](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode)
+[![Xcode](https://img.shields.io/badge/Xcode-8.2-blue.svg)](https://developer.apple.com/xcode)
+[![MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 ## Overview
 
 Build Time Analyzer is an OS X app that shows you a break down of Swift build times. See [this post]( https://medium.com/p/fc92cdd91e31) and [this post](https://medium.com/p/37b0a7514cbe) on Medium for context. 
