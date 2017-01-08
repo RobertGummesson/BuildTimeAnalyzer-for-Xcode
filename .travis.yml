@@ -1,2 +1,4 @@
 language: objective-c
 osx_image: xcode8.2
+xcode_project: BuildTimeAnalyzer.xcodeproj
+xcode_scheme: BuildTimeAnalyzer
