@@ -34,7 +34,7 @@ extension LogProcessorProtocol {
     private func process(text: String) {
         let characterSet = CharacterSet(charactersIn:"\r\"")
         var remainingRange = text.startIndex..<text.endIndex
-        let regex = try! NSRegularExpression(pattern:  "^\\d*\\.?\\dms\\t/", options: [])
+        let regex = try! NSRegularExpression(pattern:  "^\\d*\\.?\\d*ms\\t/", options: [])
         
         rawMeasures.removeAll()
         
