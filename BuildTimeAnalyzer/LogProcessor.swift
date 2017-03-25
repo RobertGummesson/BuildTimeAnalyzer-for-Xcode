@@ -81,10 +81,14 @@ extension LogProcessorProtocol {
     }
     
     private func processResult(_ unprocessedResult: [RawMeasure]) -> [CompileMeasure] {
+        let characterSet = CharacterSet(charactersIn:"\r\"")
+        
         var result: [CompileMeasure] = []
         for entry in unprocessedResult {
             let code = entry.text.characters.split(separator: "\t").map(String.init)
-            if code.count >= 2, let measure = CompileMeasure(time: entry.time, rawPath: code[0], code: trimPrefixes(code[1]), references: entry.references) {
+            let method = code.count >= 2 ? trimPrefixes(code[1]) : "-"
+            
+            if let path = code.first?.trimmingCharacters(in: characterSet), let measure = CompileMeasure(time: entry.time, rawPath: path, code: method, references: entry.references) {
                 result.append(measure)
             }
         }
