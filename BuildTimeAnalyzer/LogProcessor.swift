@@ -47,7 +47,7 @@ extension LogProcessorProtocol {
                 remainingRange = nextRange.upperBound..<remainingRange.upperBound
             }
             
-            let range = NSMakeRange(0, text.characters.count)
+            let range = NSMakeRange(0, (text as NSString).length)
             guard let match = regex.firstMatch(in: text, options: [], range: range) else { continue }
             
             let timeString = text.substring(to: text.characters.index(text.startIndex, offsetBy: match.range.length - 4))
