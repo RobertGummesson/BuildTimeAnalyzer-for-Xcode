@@ -47,6 +47,7 @@ extension LogProcessorProtocol {
                 remainingRange = nextRange.upperBound..<remainingRange.upperBound
             }
             
+            // From LuizZak: (text as NSString).length improves the performance by about 2x compared to text.characters.count
             let range = NSMakeRange(0, (text as NSString).length)
             guard let match = regex.firstMatch(in: text, options: [], range: range) else { continue }
             
