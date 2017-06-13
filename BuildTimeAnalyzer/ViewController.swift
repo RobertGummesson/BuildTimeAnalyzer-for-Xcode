@@ -17,6 +17,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     @IBOutlet weak var projectSelection: ProjectSelection!
     @IBOutlet weak var searchField: NSSearchField!
+    @IBOutlet weak var exportCSVButton: NSButton!
     @IBOutlet weak var statusLabel: NSTextField!
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var tableView: NSTableView!
@@ -89,7 +90,7 @@ class ViewController: NSViewController {
     func showInstructions(_ show: Bool) {
         instructionsView.isHidden = !show
         
-        let views: [NSView] = [compileTimeTextField, leftButton, perFileButton, searchField, statusLabel, statusTextField, tableViewContainerView]
+        let views: [NSView] = [compileTimeTextField, leftButton, perFileButton, searchField, exportCSVButton, statusLabel, statusTextField, tableViewContainerView]
         views.forEach{ $0.isHidden = show }
         
         if show && processingState == .processing {
@@ -150,6 +151,29 @@ class ViewController: NSViewController {
     
     // MARK: Actions
     
+    @IBAction func exportCSVClicked(_ sender: NSButton) {
+        var csvString = ""
+        csvString.append("Time,File,Code,Reference Count,Path\n")
+        for measurement in dataSource where measurement.time > 0 {
+            let codeRef = measurement.code.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            csvString.append("\"\(measurement.time)\",\"\(measurement.filename)\",\"\(codeRef)\",\"\(measurement.references)\",\"\(measurement.path)\"\n")
+        }
+
+        // Converting it to Data.
+        let csvData = csvString.data(using: .utf8, allowLossyConversion: false)
+
+        // Write out data
+        let desktopPath = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true)[0]
+
+        do {
+            let url = URL(fileURLWithPath: "\(desktopPath)/compile_times.csv")
+            try csvData?.write(to: url, options: .atomicWrite)
+        } catch {
+            // Write error, do nothing
+            statusTextField.stringValue = "File error."
+        }
+    }
+
     @IBAction func perFileCheckboxClicked(_ sender: NSButton) {
         dataSource = sender.state == 0 ? perFunctionTimes : perFileTimes
         tableView.reloadData()
