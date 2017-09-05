@@ -41,8 +41,8 @@ struct XcodeDatabase {
             let value = data[key] as? [String : AnyObject],
             let schemeName = value["schemeIdentifier-schemeName"] as? String,
             let title = value["title"] as? String,
-            let timeStartedRecording = value["timeStartedRecording"] as? Int,
-            let timeStoppedRecording = value["timeStoppedRecording"] as? Int,
+            let timeStartedRecording = value["timeStartedRecording"] as? NSNumber,
+            let timeStoppedRecording = value["timeStoppedRecording"] as? NSNumber,
             let fileAttributes = try? FileManager.default.attributesOfItem(atPath: path),
             let modificationDate = fileAttributes[FileAttributeKey.modificationDate] as? Date
             else { return nil }
@@ -52,8 +52,8 @@ struct XcodeDatabase {
         self.key = key
         self.schemeName = schemeName
         self.title = title
-        self.timeStartedRecording = timeStartedRecording
-        self.timeStoppedRecording = timeStoppedRecording
+        self.timeStartedRecording = timeStartedRecording.intValue
+        self.timeStoppedRecording = timeStoppedRecording.intValue
     }
     
     func processLog() -> String? {
@@ -68,8 +68,8 @@ struct XcodeDatabase {
         var sortedKeys: [(Int, key: String)] = []
         for key in data.keys {
             if let value = data[key] as? [String: AnyObject],
-                let timeStoppedRecording = value["timeStoppedRecording"] as? Int {
-                sortedKeys.append((timeStoppedRecording, key))
+                let timeStoppedRecording = value["timeStoppedRecording"] as? NSNumber {
+                sortedKeys.append((timeStoppedRecording.intValue, key))
             }
         }
         return sortedKeys.sorted{ $0.0 < $1.0 }
