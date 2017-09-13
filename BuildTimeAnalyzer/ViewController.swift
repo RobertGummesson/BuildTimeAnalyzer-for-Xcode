@@ -285,6 +285,23 @@ extension ViewController: NSTableViewDataSource {
         let item = filteredData?[row] ?? dataSource[row]
         NSWorkspace.shared().openFile(item.path)
         
+
+        let gotoLineScript =
+            "tell application \"Xcode\"\n" +
+            "  activate\n" +
+            "end tell\n" +
+            "tell application \"System Events\"\n" +
+            "  keystroke \"l\" using command down\n" +
+            "  keystroke \"\(item.location)\"\n" +
+            "  keystroke return\n" +
+            "end tell"
+
+        DispatchQueue.main.async {
+            if let script = NSAppleScript(source: gotoLineScript) {
+                script.executeAndReturnError(nil)
+            }
+        }
+        
         return true
     }
 }
