@@ -13,11 +13,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var alwaysInFrontMenuItem: NSMenuItem!
     
     var viewController: ViewController? {
-        return NSApplication.shared().mainWindow?.contentViewController as? ViewController
+        return NSApplication.shared.mainWindow?.contentViewController as? ViewController
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        alwaysInFrontMenuItem.state = UserSettings.windowShouldBeTopMost ? NSOnState : NSOffState
+        alwaysInFrontMenuItem.state = UserSettings.windowShouldBeTopMost ? .on : .off
     }
     
     func configureMenuItems(showBuildTimesMenuItem: Bool) {
@@ -42,14 +42,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func visitGitHubPage(_ sender: AnyObject) {
         let path = "https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode"
         if let url = URL(string: path) {
-            NSWorkspace.shared().open(url)
+            NSWorkspace.shared.open(url)
         }
     }
     
     @IBAction func toggleAlwaysInFront(_ sender: NSMenuItem) {
-        let alwaysInFront = sender.state == NSOffState
+        let alwaysInFront = sender.state == .off
         
-        sender.state = alwaysInFront ? NSOnState : NSOffState
+        sender.state = alwaysInFront ? .on : .off
         UserSettings.windowShouldBeTopMost = alwaysInFront
         
         viewController?.makeWindowTopMost(topMost: alwaysInFront)

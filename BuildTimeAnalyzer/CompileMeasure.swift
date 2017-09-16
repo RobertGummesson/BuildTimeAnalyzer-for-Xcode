@@ -32,13 +32,13 @@ struct CompileMeasure {
     }
     
     init?(time: Double, rawPath: String, code: String, references: Int) {
-        let untrimmedFilename = rawPath.characters.split(separator: "/").map(String.init).last
+        let untrimmedFilename = rawPath.split(separator: "/").map(String.init).last
         
-        guard let filepath = rawPath.characters.split(separator: ":").map(String.init).first,
-            let filename = untrimmedFilename?.characters.split(separator: ":").map(String.init).first else { return nil }
+        guard let filepath = rawPath.split(separator: ":").map(String.init).first,
+            let filename = untrimmedFilename?.split(separator: ":").map(String.init).first else { return nil }
         
-        let locationString = String(rawPath.substring(from: filepath.endIndex).characters.dropFirst())
-        let locations = locationString.characters.split(separator: ":").flatMap{ Int(String.init($0)) }
+        let locationString = String(rawPath[filepath.endIndex...].dropFirst())
+        let locations = locationString.split(separator: ":").flatMap{ Int(String.init($0)) }
         guard locations.count == 2 else { return nil }
         
         self.time = time
@@ -50,10 +50,10 @@ struct CompileMeasure {
     }
 
     init?(rawPath: String, time: Double) {
-        let untrimmedFilename = rawPath.characters.split(separator: "/").map(String.init).last
+        let untrimmedFilename = rawPath.split(separator: "/").map(String.init).last
 
-        guard let filepath = rawPath.characters.split(separator: ":").map(String.init).first,
-            let filename = untrimmedFilename?.characters.split(separator: ":").map(String.init).first else { return nil }
+        guard let filepath = rawPath.split(separator: ":").map(String.init).first,
+            let filename = untrimmedFilename?.split(separator: ":").map(String.init).first else { return nil }
 
         self.time = time
         self.code = ""
