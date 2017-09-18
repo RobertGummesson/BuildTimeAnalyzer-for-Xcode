@@ -49,7 +49,7 @@ class ViewController: NSViewController {
         projectSelection.delegate = self
         projectSelection.listFolders()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(notification:)), name: .NSWindowWillClose, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(notification:)), name: NSWindow.willCloseNotification, object: nil)
     }
     
     override func viewWillAppear() {
@@ -67,7 +67,7 @@ class ViewController: NSViewController {
         makeWindowTopMost(topMost: false)
     }
     
-    func windowWillClose(notification: NSNotification) {
+    @objc func windowWillClose(notification: NSNotification) {
         guard let object = notification.object, !(object is NSPanel) else { return }
         NotificationCenter.default.removeObserver(self)
         
@@ -142,26 +142,26 @@ class ViewController: NSViewController {
     }
     
     func makeWindowTopMost(topMost: Bool) {
-        if let window = NSApplication.shared().windows.first {
+        if let window = NSApplication.shared.windows.first {
             let level: CGWindowLevelKey = topMost ? .floatingWindow : .normalWindow
-            window.level = Int(CGWindowLevelForKey(level))
+            window.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(level)))
         }
     }
     
     // MARK: Actions
     
     @IBAction func perFileCheckboxClicked(_ sender: NSButton) {
-        dataSource = sender.state == 0 ? perFunctionTimes : perFileTimes
+        dataSource = sender.state.rawValue == 0 ? perFunctionTimes : perFileTimes
         tableView.reloadData()
     }
     
     @IBAction func clipboardButtonClicked(_ sender: AnyObject) {
-        NSPasteboard.general().clearContents()
-        NSPasteboard.general().writeObjects(["-Xfrontend -debug-time-function-bodies" as NSPasteboardWriting])
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects(["-Xfrontend -debug-time-function-bodies" as NSPasteboardWriting])
     }
     
     @IBAction func visitDerivedData(_ sender: AnyObject) {
-        NSWorkspace.shared().openFile(derivedDataTextField.stringValue)
+        NSWorkspace.shared.openFile(derivedDataTextField.stringValue)
     }
     
     
@@ -283,7 +283,7 @@ extension ViewController: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         let item = filteredData?[row] ?? dataSource[row]
-        NSWorkspace.shared().openFile(item.path)
+        NSWorkspace.shared.openFile(item.path)
         
 
         let gotoLineScript =
@@ -312,7 +312,7 @@ extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
         
-        let result = tableView.make(withIdentifier: "Cell\(columnIndex)", owner: self) as? NSTableCellView
+        let result = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "Cell\(columnIndex)"), owner: self) as? NSTableCellView
         result?.textField?.stringValue = filteredData?[row][columnIndex] ?? dataSource[row][columnIndex]
         
         return result

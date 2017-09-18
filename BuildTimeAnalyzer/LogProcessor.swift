@@ -41,7 +41,7 @@ extension LogProcessorProtocol {
         processingDidStart()
         
         while let nextRange = text.rangeOfCharacter(from: characterSet, options: [], range: remainingRange) {
-            let text = text.substring(with: remainingRange.lowerBound..<nextRange.upperBound)
+            let text = String(text[remainingRange.lowerBound..<nextRange.upperBound])
             
             defer {
                 remainingRange = nextRange.upperBound..<remainingRange.upperBound
@@ -51,9 +51,9 @@ extension LogProcessorProtocol {
             let range = NSMakeRange(0, (text as NSString).length)
             guard let match = regex.firstMatch(in: text, options: [], range: range) else { continue }
             
-            let timeString = text.substring(to: text.characters.index(text.startIndex, offsetBy: match.range.length - 4))
+            let timeString = text[...text.index(text.startIndex, offsetBy: match.range.length - 4)]
             if let time = Double(timeString) {
-                let value = text.substring(from: text.characters.index(text.startIndex, offsetBy: match.range.length - 1))
+                let value = String(text[...text.index(text.startIndex, offsetBy: match.range.length - 1)])
                 if var rawMeasure = rawMeasures[value] {
                     rawMeasure.time += time
                     rawMeasure.references += 1
@@ -86,7 +86,7 @@ extension LogProcessorProtocol {
         
         var result: [CompileMeasure] = []
         for entry in unprocessedResult {
-            let code = entry.text.characters.split(separator: "\t").map(String.init)
+            let code = entry.text.split(separator: "\t").map(String.init)
             let method = code.count >= 2 ? trimPrefixes(code[1]) : "-"
             
             if let path = code.first?.trimmingCharacters(in: characterSet), let measure = CompileMeasure(time: entry.time, rawPath: path, code: method, references: entry.references) {
@@ -100,7 +100,7 @@ extension LogProcessorProtocol {
         var code = code
         ["@objc ", "final ", "@IBAction "].forEach { (prefix) in
             if code.hasPrefix(prefix) {
-                code = code.substring(from: code.index(code.startIndex, offsetBy: prefix.characters.count))
+                code = String(code[code.index(code.startIndex, offsetBy: prefix.count)...])
             }
         }
         return code
@@ -130,7 +130,7 @@ class LogProcessor: NSObject, LogProcessorProtocol {
         }
     }
     
-    func timerCallback(_ timer: Timer) {
+    @objc func timerCallback(_ timer: Timer) {
         updateResults(didComplete: false, didCancel: false)
     }
 }
