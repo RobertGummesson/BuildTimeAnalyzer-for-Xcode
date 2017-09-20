@@ -51,9 +51,9 @@ extension LogProcessorProtocol {
             let range = NSMakeRange(0, (text as NSString).length)
             guard let match = regex.firstMatch(in: text, options: [], range: range) else { continue }
             
-            let timeString = text[...text.index(text.startIndex, offsetBy: match.range.length - 4)]
+            let timeString = text[..<text.index(text.startIndex, offsetBy: match.range.length - 4)]
             if let time = Double(timeString) {
-                let value = String(text[...text.index(text.startIndex, offsetBy: match.range.length - 1)])
+                let value = String(text[text.index(text.startIndex, offsetBy: match.range.length - 1)...])
                 if var rawMeasure = rawMeasures[value] {
                     rawMeasure.time += time
                     rawMeasure.references += 1
