@@ -21,8 +21,6 @@ Open up the app and follow the instructions.
 
 Download the code and open it in Xcode, archive the project and export the build. Easy, right?
 
-If you are on Xcode 7, instead use the [Xcode plug-in](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/releases/tag/v0.0.0-Plugin-for-Xcode7).
-
 ## Contributions
 
 If you encounter any issues or have ideas for improvement, I am open to code contributions.
