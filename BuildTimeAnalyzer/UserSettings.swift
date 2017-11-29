@@ -35,7 +35,7 @@ class UserSettings {
             if _windowLevelIsNormal == nil {
                 _windowLevelIsNormal = UserDefaults.standard.bool(forKey: windowLevelIsNormalKey)
             }
-            return !(_windowLevelIsNormal ?? true)
+            return !(_windowLevelIsNormal ?? false)
         }
         set {
             _windowLevelIsNormal = !newValue
