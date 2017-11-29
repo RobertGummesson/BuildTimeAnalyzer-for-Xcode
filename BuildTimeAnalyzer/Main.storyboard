@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11201"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="system font weights other than Regular or Bold" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
@@ -211,6 +212,9 @@
                         <rect key="contentRect" x="196" y="240" width="999" height="473"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
                         <value key="minSize" type="size" width="900" height="323"/>
+                        <connections>
+                            <outlet property="delegate" destination="B8D-0N-5wS" id="Rb5-sO-360"/>
+                        </connections>
                     </window>
                     <connections>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
@@ -635,7 +639,7 @@ Gw
                                             </subviews>
                                         </clipView>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="120" id="V1C-tO-aNA"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="V1C-tO-aNA"/>
                                         </constraints>
                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="YXc-0k-3G9">
                                             <rect key="frame" x="1" y="99" width="597" height="16"/>
@@ -699,7 +703,9 @@ Gw
                                     <constraint firstItem="MtA-kf-7kN" firstAttribute="leading" secondItem="x1K-8w-91Y" secondAttribute="leading" id="doX-4F-aoa"/>
                                     <constraint firstItem="x1K-8w-91Y" firstAttribute="leading" secondItem="wyZ-eU-XEt" secondAttribute="leading" constant="20" id="fYD-Gu-iO9"/>
                                     <constraint firstItem="ptj-Cb-LDq" firstAttribute="centerY" secondItem="MtA-kf-7kN" secondAttribute="centerY" id="hWs-e1-6dI"/>
+                                    <constraint firstAttribute="trailing" secondItem="ddp-S7-yG2" secondAttribute="trailing" constant="191" id="jvl-63-wCZ"/>
                                     <constraint firstItem="NbS-C3-WfY" firstAttribute="centerY" secondItem="c6J-cx-fi8" secondAttribute="centerY" id="lGh-3Z-UEi"/>
+                                    <constraint firstAttribute="bottom" secondItem="ptj-Cb-LDq" secondAttribute="bottom" constant="27" id="nQn-b1-UO6"/>
                                     <constraint firstItem="ddp-S7-yG2" firstAttribute="top" secondItem="O5K-4i-z6g" secondAttribute="bottom" constant="5" id="oCY-Ao-8bF"/>
                                     <constraint firstItem="Zkv-Tf-sdq" firstAttribute="top" secondItem="Um0-zQ-09O" secondAttribute="bottom" constant="35" id="oan-Z5-mK3"/>
                                     <constraint firstItem="coU-tR-Iyy" firstAttribute="centerY" secondItem="ptj-Cb-LDq" secondAttribute="centerY" id="rN7-rQ-Q8B"/>
