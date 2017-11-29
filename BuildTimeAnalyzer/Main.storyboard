@@ -321,7 +321,7 @@ Gw
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn width="90" minWidth="40" maxWidth="1000" id="g67-YV-my9">
+                                                <tableColumn identifier="" width="90" minWidth="40" maxWidth="1000" id="g67-YV-my9">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Cumulative time">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -359,7 +359,7 @@ Gw
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn width="250" minWidth="40" maxWidth="1000" id="I8k-1E-YFi">
+                                                <tableColumn identifier="" width="250" minWidth="40" maxWidth="1000" id="I8k-1E-YFi">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Location">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -397,7 +397,7 @@ Gw
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn width="73" minWidth="10" maxWidth="3.4028234663852886e+38" id="pNQ-e7-chu">
+                                                <tableColumn identifier="" width="73" minWidth="10" maxWidth="3.4028234663852886e+38" id="pNQ-e7-chu">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Occurrences">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -434,7 +434,7 @@ Gw
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn width="532" minWidth="40" maxWidth="1000" id="Rka-lG-OGR">
+                                                <tableColumn identifier="" width="532" minWidth="40" maxWidth="1000" id="Rka-lG-OGR">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Function">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -527,7 +527,7 @@ Gw
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zkv-Tf-sdq">
-                                        <rect key="frame" x="190" y="305" width="225" height="17"/>
+                                        <rect key="frame" x="190" y="305" width="226" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2) Clean your project (⌘ + Shift + K)" id="eMR-lR-OuM">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -535,7 +535,7 @@ Gw
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PV7-TD-diE">
-                                        <rect key="frame" x="190" y="253" width="339" height="17"/>
+                                        <rect key="frame" x="190" y="253" width="340" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="3) Build your project (⌘ + B) and wait for it to complete" id="WcG-TO-qa4">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -550,20 +550,20 @@ Gw
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="42" horizontalPageScroll="10" verticalLineScroll="42" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddp-S7-yG2">
+                                    <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddp-S7-yG2">
                                         <rect key="frame" x="192" y="76" width="616" height="120"/>
                                         <clipView key="contentView" id="hf9-7R-VGA">
                                             <rect key="frame" x="1" y="0.0" width="614" height="119"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="40" rowSizeStyle="automatic" headerView="aAe-a7-ga6" viewBased="YES" id="vE3-G0-gZw">
+                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="25" headerView="aAe-a7-ga6" viewBased="YES" id="vE3-G0-gZw">
                                                     <rect key="frame" x="0.0" y="0.0" width="614" height="96"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn width="380" minWidth="40" maxWidth="1000" id="EHR-zb-SmS">
+                                                        <tableColumn identifier="" width="380" minWidth="40" maxWidth="1000" id="EHR-zb-SmS">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Name">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -596,7 +596,7 @@ Gw
                                                                 </tableCellView>
                                                             </prototypeCellViews>
                                                         </tableColumn>
-                                                        <tableColumn width="228" minWidth="40" maxWidth="1000" id="mpO-wX-dkq">
+                                                        <tableColumn identifier="" width="228" minWidth="40" maxWidth="1000" id="mpO-wX-dkq">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Date">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
