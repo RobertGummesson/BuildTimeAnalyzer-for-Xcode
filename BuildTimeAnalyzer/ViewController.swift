@@ -21,16 +21,13 @@ class ViewController: NSViewController {
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
-    
-    fileprivate var dataSource: [CompileMeasure] = []
-    fileprivate var filteredData: [CompileMeasure]?
+
+    fileprivate let dataSource = ViewControllerDataSource()
     
     private var currentKey: String?
     private var nextDatabase: XcodeDatabase?
     
     private var processor = LogProcessor()
-    private var perFunctionTimes: [CompileMeasure] = []
-    private var perFileTimes: [CompileMeasure] = []
     
     var processingState: ProcessingState = .waiting {
         didSet {
@@ -48,7 +45,10 @@ class ViewController: NSViewController {
         buildManager.delegate = self
         projectSelection.delegate = self
         projectSelection.listFolders()
-        
+
+        tableView.tableColumns[0].sortDescriptorPrototype = NSSortDescriptor(key: CompileMeasure.Order.time.rawValue, ascending: true)
+        tableView.tableColumns[1].sortDescriptorPrototype = NSSortDescriptor(key: CompileMeasure.Order.filename.rawValue, ascending: true)
+
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(notification:)), name: NSWindow.willCloseNotification, object: nil)
     }
     
@@ -99,21 +99,6 @@ class ViewController: NSViewController {
         }
     }
     
-    func aggregateTimesByFile(_ functionTimes: [CompileMeasure]) -> [CompileMeasure] {
-        var fileTimes: [String: CompileMeasure] = [:]
-        
-        for measure in functionTimes {
-            if var fileMeasure = fileTimes[measure.path] {
-                fileMeasure.time += measure.time
-                fileTimes[measure.path] = fileMeasure
-            } else {
-                let newFileMeasure = CompileMeasure(rawPath: measure.path, time: measure.time)
-                fileTimes[measure.path] = newFileMeasure
-            }
-        }
-        return Array(fileTimes.values).sorted{ $0.time > $1.time }
-    }
-    
     func updateViewForState() {
         switch processingState {
         case .processing:
@@ -151,7 +136,7 @@ class ViewController: NSViewController {
     // MARK: Actions
     
     @IBAction func perFileCheckboxClicked(_ sender: NSButton) {
-        dataSource = sender.state.rawValue == 0 ? perFunctionTimes : perFileTimes
+        dataSource.aggregateByFile = (sender.state.rawValue == 1)
         tableView.reloadData()
     }
     
@@ -179,7 +164,7 @@ class ViewController: NSViewController {
     
     override func controlTextDidChange(_ obj: Notification) {
         if let field = obj.object as? NSSearchField, field == searchField {
-            filteredData = field.stringValue.isEmpty ? nil : dataSource.filter{ textContains($0.code) || textContains($0.filename) }
+            dataSource.filter = searchField.stringValue
             tableView.reloadData()
         } else if let field = obj.object as? NSTextField, field == derivedDataTextField {
             buildManager.stopMonitoring()
@@ -227,9 +212,7 @@ class ViewController: NSViewController {
     }
     
     func handleProcessorUpdate(result: [CompileMeasure], didComplete: Bool, didCancel: Bool) {
-        dataSource = result
-        perFunctionTimes = result
-        perFileTimes = aggregateTimesByFile(perFunctionTimes)
+        dataSource.resetSourceData(newSourceData: result)
         tableView.reloadData()
         
         if didComplete {
@@ -238,7 +221,7 @@ class ViewController: NSViewController {
     }
     
     func completeProcessorUpdate(didCancel: Bool) {
-        let didSucceed = !dataSource.isEmpty
+        let didSucceed = !dataSource.isEmpty()
         
         var stateName = ProcessingState.failedString
         if didCancel {
@@ -268,23 +251,18 @@ class ViewController: NSViewController {
         let text = "Build duration: " + (buildTime < 60 ? "\(buildTime)s" : "\(buildTime / 60)m \(buildTime % 60)s")
         compileTimeTextField.stringValue = text
     }
-    
-    func textContains(_ text: String) -> Bool {
-        return text.lowercased().contains(searchField.stringValue.lowercased())
-    }
 }
 
 // MARK: NSTableViewDataSource
 
 extension ViewController: NSTableViewDataSource {
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return filteredData?.count ?? dataSource.count
+        return dataSource.count()
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        let item = filteredData?[row] ?? dataSource[row]
+        guard let item = dataSource.measure(index: row) else { return false }
         NSWorkspace.shared.openFile(item.path)
-        
 
         let gotoLineScript =
             "tell application \"Xcode\"\n" +
@@ -311,11 +289,17 @@ extension ViewController: NSTableViewDataSource {
 extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
-        
+        guard let item = dataSource.measure(index: row) else { return nil }
+
         let result = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "Cell\(columnIndex)"), owner: self) as? NSTableCellView
-        result?.textField?.stringValue = filteredData?[row][columnIndex] ?? dataSource[row][columnIndex]
+        result?.textField?.stringValue = item[columnIndex]
         
         return result
+    }
+
+    func tableView(_ tableView: NSTableView, sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
+        dataSource.sortDescriptors = tableView.sortDescriptors
+        tableView.reloadData()
     }
 }
 

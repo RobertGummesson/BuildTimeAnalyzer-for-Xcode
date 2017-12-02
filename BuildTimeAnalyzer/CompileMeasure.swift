@@ -5,15 +5,20 @@
 
 import Foundation
 
-struct CompileMeasure {
+@objcMembers class CompileMeasure: NSObject {
     
-    var time: Double
+    dynamic var time: Double
     var path: String
     var code: String
-    var filename: String
+    dynamic var filename: String
     var references: Int
 
     private var locationArray: [Int]
+
+    public enum Order: String {
+        case filename
+        case time
+    }
 
     var fileAndLine: String {
         return "\(filename):\(locationArray[0])"

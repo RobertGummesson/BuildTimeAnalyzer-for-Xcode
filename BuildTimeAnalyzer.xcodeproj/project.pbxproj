@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2839B8691FD2896F004C075C /* ViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2839B8681FD2896F004C075C /* ViewControllerDataSource.swift */; };
+		2839B86B1FD32766004C075C /* ViewControllerDataSourceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2839B86A1FD32766004C075C /* ViewControllerDataSourceTest.swift */; };
 		2A3164C81D21D73F00064045 /* CompileMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C01D21D73F00064045 /* CompileMeasure.swift */; };
 		2A3164C91D21D73F00064045 /* LogProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C11D21D73F00064045 /* LogProcessor.swift */; };
 		2A3164CB1D21D73F00064045 /* ProcessingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3164C31D21D73F00064045 /* ProcessingState.swift */; };
@@ -39,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2839B8681FD2896F004C075C /* ViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDataSource.swift; sourceTree = "<group>"; };
+		2839B86A1FD32766004C075C /* ViewControllerDataSourceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerDataSourceTest.swift; sourceTree = "<group>"; };
 		2A3164C01D21D73F00064045 /* CompileMeasure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompileMeasure.swift; sourceTree = "<group>"; };
 		2A3164C11D21D73F00064045 /* LogProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogProcessor.swift; sourceTree = "<group>"; };
 		2A3164C31D21D73F00064045 /* ProcessingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProcessingState.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				2A3698AB1D80A33B002C5CDA /* ViewController.swift */,
+				2839B8681FD2896F004C075C /* ViewControllerDataSource.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -196,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				2A3164CF1D21D74A00064045 /* CompileMeasureTests.swift */,
+				2839B86A1FD32766004C075C /* ViewControllerDataSourceTest.swift */,
 				2A3164D71D21D7A800064045 /* Supporting Files */,
 			);
 			path = BuildTimeAnalyzerTests;
@@ -306,6 +312,7 @@
 				2A9807DD1D7C71F900B9232C /* DirectoryMonitor.swift in Sources */,
 				2A3164DA1D21D90100064045 /* NSData+GZIP.m in Sources */,
 				2A3164C91D21D73F00064045 /* LogProcessor.swift in Sources */,
+				2839B8691FD2896F004C075C /* ViewControllerDataSource.swift in Sources */,
 				2A5404011D86D01700DBD44C /* BuildManager.swift in Sources */,
 				2A5404051D86F3C700DBD44C /* File.swift in Sources */,
 				2ABFB6CE1D81F2DE00D060BF /* NSAlert+Extensions.swift in Sources */,
@@ -327,6 +334,7 @@
 			files = (
 				2A3164D51D21D77500064045 /* NSData+GZIP.m in Sources */,
 				2A3164D01D21D74A00064045 /* CompileMeasureTests.swift in Sources */,
+				2839B86B1FD32766004C075C /* ViewControllerDataSourceTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
