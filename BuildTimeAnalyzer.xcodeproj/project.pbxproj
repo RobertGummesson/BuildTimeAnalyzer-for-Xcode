@@ -455,6 +455,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = BuildTimeAnalyzer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
@@ -469,6 +470,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = BuildTimeAnalyzer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
