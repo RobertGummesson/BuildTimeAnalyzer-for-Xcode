@@ -33,7 +33,9 @@ import Foundation
     }
     
     var timeString: String {
-        return String(format: "%.1fms", time)
+        let format = ShowSettings.IN_SECONDS ? "%.5f seconds": "%.1fms"
+        let computedTime = ShowSettings.IN_SECONDS ? (time / 1000): time
+        return String(format: format, computedTime)
     }
     
     init?(time: Double, rawPath: String, code: String, references: Int) {

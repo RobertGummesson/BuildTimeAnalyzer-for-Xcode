@@ -5,6 +5,10 @@
 
 import Cocoa
 
+internal struct ShowSettings {
+    static var IN_SECONDS = false
+}
+
 class ViewController: NSViewController {
     
     @IBOutlet var buildManager: BuildManager!
@@ -21,7 +25,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
-
+    @IBOutlet weak var showInSeconds: NSButton!
+    
     fileprivate let dataSource = ViewControllerDataSource()
     
     private var currentKey: String?
@@ -89,7 +94,7 @@ class ViewController: NSViewController {
     func showInstructions(_ show: Bool) {
         instructionsView.isHidden = !show
         
-        let views: [NSView] = [compileTimeTextField, leftButton, perFileButton, searchField, statusLabel, statusTextField, tableViewContainerView]
+        let views: [NSView] = [compileTimeTextField, leftButton, perFileButton, searchField, statusLabel, statusTextField, tableViewContainerView, showInSeconds]
         views.forEach{ $0.isHidden = show }
         
         if show && processingState == .processing {
@@ -134,6 +139,11 @@ class ViewController: NSViewController {
     }
     
     // MARK: Actions
+    
+    @IBAction func showInSecondsChecked(_ sender: Any) {
+        ShowSettings.IN_SECONDS = !ShowSettings.IN_SECONDS
+        tableView.reloadData()
+    }
     
     @IBAction func perFileCheckboxClicked(_ sender: NSButton) {
         dataSource.aggregateByFile = (sender.state.rawValue == 1)
