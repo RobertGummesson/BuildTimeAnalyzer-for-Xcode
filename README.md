@@ -27,7 +27,7 @@ If you encounter any issues or have ideas for improvement, I am open to code con
 
 ## License
 
-    Copyright (c) 2016-2017, Robert Gummesson
+    Copyright (c) 2016-2018, Robert Gummesson
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
