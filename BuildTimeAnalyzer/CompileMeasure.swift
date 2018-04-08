@@ -43,7 +43,7 @@ import Foundation
             let filename = untrimmedFilename?.split(separator: ":").map(String.init).first else { return nil }
         
         let locationString = String(rawPath[filepath.endIndex...].dropFirst())
-        let locations = locationString.split(separator: ":").flatMap{ Int(String.init($0)) }
+        let locations = locationString.split(separator: ":").compactMap{ Int(String.init($0)) }
         guard locations.count == 2 else { return nil }
         
         self.time = time

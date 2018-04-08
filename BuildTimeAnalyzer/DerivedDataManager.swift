@@ -13,7 +13,7 @@ class DerivedDataManager {
         let folders = DerivedDataManager.listFolders(at: url)
         let fileManager = FileManager.default
         
-        return folders.flatMap{ (url) -> File? in
+        return folders.compactMap{ (url) -> File? in
             if url.lastPathComponent != "ModuleCache",
                 let properties = try? fileManager.attributesOfItem(atPath: url.path),
                 let modificationDate = properties[FileAttributeKey.modificationDate] as? Date {

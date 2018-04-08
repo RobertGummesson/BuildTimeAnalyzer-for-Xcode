@@ -14,9 +14,9 @@ class ProjectSelection: NSObject {
     @IBOutlet weak var tableView: NSTableView!
     weak var delegate: ProjectSelectionDelegate?
     
-    fileprivate var dataSource: [XcodeDatabase] = []
+    private var dataSource: [XcodeDatabase] = []
     
-    static fileprivate let dateFormatter: DateFormatter = {
+    static private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .short
         dateFormatter.dateStyle = .medium
@@ -24,7 +24,7 @@ class ProjectSelection: NSObject {
     }()
     
     func listFolders() {
-        dataSource = DerivedDataManager.derivedData().flatMap{
+        dataSource = DerivedDataManager.derivedData().compactMap{
             XcodeDatabase(fromPath: $0.url.appendingPathComponent("Logs/Build/Cache.db").path)
         }.sorted(by: { $0.modificationDate > $1.modificationDate })
         

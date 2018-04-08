@@ -28,8 +28,8 @@ class ViewControllerDataSource {
         }
     }
 
-    fileprivate var originalData = [CompileMeasure]()
-    fileprivate var processedData = [CompileMeasure]()
+    private var originalData = [CompileMeasure]()
+    private var processedData = [CompileMeasure]()
 
     func resetSourceData(newSourceData: [CompileMeasure]) {
         originalData = newSourceData
