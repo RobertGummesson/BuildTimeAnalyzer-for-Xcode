@@ -22,7 +22,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var tableViewContainerView: NSScrollView!
 
-    fileprivate let dataSource = ViewControllerDataSource()
+    private let dataSource = ViewControllerDataSource()
     
     private var currentKey: String?
     private var nextDatabase: XcodeDatabase?
