@@ -11,52 +11,52 @@ protocol BuildManagerDelegate: class {
 }
 
 class BuildManager: NSObject {
-    
+
     weak var delegate: BuildManagerDelegate?
-    
+
     private let derivedDataDirectoryMonitor = DirectoryMonitor(isDerivedData: true)
     private let logFolderDirectoryMonitor = DirectoryMonitor(isDerivedData: false)
-    
+
     private var currentDataBase: XcodeDatabase?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         derivedDataDirectoryMonitor.delegate = self
         logFolderDirectoryMonitor.delegate = self
-        
+
         startMonitoring()
     }
-    
+
     func startMonitoring() {
         stopMonitoring()
         derivedDataDirectoryMonitor.startMonitoring(path: UserSettings.derivedDataLocation)
     }
-    
+
     func stopMonitoring() {
         derivedDataDirectoryMonitor.stopMonitoring()
     }
-    
+
     func database(forFolder URL: URL) -> XcodeDatabase? {
         let databaseURL = URL.appendingPathComponent("Cache.db")
         return XcodeDatabase(fromPath: databaseURL.path)
     }
-    
+
     func processDerivedData() {
         guard let mostRecent = DerivedDataManager.derivedData().first else { return }
-        
+
         let logFolder = mostRecent.url.appendingPathComponent("Logs/Build").path
         guard logFolderDirectoryMonitor.path != logFolder else { return }
-        
+
         logFolderDirectoryMonitor.stopMonitoring()
         logFolderDirectoryMonitor.startMonitoring(path: logFolder)
     }
-    
+
     func processLogFolder(with url: URL) {
         guard let activeDatabase = database(forFolder: url),
             activeDatabase.isBuildType,
             activeDatabase != currentDataBase else { return }
-        
+
         currentDataBase = activeDatabase
         delegate?.buildManager(self, shouldParseLogWithDatabase: activeDatabase)
     }

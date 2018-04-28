@@ -3,13 +3,11 @@
 //  BuildTimeAnalyzer
 //
 
-import Foundation
-
 struct RawMeasure {
     var time: Double
     var text: String
     var references: Int
-    
+
     init(time: Double, text: String) {
         self.time = time
         self.text = text
@@ -19,10 +17,10 @@ struct RawMeasure {
 
 // MARK: Equatable
 
-extension RawMeasure: Equatable {}
-
-func ==(lhs: RawMeasure, rhs: RawMeasure) -> Bool {
-    return lhs.time == rhs.time && lhs.text == rhs.text
+extension RawMeasure: Equatable {
+    static func ==(lhs: RawMeasure, rhs: RawMeasure) -> Bool {
+        return lhs.time == rhs.time && lhs.text == rhs.text
+    }
 }
 
 // MARK: Hashable
