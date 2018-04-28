@@ -6,13 +6,13 @@
 import Foundation
 
 class UserSettings {
-    
+
     static private let derivedDataLocationKey = "derivedDataLocationKey"
     static private let windowLevelIsNormalKey = "windowLevelIsNormalKey"
-    
+
     static private var _derivedDataLocation: String?
     static private var _windowLevelIsNormal: Bool?
-    
+
     static var derivedDataLocation: String {
         get {
             if _derivedDataLocation == nil {
@@ -29,7 +29,7 @@ class UserSettings {
             UserDefaults.standard.synchronize()
         }
     }
-    
+
     static var windowShouldBeTopMost: Bool {
         get {
             if _windowLevelIsNormal == nil {

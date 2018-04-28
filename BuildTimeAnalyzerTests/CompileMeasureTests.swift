@@ -8,7 +8,7 @@ import XCTest
 @testable import BuildTimeAnalyzer
 
 class BuildTimeAnalyzerTests: XCTestCase {
-    
+
     func testInit() {
         // Given
         let time = 25.3
@@ -21,14 +21,14 @@ class BuildTimeAnalyzerTests: XCTestCase {
         let rawPath = "\(folder)\(fileInfo)"
         let code = "some code"
         let references = 2
-        
+
         // When
         let resultOptional = CompileMeasure(time: time, rawPath: rawPath, code: code, references: references)
-        
-        // Then 
+
+        // Then
         XCTAssertNotNil(resultOptional)
         guard let result = resultOptional else { return }
-        
+
         XCTAssertEqual(result.time, time)
         XCTAssertEqual(result.code, code)
         XCTAssertEqual(result.path, path)
