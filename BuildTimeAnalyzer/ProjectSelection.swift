@@ -25,7 +25,7 @@ class ProjectSelection: NSObject {
     
     func listFolders() {
         dataSource = DerivedDataManager.derivedData().compactMap{
-            XcodeDatabase(fromPath: $0.url.appendingPathComponent("Logs/Build/Cache.db").path)
+            XcodeDatabase(fromPath: $0.url.appendingPathComponent("Logs/Build/LogStoreManifest.plist").path)
         }.sorted(by: { $0.modificationDate > $1.modificationDate })
         
         tableView.reloadData()
