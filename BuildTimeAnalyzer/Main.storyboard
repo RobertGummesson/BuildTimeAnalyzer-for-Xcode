@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -62,6 +62,13 @@
                                         <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                             <connections>
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Kk2-Jz-LKd"/>
+                                        <menuItem title="Export data as CSV…" keyEquivalent="e" id="3xt-bK-nQa">
+                                            <connections>
+                                                <action selector="exportAsCSVClicked:" target="Ady-hI-5gd" id="kbQ-xo-OtY"/>
+                                                <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.canExport" id="nAf-82-Fb2"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -200,7 +207,7 @@
                 </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="0.0"/>
+            <point key="canvasLocation" x="-33" y="-217"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -765,7 +772,7 @@ Gw
                 </customObject>
                 <customObject id="f4z-Qu-43g" customClass="BuildManager" customModule="BuildTimeAnalyzer" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="257.5" y="785.5"/>
+            <point key="canvasLocation" x="258" y="933"/>
         </scene>
     </scenes>
     <resources>
