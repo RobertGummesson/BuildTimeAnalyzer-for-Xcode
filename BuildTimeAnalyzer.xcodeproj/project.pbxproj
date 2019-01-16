@@ -28,6 +28,7 @@
 		2AE775121D225D5D00D1A744 /* DerivedDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */; };
 		2AF821441D21D6B900D65186 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF821431D21D6B900D65186 /* AppDelegate.swift */; };
 		2AF821461D21D6B900D65186 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AF821451D21D6B900D65186 /* Assets.xcassets */; };
+		5603EB6221EF93E90013D77B /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5603EB6121EF93E90013D77B /* CSVExporter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		2AF8214A1D21D6B900D65186 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2AF8214F1D21D6B900D65186 /* BuildTimeAnalyzerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildTimeAnalyzerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AF821551D21D6B900D65186 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5603EB6121EF93E90013D77B /* CSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				2A3164C11D21D73F00064045 /* LogProcessor.swift */,
 				2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */,
 				2ACBFD0B1D8835E60009567E /* UserSettings.swift */,
+				5603EB6121EF93E90013D77B /* CSVExporter.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				2A3164C91D21D73F00064045 /* LogProcessor.swift in Sources */,
 				2839B8691FD2896F004C075C /* ViewControllerDataSource.swift in Sources */,
 				2A5404011D86D01700DBD44C /* BuildManager.swift in Sources */,
+				5603EB6221EF93E90013D77B /* CSVExporter.swift in Sources */,
 				2A5404051D86F3C700DBD44C /* File.swift in Sources */,
 				2ABFB6CE1D81F2DE00D060BF /* NSAlert+Extensions.swift in Sources */,
 				2A5404031D86DE0C00DBD44C /* XcodeDatabase.swift in Sources */,
