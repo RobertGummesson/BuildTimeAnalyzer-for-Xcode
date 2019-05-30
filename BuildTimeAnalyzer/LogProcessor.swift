@@ -7,6 +7,8 @@ import Foundation
 
 typealias CMUpdateClosure = (_ result: [CompileMeasure], _ didComplete: Bool, _ didCancel: Bool) -> ()
 
+fileprivate let regex = try! NSRegularExpression(pattern:  "^\\d*\\.?\\d*ms\\t/", options: [])
+
 protocol LogProcessorProtocol: class {
     var rawMeasures: [String: RawMeasure] { get set }
     var updateHandler: CMUpdateClosure? { get set }
@@ -32,25 +34,30 @@ extension LogProcessorProtocol {
     // MARK: Private methods
     
     private func process(text: String) {
+        let text = text as NSString
         let characterSet = CharacterSet(charactersIn:"\r\"")
-        var remainingRange = text.startIndex..<text.endIndex
-        let regex = try! NSRegularExpression(pattern:  "^\\d*\\.?\\d*ms\\t/", options: [])
+        var remainingRange = NSMakeRange(0, text.length)
         
         rawMeasures.removeAll()
         
         processingDidStart()
         
-        while let nextRange = text.rangeOfCharacter(from: characterSet, options: [], range: remainingRange) {
-            let text = String(text[remainingRange.lowerBound..<nextRange.upperBound])
-            
+        while true {
+            let nextRange = text.rangeOfCharacter(from: characterSet, options: .literal, range: remainingRange)
+            guard nextRange.location != NSNotFound else { break }
+
+            let beginIdx = remainingRange.lowerBound
+            let endIdx = nextRange.upperBound
+            let textCount = endIdx - beginIdx
+            let text = text.substring(with: NSMakeRange(beginIdx, textCount))
+
             defer {
-                remainingRange = nextRange.upperBound..<remainingRange.upperBound
+                remainingRange = NSMakeRange(endIdx, remainingRange.upperBound - endIdx)
             }
             
-            // From LuizZak: (text as NSString).length improves the performance by about 2x compared to text.characters.count
-            let range = NSMakeRange(0, (text as NSString).length)
+            let range = NSMakeRange(0, textCount)
             guard let match = regex.firstMatch(in: text, options: [], range: range) else { continue }
-            
+
             let timeString = text[..<text.index(text.startIndex, offsetBy: match.range.length - 4)]
             if let time = Double(timeString) {
                 let value = String(text[text.index(text.startIndex, offsetBy: match.range.length - 1)...])
