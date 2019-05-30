@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct RawMeasure {
+class RawMeasure {
     var time: Double
     var text: String
     var references: Int

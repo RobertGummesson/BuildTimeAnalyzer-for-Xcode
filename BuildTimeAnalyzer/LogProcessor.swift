@@ -37,7 +37,7 @@ extension LogProcessorProtocol {
         let text = text as NSString
         let characterSet = CharacterSet(charactersIn:"\r\"")
         var remainingRange = NSMakeRange(0, text.length)
-        
+
         rawMeasures.removeAll()
         
         processingDidStart()
@@ -49,22 +49,19 @@ extension LogProcessorProtocol {
             let beginIdx = remainingRange.lowerBound
             let endIdx = nextRange.upperBound
             let textCount = endIdx - beginIdx
-            let text = text.substring(with: NSMakeRange(beginIdx, textCount))
 
             defer {
                 remainingRange = NSMakeRange(endIdx, remainingRange.upperBound - endIdx)
             }
             
-            let range = NSMakeRange(0, textCount)
-            guard let match = regex.firstMatch(in: text, options: [], range: range) else { continue }
-
-            let timeString = text[..<text.index(text.startIndex, offsetBy: match.range.length - 4)]
+            let range = NSMakeRange(beginIdx, textCount)
+            guard let match = regex.firstMatch(in: text as String, options: [], range: range) else { continue }
+            let timeString = text.substring(with: NSMakeRange(beginIdx, match.range.length - 4))
             if let time = Double(timeString) {
-                let value = String(text[text.index(text.startIndex, offsetBy: match.range.length - 1)...])
-                if var rawMeasure = rawMeasures[value] {
+                let value = text.substring(with: NSMakeRange(match.range.upperBound - 1, endIdx - match.range.upperBound - 1)) as String
+                if let rawMeasure = rawMeasures[value] {
                     rawMeasure.time += time
                     rawMeasure.references += 1
-                    rawMeasures[value] = rawMeasure
                 } else {
                     rawMeasures[value] = RawMeasure(time: time, text: value)
                 }
@@ -75,16 +72,23 @@ extension LogProcessorProtocol {
     }
     
     fileprivate func updateResults(didComplete completed: Bool, didCancel: Bool) {
-        var filteredResults = rawMeasures.values.filter{ $0.time > 10 }
-        if filteredResults.count < 20 {
-            filteredResults = rawMeasures.values.filter{ $0.time > 0.1 }
-        }
-        
-        let sortedResults = filteredResults.sorted(by: { $0.time > $1.time })
-        updateHandler?(processResult(sortedResults), completed, didCancel)
-        
-        if completed {
-            rawMeasures.removeAll()
+        DispatchQueue.global(qos: .userInteractive).async {
+            let measures = self.rawMeasures.values
+            var filteredResults = measures.filter{ $0.time > 10 }
+            if filteredResults.count < 20 {
+                filteredResults = measures.filter{ $0.time > 0.1 }
+            }
+
+            let sortedResults = filteredResults.sorted(by: { $0.time > $1.time })
+            let result = self.processResult(sortedResults)
+
+            if completed {
+                self.rawMeasures.removeAll()
+            }
+
+            DispatchQueue.main.async {
+                self.updateHandler?(result, completed, didCancel)
+            }
         }
     }
     
