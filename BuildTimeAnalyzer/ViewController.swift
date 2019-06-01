@@ -162,7 +162,7 @@ class ViewController: NSViewController {
         projectSelection.listFolders()
     }
     
-    override func controlTextDidChange(_ obj: Notification) {
+    func controlTextDidChange(_ obj: Notification) {
         if let field = obj.object as? NSSearchField, field == searchField {
             dataSource.filter = searchField.stringValue
             tableView.reloadData()
@@ -288,7 +288,7 @@ extension ViewController: NSTableViewDataSource {
 
 extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
+        guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.firstIndex(of: tableColumn) else { return nil }
         guard let item = dataSource.measure(index: row) else { return nil }
 
         let result = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "Cell\(columnIndex)"), owner: self) as? NSTableCellView

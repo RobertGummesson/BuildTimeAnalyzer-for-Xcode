@@ -257,11 +257,11 @@
 				TargetAttributes = {
 					2AF8213F1D21D6B900D65186 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 					};
 					2AF8214E1D21D6B900D65186 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						TestTargetID = 2AF8213F1D21D6B900D65186;
 					};
 				};
@@ -271,6 +271,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -462,7 +463,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -476,7 +477,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -492,7 +493,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BuildTimeAnalyzer.app/Contents/MacOS/BuildTimeAnalyzer";
 			};
 			name = Debug;
@@ -508,7 +509,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BuildTimeAnalyzer.app/Contents/MacOS/BuildTimeAnalyzer";
 			};
 			name = Release;
