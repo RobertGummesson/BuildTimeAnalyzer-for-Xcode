@@ -268,10 +268,9 @@
 			};
 			buildConfigurationList = 2AF8213B1D21D6B900D65186 /* Build configuration list for PBXProject "BuildTimeAnalyzer" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
