@@ -60,31 +60,28 @@ class LogProcessor: NSObject, LogProcessorProtocol {
     // MARK: Private methods
 
     private func process(text: String) {
-        let text: NSString = text as NSString
-        let characterSet = CharacterSet(charactersIn:"\r\"")
-        var remainingRange = NSMakeRange(0, text.length)
+        let characterSet = CharacterSet(charactersIn:"\r")
+        var remainingRange = text.startIndex..<text.endIndex
 
         rawMeasures.removeAll()
 
         processingDidStart()
 
-        while true {
-            let nextRange = text.rangeOfCharacter(from: characterSet, options: .literal, range: remainingRange)
-            guard nextRange.location != NSNotFound else { break }
-
-            let beginIdx = remainingRange.lowerBound
-            let endIdx = nextRange.upperBound
-            let textCount = endIdx - beginIdx
+        while !shouldCancel, let characterRange = text.rangeOfCharacter(from: characterSet,
+                                                                        options: .literal,
+                                                                        range: remainingRange) {
+            let nextRange = remainingRange.lowerBound..<characterRange.upperBound
 
             defer {
-                remainingRange = NSMakeRange(endIdx, remainingRange.upperBound - endIdx)
+                remainingRange = nextRange.upperBound..<remainingRange.upperBound
             }
 
-            let range = NSMakeRange(beginIdx, textCount)
-            guard let match = regex.firstMatch(in: text as String, options: [], range: range) else { continue }
-            let timeString = text.substring(with: NSMakeRange(beginIdx, match.range.length - 4))
+            let range = NSRange(nextRange, in: text)
+            guard let match = regex.firstMatch(in: text, options: [], range: range) else { continue }
+            let matchRange = Range<String.Index>.init(match.range, in: text)!
+            let timeString = text[remainingRange.lowerBound..<text.index(matchRange.upperBound, offsetBy: -4)]
             if let time = Double(timeString) {
-                let value = text.substring(with: NSMakeRange(match.range.upperBound - 1, endIdx - match.range.upperBound - 1)) as String
+                let value = String(text[text.index(before: matchRange.upperBound)..<nextRange.upperBound])
                 if let rawMeasure = rawMeasures[value] {
                     rawMeasure.time += time
                     rawMeasure.references += 1
@@ -92,7 +89,6 @@ class LogProcessor: NSObject, LogProcessorProtocol {
                     rawMeasures[value] = RawMeasure(time: time, text: value)
                 }
             }
-            guard !shouldCancel else { break }
         }
         processingDidFinish()
     }
