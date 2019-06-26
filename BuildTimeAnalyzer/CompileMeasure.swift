@@ -83,3 +83,13 @@ import Foundation
         }
     }
 }
+
+extension CompileMeasure: CSVExportable {
+
+    static var csvHeaderLine: String = ["time", "file", "references", "code"].joinedAsCSVLine(delimiter: .doubleQuote)
+
+    var csvLine: String
+    {
+        return [timeString, fileInfo, "\(references)", code].joinedAsCSVLine(delimiter: .doubleQuote)
+    }
+}
