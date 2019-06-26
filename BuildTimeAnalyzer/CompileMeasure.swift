@@ -37,19 +37,21 @@ import Foundation
     }
     
     init?(time: Double, rawPath: String, code: String, references: Int) {
-        let untrimmedFilename = rawPath.split(separator: "/").map(String.init).last
-        
-        guard let filepath = rawPath.split(separator: ":").map(String.init).first,
-            let filename = untrimmedFilename?.split(separator: ":").map(String.init).first else { return nil }
-        
-        let locationString = String(rawPath[filepath.endIndex...].dropFirst())
-        let locations = locationString.split(separator: ":").compactMap{ Int(String.init($0)) }
+        let untrimmedFilename: Substring
+        if let lastIdx = rawPath.lastIndex(of: "/") {
+            untrimmedFilename = rawPath.suffix(from: rawPath.index(after: lastIdx))
+        } else {
+            untrimmedFilename = rawPath[...]
+        }
+        let filepath = rawPath.prefix(while: {$0 != ":"})
+        let filename = untrimmedFilename.prefix(while: {$0 != ":"})
+        let locations = untrimmedFilename.split(separator: ":").dropFirst().compactMap({Int(String($0))})
         guard locations.count == 2 else { return nil }
         
         self.time = time
         self.code = code
-        self.path = filepath
-        self.filename = filename
+        self.path = String(filepath)
+        self.filename = String(filename)
         self.locationArray = locations
         self.references = references
     }
