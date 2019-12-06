@@ -48,6 +48,7 @@ class ViewController: NSViewController {
 
         tableView.tableColumns[0].sortDescriptorPrototype = NSSortDescriptor(key: CompileMeasure.Order.time.rawValue, ascending: true)
         tableView.tableColumns[1].sortDescriptorPrototype = NSSortDescriptor(key: CompileMeasure.Order.filename.rawValue, ascending: true)
+        tableView.doubleAction = #selector(didDoubleClickTableView(_:))
 
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(notification:)), name: NSWindow.willCloseNotification, object: nil)
     }
@@ -73,6 +74,27 @@ class ViewController: NSViewController {
         
         processor.shouldCancel = true
         NSApp.terminate(self)
+    }
+
+    @objc func didDoubleClickTableView(_ tableView: NSTableView) {
+        guard let item = dataSource.measure(index: tableView.selectedRow) else { return }
+        NSWorkspace.shared.openFile(item.path)
+
+        let gotoLineScript =
+            "tell application \"Xcode\"\n" +
+            "  activate\n" +
+            "end tell\n" +
+            "tell application \"System Events\"\n" +
+            "  keystroke \"l\" using command down\n" +
+            "  keystroke \"\(item.location)\"\n" +
+            "  keystroke return\n" +
+            "end tell"
+
+        DispatchQueue.main.async {
+            if let script = NSAppleScript(source: gotoLineScript) {
+                script.executeAndReturnError(nil)
+            }
+        }
     }
     
     // MARK: Layout
@@ -261,25 +283,7 @@ extension ViewController: NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        guard let item = dataSource.measure(index: row) else { return false }
-        NSWorkspace.shared.openFile(item.path)
-
-        let gotoLineScript =
-            "tell application \"Xcode\"\n" +
-            "  activate\n" +
-            "end tell\n" +
-            "tell application \"System Events\"\n" +
-            "  keystroke \"l\" using command down\n" +
-            "  keystroke \"\(item.location)\"\n" +
-            "  keystroke return\n" +
-            "end tell"
-
-        DispatchQueue.main.async {
-            if let script = NSAppleScript(source: gotoLineScript) {
-                script.executeAndReturnError(nil)
-            }
-        }
-        
+        guard let _ = dataSource.measure(index: row) else { return false }
         return true
     }
 }
