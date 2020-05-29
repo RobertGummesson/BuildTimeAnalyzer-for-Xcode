@@ -10,26 +10,26 @@ import Foundation
 
 class ViewControllerDataSource {
 
-    var aggregateByFile = false {
+    var aggregateByFile: Bool = false {
         didSet {
             processData()
         }
     }
 
-    var filter = "" {
+    var filter: String = "" {
         didSet {
             processData()
         }
     }
 
-    var sortDescriptors = [NSSortDescriptor]() {
+    var sortDescriptors: [NSSortDescriptor] = [] {
         didSet {
             processData()
         }
     }
 
-    private var originalData = [CompileMeasure]()
-    private var processedData = [CompileMeasure]()
+    private var originalData: [CompileMeasure] = []
+    private var processedData: [CompileMeasure] = []
 
     func resetSourceData(newSourceData: [CompileMeasure]) {
         originalData = newSourceData
