@@ -26,6 +26,14 @@ class ViewController: NSViewController {
     
     private var currentKey: String?
     private var nextDatabase: XcodeDatabase?
+
+    private(set) var lastProcessedDatabaseSchemeName: String? = nil
+    {
+        didSet
+        {
+            (NSApp.delegate as? AppDelegate)?.canExport = lastProcessedDatabaseSchemeName != nil
+        }
+    }
     
     private var processor = LogProcessor()
     
@@ -161,8 +169,38 @@ class ViewController: NSViewController {
         showInstructions(true)
         projectSelection.listFolders()
     }
+
+    @IBAction func exportAsCSVClicked(_ sender: Any?) {
+        guard let keyWindow = NSApp.keyWindow, let scheme = lastProcessedDatabaseSchemeName else {
+            return
+        }
+
+        let exporter = CSVExporter()
+
+        let savePanel = NSSavePanel()
+        savePanel.title = "Exporting data as CSV…"
+        savePanel.message = "Pick location for CSV file to be exported:"
+        savePanel.prompt = "Export"
+        savePanel.allowedFileTypes = ["csv"]
+        savePanel.nameFieldStringValue = exporter.filename(with: scheme)
+
+        savePanel.beginSheetModal(for: keyWindow) { [dataSource] (response) in
+            guard response == NSApplication.ModalResponse.OK, let fileUrl = savePanel.url else {
+                return
+            }
+
+            do
+            {
+                try dataSource.exportProcessedData(using: exporter, to: fileUrl)
+            }
+            catch
+            {
+                NSAlert(error: error).runModal()
+            }
+        }
+    }
     
-    func controlTextDidChange(_ obj: Notification) {
+    override func controlTextDidChange(_ obj: Notification) {
         if let field = obj.object as? NSSearchField, field == searchField {
             dataSource.filter = searchField.stringValue
             tableView.reloadData()
@@ -203,6 +241,7 @@ class ViewController: NSViewController {
         
         processingState = .processing
         currentKey = database.key
+        lastProcessedDatabaseSchemeName = database.schemeName
         
         updateTotalLabel(with: database.buildTime)
         
@@ -288,7 +327,7 @@ extension ViewController: NSTableViewDataSource {
 
 extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.firstIndex(of: tableColumn) else { return nil }
+        guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
         guard let item = dataSource.measure(index: row) else { return nil }
 
         let result = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "Cell\(columnIndex)"), owner: self) as? NSTableCellView

@@ -2,7 +2,8 @@ Build Time Analyzer for Xcode
 ======================
 
 [![GitHub release](https://img.shields.io/github/release/RobertGummesson/BuildTimeAnalyzer-for-Xcode.svg)](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode/releases/latest)
-[![Swift](https://img.shields.io/badge/Swift-5-orange.svg)](https://swift.org)
+[![Build Status](https://travis-ci.org/RobertGummesson/BuildTimeAnalyzer-for-Xcode.svg?branch=master)](https://travis-ci.org/RobertGummesson/BuildTimeAnalyzer-for-Xcode)
+[![Swift](https://img.shields.io/badge/Swift-4.1-orange.svg)](https://swift.org)
 [![Platform](https://img.shields.io/badge/platform-osx-blue.svg)](https://github.com/RobertGummesson/BuildTimeAnalyzer-for-Xcode)
 [![MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
