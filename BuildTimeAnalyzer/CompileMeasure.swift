@@ -27,13 +27,21 @@ import Foundation
     var fileInfo: String {
         return "\(fileAndLine):\(locationArray[1])"
     }
-    
+
+	var fileRow: String {
+		"\(locationArray[0])"
+	}
+
+	var fileColumn: String {
+		"\(locationArray[1])"
+	}
+
     var location: Int {
         return locationArray[0]
     }
     
     var timeString: String {
-        return String(format: "%.2f", time)
+        return String(format: "%.f", time)
     }
     
     init?(time: Double, rawPath: String, code: String, references: Int) {
@@ -84,10 +92,10 @@ import Foundation
 
 extension CompileMeasure: CSVExportable {
 
-    static var csvHeaderLine: String = ["time", "file", "references", "code"].joinedAsCSVLine(delimiter: .doubleQuote)
+    static var csvHeaderLine: String = ["time", "file", "row", "column", "references", "code"].joinedAsCSVLine(delimiter: .doubleQuote)
 
     var csvLine: String
     {
-        return [timeString, fileInfo, "\(references)", code].joinedAsCSVLine(delimiter: .doubleQuote)
+        return [timeString, filename, fileRow, fileColumn, "\(references)", code].joinedAsCSVLine(delimiter: .doubleQuote)
     }
 }
