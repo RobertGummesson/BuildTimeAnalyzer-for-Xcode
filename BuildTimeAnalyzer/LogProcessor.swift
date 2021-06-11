@@ -7,7 +7,7 @@ import Foundation
 
 typealias CMUpdateClosure = (_ result: [CompileMeasure], _ didComplete: Bool, _ didCancel: Bool) -> ()
 
-protocol LogProcessorProtocol: class {
+protocol LogProcessorProtocol: AnyObject {
     var rawMeasures: [String: RawMeasure] { get set }
     var updateHandler: CMUpdateClosure? { get set }
     var shouldCancel: Bool { get set }

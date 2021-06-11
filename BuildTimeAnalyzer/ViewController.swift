@@ -154,7 +154,8 @@ class ViewController: NSViewController {
     }
     
     @IBAction func visitDerivedData(_ sender: AnyObject) {
-        NSWorkspace.shared.openFile(derivedDataTextField.stringValue)
+        let url = URL(fileURLWithPath: derivedDataTextField.stringValue, isDirectory: true)
+        NSWorkspace.shared.open(url)
     }
     
     
@@ -200,7 +201,7 @@ class ViewController: NSViewController {
         }
     }
     
-    override func controlTextDidChange(_ obj: Notification) {
+    func controlTextDidChange(_ obj: Notification) {
         if let field = obj.object as? NSSearchField, field == searchField {
             dataSource.filter = searchField.stringValue
             tableView.reloadData()
@@ -301,7 +302,8 @@ extension ViewController: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         guard let item = dataSource.measure(index: row) else { return false }
-        NSWorkspace.shared.openFile(item.path)
+        let url = URL(fileURLWithPath: item.path, isDirectory: true)
+        NSWorkspace.shared.open(url)
 
         let gotoLineScript =
             "tell application \"Xcode\"\n" +
@@ -327,7 +329,7 @@ extension ViewController: NSTableViewDataSource {
 
 extension ViewController: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.index(of: tableColumn) else { return nil }
+        guard let tableColumn = tableColumn, let columnIndex = tableView.tableColumns.firstIndex(of: tableColumn) else { return nil }
         guard let item = dataSource.measure(index: row) else { return nil }
 
         let result = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "Cell\(columnIndex)"), owner: self) as? NSTableCellView

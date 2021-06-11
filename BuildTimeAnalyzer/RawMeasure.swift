@@ -28,7 +28,10 @@ func ==(lhs: RawMeasure, rhs: RawMeasure) -> Bool {
 // MARK: Hashable
 
 extension RawMeasure: Hashable {
-    var hashValue: Int {
-        return time.hashValue ^ text.hashValue
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(time)
+        hasher.combine(text)
+        hasher.combine(references)
     }
 }
