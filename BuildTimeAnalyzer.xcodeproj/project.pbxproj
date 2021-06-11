@@ -28,6 +28,7 @@
 		2AE775121D225D5D00D1A744 /* DerivedDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE775111D225D5D00D1A744 /* DerivedDataManager.swift */; };
 		2AF821441D21D6B900D65186 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF821431D21D6B900D65186 /* AppDelegate.swift */; };
 		2AF821461D21D6B900D65186 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2AF821451D21D6B900D65186 /* Assets.xcassets */; };
+		5603EB6221EF93E90013D77B /* CSVExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5603EB6121EF93E90013D77B /* CSVExporter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		2AF8214A1D21D6B900D65186 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2AF8214F1D21D6B900D65186 /* BuildTimeAnalyzerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildTimeAnalyzerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AF821551D21D6B900D65186 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5603EB6121EF93E90013D77B /* CSVExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVExporter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				2A3164C11D21D73F00064045 /* LogProcessor.swift */,
 				2A9807DE1D7C76FD00B9232C /* ProjectSelection.swift */,
 				2ACBFD0B1D8835E60009567E /* UserSettings.swift */,
+				5603EB6121EF93E90013D77B /* CSVExporter.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -252,16 +255,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = "Cane Media Ltd";
 				TargetAttributes = {
 					2AF8213F1D21D6B900D65186 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1250;
 					};
 					2AF8214E1D21D6B900D65186 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1250;
 						TestTargetID = 2AF8213F1D21D6B900D65186;
 					};
 				};
@@ -314,6 +317,7 @@
 				2A3164C91D21D73F00064045 /* LogProcessor.swift in Sources */,
 				2839B8691FD2896F004C075C /* ViewControllerDataSource.swift in Sources */,
 				2A5404011D86D01700DBD44C /* BuildManager.swift in Sources */,
+				5603EB6221EF93E90013D77B /* CSVExporter.swift in Sources */,
 				2A5404051D86F3C700DBD44C /* File.swift in Sources */,
 				2ABFB6CE1D81F2DE00D060BF /* NSAlert+Extensions.swift in Sources */,
 				2A5404031D86DE0C00DBD44C /* XcodeDatabase.swift in Sources */,
@@ -373,6 +377,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -397,11 +402,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -429,6 +435,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -447,10 +454,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -458,13 +466,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = BuildTimeAnalyzer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -472,13 +481,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = BuildTimeAnalyzer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -494,7 +504,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BuildTimeAnalyzer.app/Contents/MacOS/BuildTimeAnalyzer";
 			};
 			name = Debug;
@@ -510,7 +519,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.canemedia.BuildTimeAnalyzerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BuildTimeAnalyzerTests-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BuildTimeAnalyzer.app/Contents/MacOS/BuildTimeAnalyzer";
 			};
 			name = Release;

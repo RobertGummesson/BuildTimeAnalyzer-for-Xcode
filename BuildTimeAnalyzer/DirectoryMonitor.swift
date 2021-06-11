@@ -5,7 +5,7 @@
 
 import Foundation
 
-protocol DirectoryMonitorDelegate: class {
+protocol DirectoryMonitorDelegate: AnyObject {
     func directoryMonitorDidObserveChange(_ directoryMonitor: DirectoryMonitor, isDerivedData: Bool)
 }
 

@@ -11,6 +11,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var projectSelectionMenuItem: NSMenuItem!
     @IBOutlet weak var buildTimesMenuItem: NSMenuItem!
     @IBOutlet weak var alwaysInFrontMenuItem: NSMenuItem!
+
+    @objc var canExport: Bool = false
     
     var viewController: ViewController? {
         return NSApplication.shared.mainWindow?.contentViewController as? ViewController

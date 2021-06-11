@@ -49,6 +49,10 @@ class ViewControllerDataSource {
         return processedData[index]
     }
 
+    func exportProcessedData(using exporter: CSVExporter, to url: URL) throws {
+        try exporter.export(elements: processedData, to: url)
+    }
+
     // MARK: - Private methods
 
     private func processData() {

@@ -5,7 +5,7 @@
 
 import Foundation
 
-class RawMeasure {
+struct RawMeasure {
     var time: Double
     var text: String
     var references: Int
@@ -28,9 +28,10 @@ func ==(lhs: RawMeasure, rhs: RawMeasure) -> Bool {
 // MARK: Hashable
 
 extension RawMeasure: Hashable {
-
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(time)
         hasher.combine(text)
+        hasher.combine(references)
     }
 }
