@@ -9,7 +9,7 @@ typealias CMUpdateClosure = (_ result: [CompileMeasure], _ didComplete: Bool, _ 
 
 fileprivate let regex = try! NSRegularExpression(pattern:  "^\\d*\\.?\\d*ms\\t/", options: [])
 
-protocol LogProcessorProtocol: class {
+protocol LogProcessorProtocol: AnyObject {
     var rawMeasures: [String: RawMeasure] { get set }
     var updateHandler: CMUpdateClosure? { get set }
     var shouldCancel: Bool { get set }

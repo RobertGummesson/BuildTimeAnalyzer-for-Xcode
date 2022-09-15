@@ -5,7 +5,7 @@
 
 import Cocoa
 
-protocol BuildManagerDelegate: class {
+protocol BuildManagerDelegate: AnyObject {
     func derivedDataDidChange()
     func buildManager(_ buildManager: BuildManager, shouldParseLogWithDatabase database: XcodeDatabase)
 }

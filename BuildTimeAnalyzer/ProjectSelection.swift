@@ -5,7 +5,7 @@
 
 import Cocoa
 
-protocol ProjectSelectionDelegate: class {
+protocol ProjectSelectionDelegate: AnyObject {
     func didSelectProject(with database: XcodeDatabase)
 }
 
