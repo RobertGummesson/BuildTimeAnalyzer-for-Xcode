@@ -10,8 +10,8 @@ class DerivedDataManager {
     static func derivedData() -> [File] {
         let url = URL(fileURLWithPath: UserSettings.derivedDataLocation)
         
-        let folders = DerivedDataManager.listFolders(at: url)
-        let fileManager = FileManager.default
+        let folders: [URL] = DerivedDataManager.listFolders(at: url)
+        let fileManager: FileManager = FileManager.default
         
         return folders.compactMap{ (url) -> File? in
             if url.lastPathComponent != "ModuleCache",
