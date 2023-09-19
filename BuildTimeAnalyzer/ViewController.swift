@@ -315,7 +315,7 @@ extension ViewController: NSTableViewDataSource {
             "  keystroke return\n" +
             "end tell"
 
-        DispatchQueue.main.async {
+        DispatchQueue.global().async {
             if let script = NSAppleScript(source: gotoLineScript) {
                 script.executeAndReturnError(nil)
             }
