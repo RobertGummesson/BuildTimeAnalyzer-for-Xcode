@@ -150,7 +150,12 @@ class ViewController: NSViewController {
     
     @IBAction func clipboardButtonClicked(_ sender: AnyObject) {
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.writeObjects(["-Xfrontend -debug-time-function-bodies" as NSPasteboardWriting])
+        NSPasteboard.general.writeObjects(["-Xfrontend" as NSPasteboardWriting])
+    }
+    
+    @IBAction func clipboardButton2Clicked(_ sender: AnyObject) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects(["-debug-time-function-bodies" as NSPasteboardWriting])
     }
     
     @IBAction func visitDerivedData(_ sender: AnyObject) {
